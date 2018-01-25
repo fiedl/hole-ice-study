@@ -6,7 +6,7 @@
 * [Homebrew](http://brew.sh/) has to be installed.
 * The `python` installation provided by Mac OS should be used. It should neither be installed by homebrew nor by a binary package from python.org.
 * No installation of `I3_PORTS`. (No IceCube versions of `ports` or `cmake` are needed.)
-* This guide assumes the use of *zsh* as shell. For other shells, "~/.zshrc" and "~/.zshenv" have to be replaced with the file pahts appropriate to the shell in use.
+* This guide assumes the use of *zsh* as shell. For other shells, "`~/.zshrc`" and "`~/.zshenv`" have to be replaced with the file pahts appropriate to the shell in use.
 
 ## Versions
 
@@ -16,7 +16,7 @@ This guide was written for the following software versions. Please feel free to 
 * Zsh 5.2
 * Homebrew 1.1.0-21-g9a9ab92
 * Python 2.7.10
-* Simulation ...
+* IceSim V05-00-07
 
 ## Which python?
 
@@ -78,7 +78,7 @@ pip install --user --upgrade numpy scipy matplotlib
 The icecube simulation release list can be found here:
 http://code.icecube.wisc.edu/svn/meta-projects/simulation/releases/
 
-Currently, 2016-11-15, the latest release is [V05-00-06](http://code.icecube.wisc.edu/svn/meta-projects/simulation/releases/V05-00-06/).
+This guide uses [V05-00-07](http://code.icecube.wisc.edu/svn/meta-projects/simulation/releases/V05-00-07/).
 
 ## Which build type?
 
@@ -115,7 +115,7 @@ export PATH="${HOME}/Library/Python/2.7/bin/:${PATH}"
 export ICECUBE_ROOT="$HOME/icecube/software"
 
 # If you want to use a release:
-export RELEASE=V05-00-06
+export RELEASE=V05-00-07
 export ICESIM_ROOT=$ICECUBE_ROOT/icecube-simulation-$RELEASE
 export ICESIM=$ICESIM_ROOT/debug_build
 
