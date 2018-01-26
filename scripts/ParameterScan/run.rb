@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'fiedl/log'
 require 'optparse'
-require 'Date'
 require 'pp'
 require 'descriptive_statistics'
 require 'csv'
@@ -16,21 +15,18 @@ OptionParser.new do |opts|
 end.parse!
 
 log.head "Parameter Scan"
-log.info "README: https://github.com/fiedl/diplomarbeit/tree/master/scripts/ParameterScan"
+log.info "README: https://github.com/fiedl/hole-ice-study/tree/master/scripts/ParameterScan"
 
 
 # Parameter range configuration
 #
 options.merge!({
-  scattering_factor_range: [0.0001, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0].reverse,
-  absorption_factor_range: [0.0001, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0].reverse,
-  distance_range: [0.5, 1.0, 2.0, 3.0, 5.0, 10.0, 15.0].reverse,
-  #scattering_factor_range: [1.0],
-  #absorption_factor_range: [1.0],
-  #distance_range: [0.5],
+  scattering_factor_range: [0.0001, 0.5, 1.0, 100.0],
+  absorption_factor_range: [0.0001, 0.5, 1.0, 100.0],
+  distance_range: [1.0, 2.0],
   number_of_photons: 1e5,
-  number_of_runs: 10,
-  number_of_parallel_runs: 1
+  number_of_runs: 5,
+  number_of_parallel_runs: 5
 })
 
 log.info "This script will iterate over the following configuration"
