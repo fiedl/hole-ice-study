@@ -1,0 +1,20 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colored (1.2)
+    descriptive_statistics (2.5.1)
+    fiedl-log (0.3.0)
+      colored
+    pawgen (1.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colored!
+  descriptive_statistics!
+  fiedl-log!
+  pawgen!
+
+BUNDLED WITH
+   1.15.4
