@@ -14,8 +14,14 @@ Hole ice is the ice in the refrozen columns around the detector module strings. 
 
 ## Installation
 
-How to install the icecube simulation framework:
-- [How to install icesim on macOS Sierra](notes/2016-11-15_Installing_IceSim_on_macOS_Sierra.md)
+### Install icecube-simulation framework
+
+This software requires the icecube simulation framework. I've used version icecube-simulation V05-00-07.
+
+- [How to install icecube-simulation locally on macOS Sierra](notes/2016-11-15_Installing_IceSim_on_macOS_Sierra.md)
+- [How to install icecube-simulation on the Zeuthen Computer Center](notes/2018-01-23_Installing_IceSim_in_Zeuthen.md)
+
+### Install clsim fork
 
 - Use fork until merged into icesim trunk
 
