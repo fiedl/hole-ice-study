@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colored (1.2)
+    descriptive_statistics (2.5.1)
+    fiedl-log (0.3.0)
+      colored
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colored!
+  descriptive_statistics!
+  fiedl-log!
+
+BUNDLED WITH
+   1.15.1
