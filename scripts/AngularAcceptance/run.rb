@@ -178,7 +178,6 @@ global_propagation_options = {
   absorption_factor: options[:absorption_factor] || 1.0,
   save_photon_paths: false,
   propagation_log_file: "tmp/propagation.log",
-  clsim_log_file: "tmp/clsim.log",
   clsim_error_fallback: 'skip' # or: gpu-1-parallel OR cpu OR sleep OR skip
 }
 options.merge! global_propagation_options
@@ -204,6 +203,7 @@ else
       output_text_file: photons_from_angle_i3_file.gsub(".i3", "_dom_hits.txt"),
       output_separate_data_file: "tmp/angle_hits_and_photons_#{angle}.txt",
       output_mean_data_file: "tmp/angle_mean_hits_std_deviation_and_photons_#{angle}.txt",
+      clsim_log_file: "tmp/clsim_#{angle}.log",
     }
 
     if options[:resume] && File.exists?(propagation_options[:output_text_file]) && File.read(propagation_options[:output_text_file]).split("\n").count == options[:number_of_runs]
@@ -224,21 +224,21 @@ else
         --ice-model=#{options[:ice_model_file]} \\
         --output-i3-file=#{propagation_options[:output_i3_file]} \\
         --output-text-file=#{propagation_options[:output_text_file]} \\
-        --log-file=#{options[:clsim_log_file]} \\
+        --log-file=#{propagation_options[:clsim_log_file]} \\
         > #{options[:propagation_log_file]} 2>&1
       "
-      log.ensure_file propagation_options[:output_i3_file], show_log: [options[:propagation_log_file], options[:clsim_log_file]].join(" ")
+      log.ensure_file propagation_options[:output_i3_file], show_log: [options[:propagation_log_file], propagation_options[:clsim_log_file]].join(" ")
     end
-    log.ensure_file propagation_options[:output_text_file], show_log: [options[:propagation_log_file], options[:clsim_log_file]].join(" ")
+    log.ensure_file propagation_options[:output_text_file], show_log: [options[:propagation_log_file], propagation_options[:clsim_log_file]].join(" ")
 
-    if File.exist?(options[:clsim_log_file])
-      if File.readlines(options[:clsim_log_file]).grep(/error/).size > 0
-        log.error "clsim log #{options[:clsim_log_file]} contains errors"
-        shell "tail -n 20 #{options[:clsim_log_file]}"
+    if File.exist?(propagation_options[:clsim_log_file])
+      if File.readlines(propagation_options[:clsim_log_file]).grep(/error/).size > 0
+        log.error "clsim log #{propagation_options[:clsim_log_file]} contains errors"
+        shell "tail -n 20 #{propagation_options[:clsim_log_file]}"
         raise "clsim errors"
       end
     else
-      log.warning "File #{options[:clsim_log_file]} does not exist. Maybe the propagation for this angle has been skipped."
+      log.warning "File #{propagation_options[:clsim_log_file]} does not exist. Maybe the propagation for this angle has been skipped."
     end
 
     log.info "Calculating and writing data.".blue
