@@ -132,6 +132,10 @@ export GEANT4_CONFIG=$(which geant4-config)
 export I3_SRC=$ICESIM_ROOT/src
 export I3_BUILD=$ICESIM
 export I3_TESTDATA=$ICECUBE_ROOT/ports/test-data
+
+# Make sure to deactivate opencl kernel caching.
+# See: https://github.com/fiedl/hole-ice-study/issues/15
+export CUDA_CACHE_DISABLE=1
 ```
 
 ## Install icecube simulation

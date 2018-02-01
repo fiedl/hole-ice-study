@@ -25,6 +25,10 @@ This software requires the icecube simulation framework. I've used version icecu
 
 - Use fork until merged into icesim trunk
 
+### Troubleshooting
+
+- If kernel caching is active on your gpu machine, changes to `hole_ice.c` etc. might not be taken up correctly. If you plan on making changes in these files, deactivate caching by setting the environment variable `CUDA_CACHE_DISABLE=1`. See: https://github.com/fiedl/hole-ice-study/issues/15
+
 ## Author and License
 
 Copyright (c) 2013-2018 Sebastian Fiedlschuster
