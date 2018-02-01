@@ -96,6 +96,10 @@ export GEANT4_CONFIG=$(which geant4-config)
 export I3_SRC=$ICESIM_ROOT/src
 export I3_BUILD=$ICESIM
 export I3_TESTDATA=/cvmfs/icecube.opensciencegrid.org/data/i3-test-data
+
+# Make sure to deactivate opencl kernel caching.
+# See: https://github.com/fiedl/hole-ice-study/issues/15
+export CUDA_CACHE_DISABLE=1
 ```
 
 ## Install IceSim
@@ -150,3 +154,15 @@ RuntimeError: OpenCL error: could build the OpenCL program!
 ```
 
 Try to run it on a different gpu. Also, it worked fine for me on the cluster (`qsub`).
+
+### Changes in the kernel files do not appear to have any effect
+
+When kernel caching is activated on the gpu machine and changes are made to files that are `#include`d into the gpu kernel, for example `hole_ice.c` or `intersection.c`, the changes are ignored by opencl.
+
+Workaround by deactivating caching using an environment variable.
+
+```bash
+# Make sure to deactivate opencl kernel caching.
+# See: https://github.com/fiedl/hole-ice-study/issues/15
+export CUDA_CACHE_DISABLE=1
+```
