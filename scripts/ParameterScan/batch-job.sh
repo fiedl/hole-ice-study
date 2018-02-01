@@ -4,6 +4,10 @@
 #     qsub -l gpu -l tmpdir_size=10G -l s_rt=8:00:00 -m ae batch-job.sh
 #
 
+# Make sure to deactivate opencl kernel caching.
+# See: https://github.com/fiedl/hole-ice-study/issues/15
+export CUDA_CACHE_DISABLE=1
+
 # The $REMOTE directory from which the data and scripts are taken and
 # where the results will be sent to.
 REMOTE="$SCRATCH/hole-ice-study/scripts/ParameterScan"
