@@ -1,7 +1,7 @@
 # This script is for running the simulation on the computing cluster.
 # Run this with:
 #
-#     qsub -l gpu -l tmpdir_size=10G -l s_rt=8:00:00 -m ae batch-job.sh
+#     qsub -l gpu -l tmpdir_size=10G -l s_rt=8:00:00 -l h_rss=2G -m ae batch-job.sh
 #
 
 # Make sure to deactivate opencl kernel caching.
@@ -47,4 +47,4 @@ bundle install
 $LOADENV zsh -c "env && bundle exec ruby run.rb $*"
 
 # Copy result files back.
-cp -r results tmp $RESULTSDESTINATION/
+cp -r results/* $RESULTSDESTINATION/
