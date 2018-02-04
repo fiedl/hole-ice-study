@@ -79,8 +79,8 @@ else
 
           parameter_set_index += 1
 
-          need_to_perform_this_job = (not current_cluster_node_index) or
-              (current_cluster_node_index.to_i == parameter_set_index)
+          need_to_perform_this_job = ((not current_cluster_node_index) or
+              (current_cluster_node_index.to_i == parameter_set_index))
 
           if need_to_perform_this_job
             log.section "Parameters: sca=#{sca}, abs=#{abs}, dst=#{dst}"
@@ -127,7 +127,7 @@ if options[:submit_to_cluster]
   log.success "These are your current cluster jobs:"
   shell "qstat -u $(whoami)"
 
-elsif not options[:submit_to_cluster]
+elsif not options[:submit_to_cluster] and not current_cluster_node_index
 
   log.section "Finding the best parameters via minimal chi-squared"
   log.info "Collecting data from simulation results."
