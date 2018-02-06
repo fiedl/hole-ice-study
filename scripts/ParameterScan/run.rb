@@ -152,15 +152,8 @@ if options[:plot] or (not options[:submit_to_cluster] and not current_cluster_no
   end
 
   log.info "Writing results into table data file."
-  shell "mkdir -p results tmp"
-  #CSV.open("results/results.csv", "wb", col_sep: " ") do |csv|
-  #  csv << results.first.keys
-  #  results.each do |result|
-  #    csv << result.values if result[:distance] == 10.0
-  #  end
-  #end
-  #log.ensure_file "results/results.csv"
-  #
+  shell "mkdir -p tmp"
+
   log.info "Plotting 3d plot for separate distances."
   distances = results.collect { |result| result[:distance] }.uniq
   distances.each do |distance|
