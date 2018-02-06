@@ -69,6 +69,7 @@ else
           -l tmpdir_size=10G \\
           -l s_rt=11:30:00 \\
           -l h_rss=2G \\
+          -l hostname=kepler{16..26} \\
           -m ae \\
           -t 1-#{number_of_jobs} \\
         batch-job.sh \\
