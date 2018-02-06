@@ -22,7 +22,7 @@ OptionParser.new do |opts|
   opts.on "--absorption-factor=ABS", "Something between 0.0 and 1.0." do |abs|
     options[:absorption_factor] = abs.to_f
   end
-  opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres." do |dst|
+  opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres, e.g. 1.0" do |dst|
     options[:distance] = dst.to_f
   end
   opts.on "--number-of-photons=NUM", "e.g. 1e5" do |num|
@@ -123,7 +123,7 @@ log.section "Create photon frames"
 photon_frames_options = {
   dom_index: [1, 1],
   dom_position: [-256.02301025390625, -521.281982421875, 500],
-  distance: options[:distance] || 10.0,
+  distance: options[:distance] || 1.0,
   angles: options[:angles] || [0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180],
   number_of_photons: options[:number_of_photons] || 1e5,
   number_of_runs: options[:number_of_runs] || 10,
