@@ -126,8 +126,8 @@ photon_frames_options = {
   distance: options[:distance] || 1.0,
   angles: options[:angles] || [0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180],
   number_of_photons: options[:number_of_photons] || 1e5,
-  number_of_runs: options[:number_of_runs] || 10,
-  number_of_parallel_runs: options[:number_of_parallel_runs] || 10
+  number_of_runs: options[:number_of_runs] || 2,
+  number_of_parallel_runs: options[:number_of_parallel_runs] || 2
 }
 options.merge! photon_frames_options
 

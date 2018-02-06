@@ -25,10 +25,10 @@ log.info "README: https://github.com/fiedl/hole-ice-study/tree/master/scripts/Pa
 # Parameter range configuration
 #
 options.merge!({
-  scattering_factor_range: [0.0001, 0.1, 0.5, 1.0, 100.0],
-  absorption_factor_range: [0.0001, 0.1, 0.5, 1.0, 100.0],
+  scattering_factor_range: [0.01, 0.1, 0.5, 1.0, 10.0],
+  absorption_factor_range: [0.01, 0.1, 0.5, 1.0, 10.0],
   distance_range: [1.0, 10.0],
-  number_of_photons: 1e2,
+  number_of_photons: 1e5,
   number_of_runs: 2,
   number_of_parallel_runs: 2
 })
@@ -60,7 +60,7 @@ else
     shell "qsub \\
         -l gpu \\
         -l tmpdir_size=10G \\
-        -l s_rt=3:00:00 \\
+        -l s_rt=0:30:00 \\
         -l h_rss=2G \\
         -m ae \\
         -t 1-#{number_of_jobs} \\
