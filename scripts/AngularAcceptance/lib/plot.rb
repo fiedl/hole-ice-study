@@ -53,6 +53,19 @@ configurations.each do |options|
   }
   log.configuration compare_options
   options.merge! compare_options
+
+  log.info "\nSkipping data rows with zero error".blue
+  log.info "because they would be weighted with infinity in chi square."
+  data_rows = File.read(options[:chi_squared_data_file]).split("\n")
+  data_rows.select! do |row|
+    columns = row.split(" ")
+    if columns[2] == "0.0"
+      log.warning "Skipping data row #{row}"
+      false
+    else
+      true
+    end
+  end
   File.open(options[:chi_squared_data_without_zero_errors_file], 'w') { |file| file.write(data_rows.join("\n")) }
   log.info ""
 
