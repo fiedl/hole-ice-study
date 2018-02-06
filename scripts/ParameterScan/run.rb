@@ -32,12 +32,12 @@ else
   # Parameter range configuration
   #
   options.merge!({
-    scattering_factor_range: [0.01, 0.1, 0.5, 1.0, 10.0],
-    absorption_factor_range: [0.01, 0.1, 0.5, 1.0, 10.0],
-    distance_range: [1.0, 10.0],
+    scattering_factor_range: [0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+    absorption_factor_range: [0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+    distance_range: [1.0],
     number_of_photons: 1e5,
-    number_of_runs: 2,
-    number_of_parallel_runs: 2
+    number_of_runs: 5,
+    number_of_parallel_runs: 5
   })
 
   log.info "This script will iterate over the following configuration"
@@ -67,7 +67,7 @@ else
       shell "qsub \\
           -l gpu \\
           -l tmpdir_size=10G \\
-          -l s_rt=0:30:00 \\
+          -l s_rt=11:30:00 \\
           -l h_rss=2G \\
           -m ae \\
           -t 1-#{number_of_jobs} \\
