@@ -1,6 +1,9 @@
 # This specifies which files to exclude from git version control.
 # Nice collection of templates: https://github.com/github/gitignore
 
+*.i3
+
+
 # ---------------------------------------------------------------------
 # macOS
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
