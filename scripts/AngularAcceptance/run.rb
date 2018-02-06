@@ -324,41 +324,24 @@ log.ensure_file options[:hits_histograms_log]
 log.ensure_file "tmp/histograms/hits_histogram_000.png"
 
 
-# Compare to reference plot.
-#
-log.section "Comparing to reference plot"
-log.info "The simulation data is compared to the reference plot by"
-log.info "showing both in one image and by showing reduced chi-suqre."
-compare_options = {
-  chi_squared_nu_plot_file: "tmp/plot_with_reference.png",
-  chi_squared_results_file: "tmp/chi_square_results.txt",
-}
-log.configuration compare_options
-options.merge! compare_options
-shell "ruby lib/compare_simulation_to_reference.rb \\
-  --input-files='tmp/angle_hits_deviation_and_photons.txt' \\
-  --data-label='#{options[:run_id]}, Dst. #{options[:distance]}m' \\
-  --output-plot-file='#{options[:chi_squared_nu_plot_file]}' \\
-  --results-file='#{options[:chi_squared_results_file]}' \\
-  #{'--use-hole-ice' if options[:hole_ice]}
-"
-log.ensure_file options[:chi_squared_nu_plot_file]
-log.ensure_file options[:chi_squared_results_file]
-
-log.info "Chi-squared results:"
-chi_squared_results = eval(File.read("tmp/chi_square_results.txt"))
-log.configuration chi_squared_results
-options.merge!({
-  chi_squared_results: chi_squared_results
-})
-
-
 # Writing down used options.
 #
 log.section "Exporting options"
 pp options
 File.open("tmp/options.txt", 'a') { |file| PP.pp(options, file) }
 log.ensure_file "tmp/options.txt"
+
+
+# Generate plots.
+#
+log.section "Comparing to reference plot"
+shell "ruby lib/plot.rb ./tmp"
+
+
+# Read in options, which might have been changed
+# by the plots script.
+#
+options = eval(File.read("tmp/options.txt"))
 
 
 # Writing README

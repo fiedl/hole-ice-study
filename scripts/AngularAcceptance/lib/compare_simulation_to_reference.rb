@@ -54,6 +54,7 @@ else
   "
 end
 
+shell "mkdir -p tmp"
 shell "rm #{options[:gnuplot_log]}"
 
 results = {}
