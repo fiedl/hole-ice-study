@@ -30,6 +30,9 @@ OptionParser.new do |opts|
   opts.on "--cpu", "use the cpu rather than the gpu for the simulation" do
     options[:cpu] = true
   end
+  opts.on "--angle=DEGREES", "e.g. 45" do |angle|
+    options[:angles] = [angle.to_i]
+  end
 
 end.parse!
 
@@ -102,7 +105,7 @@ photon_frames_options = {
   dom_index: [1, 1],
   dom_position: [-256.02301025390625, -521.281982421875, 500],
   distance: options[:distance] || 1.0,
-  angles: [90],
+  angles: options[:angles] || [90],
   number_of_photons: options[:number_of_photons] || 1e5,
   number_of_runs: options[:number_of_runs] || 2,
   number_of_parallel_runs: options[:number_of_parallel_runs] || 2,
