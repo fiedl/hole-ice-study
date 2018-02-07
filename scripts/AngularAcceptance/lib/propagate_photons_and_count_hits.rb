@@ -51,6 +51,10 @@ OptionParser.new do |opts|
   opts.on "--show-log", "whether to display the clsim log" do
     options[:show_clsim_log] = true
   end
+  opts.on "--cpu", "use the cpu rather than the gpu for the simulation" do
+    options[:cpu] = true
+  end
+
 end.parse!
 
 options[:fallback] ||= 'cpu'
@@ -88,7 +92,7 @@ number_of_loops = options[:number_of_runs] / options[:number_of_parallel_runs]
     --seed=#{seed} \\
     --output-i3-file=#{options[:output_i3_file]} \\
     --output-text-file=#{options[:output_text_file]}.temp \\
-    --use-gpus=True \\
+    --use-gpus=#{not options[:cpu]} \\
     --save-photon-paths=#{options[:save_photon_paths] ? 'True' : 'False'} \\
     --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
     --use-hole-ice-approximation=#{(options[:hole_ice] == :approximation) ? 'True' : 'False'} \\

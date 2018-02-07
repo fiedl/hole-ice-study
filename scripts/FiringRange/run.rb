@@ -27,6 +27,9 @@ OptionParser.new do |opts|
   opts.on "--save-photon-paths", "for example, to visualize them in steamshovel" do
     options[:save_photon_paths] = true
   end
+  opts.on "--cpu", "use the cpu rather than the gpu for the simulation" do
+    options[:cpu] = true
+  end
 
 end.parse!
 
@@ -163,6 +166,7 @@ shell "ruby ../AngularAcceptance/lib/propagate_photons_and_count_hits.rb \\
   --scattering-factor=#{options[:scattering_factor]} \\
   --absorption-factor=#{options[:absorption_factor]} \\
   #{'--save-photon-paths' if options[:save_photon_paths]} \\
+  #{'--cpu' if options[:cpu]} \\
   --seed=#{propagation_options[:seed]} \\
   --ice-model=#{options[:ice_model_file]} \\
   --output-i3-file=#{propagation_options[:output_i3_file]} \\
