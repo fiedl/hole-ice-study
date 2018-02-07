@@ -24,6 +24,9 @@ OptionParser.new do |opts|
   opts.on "--number-of-parallel-runs=NUM", "e.g. 5" do |num|
     options[:number_of_parallel_runs] = num.to_f
   end
+  opts.on "--save-photon-paths", "for example, to visualize them in steamshovel" do
+    options[:save_photon_paths] = true
+  end
 
 end.parse!
 
@@ -51,11 +54,11 @@ detector_geometry_options = {
   seed: 123456,
   hole_ice_cylinder_positions: [
     [-256.02301025390625, -521.281982421875],
-    [-256.02301025390625, -521.281982421875]
+#    [-256.02301025390625, -521.281982421875]
   ],
   hole_ice_cylinder_radii: [
     0.30,
-    0.15
+#    0.15
   ]
 }
 log.configuration detector_geometry_options
@@ -95,8 +98,8 @@ log.section "Create photon frames"
 photon_frames_options = {
   dom_index: [1, 1],
   dom_position: [-256.02301025390625, -521.281982421875, 500],
-  distance: options[:distance] || 10.0,
-  angles: [0],
+  distance: options[:distance] || 1.0,
+  angles: [90],
   number_of_photons: options[:number_of_photons] || 1e5,
   number_of_runs: options[:number_of_runs] || 2,
   number_of_parallel_runs: options[:number_of_parallel_runs] || 2,
@@ -130,7 +133,7 @@ global_propagation_options = {
   hole_ice: :simulation,  # false, :approximation, :simulation
   scattering_factor: options[:scattering_factor] || 0.02,
   absorption_factor: options[:absorption_factor] || 1.0,
-  save_photon_paths: false,
+  save_photon_paths: options[:save_photon_paths],
   propagation_log_file: "tmp/propagation.log",
   clsim_log_file: "tmp/clsim.log",
   clsim_error_fallback: 'skip' # or: gpu-1-parallel OR cpu OR sleep OR skip
