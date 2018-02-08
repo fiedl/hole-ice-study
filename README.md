@@ -22,6 +22,23 @@ steamshovel tmp/propagated_photons.i3
 
 ![instant absorption example](https://user-images.githubusercontent.com/1679688/35931789-0f3c6f46-0c36-11e8-9e05-0b692c6b093c.png)
 
+### Angular Acceptance Example
+
+Depending on the simulated hole ice parameters, the hole ice simulation produces similar results regarding the dom angular acceptance as the [reference study](https://github.com/fiedl/hole-ice-study/issues/10).
+
+In the following example, the hole ice scattering and absorption lengths are defined to be 1/10 of the corresponding lengths outside the hole ice. Photons are shot from a distance of 1.0m onto the dom from different angles.
+
+```bash
+$ICESIM/env-shell.sh
+cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
+./run.rb --scattering-factor=0.1 --absorption-factor=0.1 --distance=1.0 \
+    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-runs=2 --number-of-parallel-runs=2
+open results/current/plot_with_reference.png
+```
+
+![angular acceptance example](https://user-images.githubusercontent.com/1679688/35880167-761375e8-0b7d-11e8-8bf8-53e9a43f99c3.png)
+
 ## Usage
 
 - Which framework version is required (or tested)?
