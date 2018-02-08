@@ -6,6 +6,22 @@ Hole ice is the ice in the refrozen columns around the detector module strings. 
 
 ## Results
 
+### Instant Absorption Example
+
+When simulating photon propagation for a hole ice with zero absorption length, one can visualize instant photon absorption within the hole ice cylinder.
+
+```bash
+$ICESIM/env-shell.sh
+cd $HOLE_ICE_STUDY/scripts/FiringRange
+./run.rb --scattering-factor=1.0 --absorption-factor=0.0 --distance=1.0 \
+    --number-of-photons=1e3 --angle=90 \
+    --number-of-runs=1 --number-of-parallel-runs=1 \
+    --save-photon-paths --cpu
+steamshovel tmp/propagated_photons.i3
+```
+
+![instant absorption example](https://user-images.githubusercontent.com/1679688/35931789-0f3c6f46-0c36-11e8-9e05-0b692c6b093c.png)
+
 ## Usage
 
 - Which framework version is required (or tested)?
