@@ -62,29 +62,14 @@ tray = I3Tray()
 tray.AddModule("I3InfiniteSource",
                Prefix = gcd_file,
                Stream = icetray.I3Frame.DAQ)
-if args.plane_wave:
-  for i in xrange(number_of_photons):
-    random_vector = I3Position(random.random() * 2 - 1, random.random() * 2 - 1, random.random() * 2 - 1)
-    shift_vector_a = photon_direction.cross(random_vector)
-    shift_vector_b = photon_direction.cross(shift_vector_a)
-    len_a = math.sqrt(shift_vector_a * shift_vector_a)
-    len_b = math.sqrt(shift_vector_b * shift_vector_b)
-    new_photon_position = photon_position + \
-        shift_vector_a / len_a * (random.random() * 2 - 1) * args.plane_wave_size / 2 + \
-        shift_vector_b / len_b * (random.random() * 2 - 1) * args.plane_wave_size / 2
-
-    tray.AddModule(GeneratePhotonFlashModule,
-               SeriesFrameKey = "PhotonFlasherPulseSeries",
-               PhotonPosition = new_photon_position,
-               PhotonDirection = photon_direction,
-               NumOfPhotons = 1,
-               FlasherPulseType = clsim.I3CLSimFlasherPulse.FlasherPulseType.LED340nm)
-else:
-  tray.AddModule(GeneratePhotonFlashModule,
+tray.AddModule(GeneratePhotonFlashModule,
                SeriesFrameKey = "PhotonFlasherPulseSeries",
                PhotonPosition = photon_position,
                PhotonDirection = photon_direction,
                NumOfPhotons = number_of_photons, # 1.7e5,
+               PlaneWave = args.plane_wave,
+               PlaneWaveSize = args.plane_wave_size,
+               Seed = args.seed,
                FlasherPulseType = clsim.I3CLSimFlasherPulse.FlasherPulseType.LED340nm)
 tray.AddModule("I3Writer",
                Filename = output_file)
