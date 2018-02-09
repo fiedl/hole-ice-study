@@ -36,15 +36,29 @@ OptionParser.new do |opts|
   opts.on "--number-of-runs=NUMBER", "Repeat the same scenario NUMBER times, i.e. create NUMBER q frames." do |number|
     options[:number_of_runs] = number.to_i
   end
-
+  opts.on "--plane-wave", "Start photons from a plane rather than a point." do
+    options[:plane_wave] = true
+  end
+  opts.on "--plane-wave-size=METRES" do |metres|
+    options[:plane_wave_size] = metres
+  end
+  opts.on "--seed=NUMBER", "Seed for the random number generator" do |number|
+    options[:seed] = number
+  end
 end.parse!
 
 options[:number_of_runs] ||= 1
+options[:number_of_angles] ||= 8
+options[:dom_position] ||= [-256.02301025390625, -521.281982421875, 500.0]
+options[:distance] ||= 1.0
+options[:output_file_pattern] ||= 'tmp/photons_from_angle_ANGLE.i3'
+options[:number_of_photons_per_angle] ||= 1e5.to_i
+options[:seed] ||= 1234
 
 log.head "Creating photons from all angles"
 log.info options
 
-angular_range = options[:angles] || (0..359).step(360 / options[:number_of_angles])
+angular_range = options[:angles] || (0..180).step(180 / options[:number_of_angles])
 log.section "Looping through #{angular_range.to_s}"
 
 require 'matrix'
@@ -71,6 +85,10 @@ angular_range.each do |angle|
   #log.variable photon_direction, :photon_direction
   log.info "photons from #{photon_direction.to_s.red}"
 
+  # choose the size of the plane wave in the order of the distance from the dom
+  # if nothing else is specified.
+  options[:plane_wave_size] ||= options[:distance]
+
   # write photons into file
   `python #{__dir__}/create_qframe_i3_file_with_photons_from_angle.py \
     --photon-position=#{photon_position.to_a.join(",")} \
@@ -79,6 +97,9 @@ angular_range.each do |angle|
     --gcd-file=#{options[:gcd_file]} \
     --output-file=#{filename} \
     --number-of-runs=#{options[:number_of_runs]} \
+    #{'--plane-wave' if options[:plane_wave]} \
+    #{"--plane-wave-size=#{options[:plane_wave_size]}" if options[:plane_wave]} \
+    --seed=#{options[:seed]}
     > tmp/create_qframes.log 2>&1
   `
 

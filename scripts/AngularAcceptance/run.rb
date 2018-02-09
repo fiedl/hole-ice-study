@@ -37,7 +37,9 @@ OptionParser.new do |opts|
   opts.on "--angles=LIST", "e.g. 0,45,90,180" do |list|
     options[:angles] = list.split(",").map(&:to_i)
   end
-
+  opts.on "--plane-wave", "Start photons from a plane rather than a point." do
+    options[:plane_wave] = true
+  end
 end.parse!
 
 
@@ -159,7 +161,10 @@ else
     --gcd-file=#{options[:gcd_file_with_hole_ice]} \\
     --output-file-pattern=tmp/photons_from_angle_ANGLE.i3 \\
     --number-of-photons-per-angle=#{options[:number_of_photons]} \\
-    --number-of-runs=#{options[:number_of_parallel_runs]}
+    --number-of-runs=#{options[:number_of_parallel_runs]} \\
+    #{"--plane-wave" if options[:plane_wave]} \\
+    #{"--plane-wave-size=#{options[:distance]}" if options[:plane_wave]} \\
+    --seed=#{options[:seed]}
   "
 end
 if options[:angles]

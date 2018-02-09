@@ -33,7 +33,9 @@ OptionParser.new do |opts|
   opts.on "--angle=DEGREES", "e.g. 45" do |angle|
     options[:angles] = [angle.to_i]
   end
-
+  opts.on "--plane-wave", "Start photons from a plane rather than a point." do
+    options[:plane_wave] = true
+  end
 end.parse!
 
 log.head "Firing Range: Fire Photons Onto a DOM"
@@ -126,7 +128,10 @@ else
     --gcd-file=#{options[:gcd_file_with_hole_ice]} \\
     --output-file-pattern=tmp/photons.i3 \\
     --number-of-photons-per-angle=#{options[:number_of_photons]} \\
-    --number-of-runs=#{options[:number_of_parallel_runs]}
+    --number-of-runs=#{options[:number_of_parallel_runs]} \\
+    #{"--plane-wave" if options[:plane_wave]} \\
+    #{"--plane-wave-size=#{options[:distance]}" if options[:plane_wave]} \\
+    --seed=#{options[:seed]}
   "
 end
 log.ensure_file "tmp/photons.i3"
@@ -137,8 +142,8 @@ log.ensure_file "tmp/photons.i3"
 log.section "Propagate photons with clsim"
 global_propagation_options = {
   hole_ice: :simulation,  # false, :approximation, :simulation
-  scattering_factor: options[:scattering_factor] || 0.02,
-  absorption_factor: options[:absorption_factor] || 1.0,
+  scattering_factor: options[:scattering_factor] || 0.1,
+  absorption_factor: options[:absorption_factor] || 0.1,
   save_photon_paths: options[:save_photon_paths],
   propagation_log_file: "tmp/propagation.log",
   clsim_log_file: "tmp/clsim.log",
