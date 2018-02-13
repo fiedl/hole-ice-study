@@ -40,6 +40,9 @@ OptionParser.new do |opts|
   opts.on "--plane-wave", "Start photons from a plane rather than a point." do
     options[:plane_wave] = true
   end
+  opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
+    options[:cylinder_shift] = metres
+  end
 end.parse!
 
 
@@ -89,7 +92,7 @@ detector_geometry_options = {
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
   seed: 123456,
   hole_ice_cylinder_positions: [
-    [-256.02301025390625, -521.281982421875]
+    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875]
   ],
   hole_ice_cylinder_radii: [
     0.30
