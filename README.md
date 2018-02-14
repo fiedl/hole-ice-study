@@ -55,6 +55,24 @@ open results/current/plot_with_reference.png
 
 ![plot](https://user-images.githubusercontent.com/1679688/36029509-bc087af8-0da3-11e8-82ec-28b792254ca0.png)
 
+### Asymmetry Example
+
+This is the same simulation, but the hole-ice cylinder and the DOM are shifted against each other by 20cm, such that the DOM is no longer centered inside the hole ice. See: [Issue #8](https://github.com/fiedl/hole-ice-study/issues/8).
+
+```bash
+$ICESIM/env-shell.sh
+cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
+./run.rb --scattering-factor=0.1 --absorption-factor=1.0 \
+    --distance=1.0 --plane-wave \
+    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-runs=2 --number-of-parallel-runs=2 \
+    --cylinder-shift=0.2
+open results/current/plot_with_reference.png
+```
+
+![plot](https://user-images.githubusercontent.com/1679688/36163106-a0041ce8-10e8-11e8-87af-9981b2e62cf7.png)
+
+
 ## Usage
 
 - Which framework version is required (or tested)?
