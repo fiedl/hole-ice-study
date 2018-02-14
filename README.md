@@ -20,13 +20,13 @@ cd $HOLE_ICE_STUDY/scripts/FiringRange
 steamshovel tmp/propagated_photons.i3
 ```
 
-![instant absorption example](https://user-images.githubusercontent.com/1679688/35931789-0f3c6f46-0c36-11e8-9e05-0b692c6b093c.png)
+![instant absorption example](https://user-images.githubusercontent.com/1679688/36201180-6b1c1796-117f-11e8-9d06-cf682ad139f0.png)
 
 ### Angular Acceptance Example
 
 Depending on the simulated hole ice parameters, the hole ice simulation produces similar results regarding the dom angular acceptance as the [reference study](https://github.com/fiedl/hole-ice-study/issues/10).
 
-In the following example, the hole ice scattering and absorption lengths are defined to be 1/10 of the corresponding lengths outside the hole ice. Photons are shot from a distance of 1.0m onto the dom from different angles.
+In the following example, the hole ice scattering length is defined to be 1/10 of the scattering length outside the hole ice. The hole ice absorption length is defined to be the same as outside the hole ice. Photons are shot from a distance of 1.0m onto the dom from different angles.
 
 ```bash
 $ICESIM/env-shell.sh
@@ -37,7 +37,23 @@ cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
 open results/current/plot_with_reference.png
 ```
 
-![angular acceptance example](https://user-images.githubusercontent.com/1679688/35880167-761375e8-0b7d-11e8-8bf8-53e9a43f99c3.png)
+![angular acceptance example](https://user-images.githubusercontent.com/1679688/36202267-641a2b1e-1183-11e8-968b-9df82763b247.png)
+
+### Plane Wave Example
+
+This is the same angular acceptance simulation, but rather than having the photons start at a single point for each angle, the starting points are randomly distributed over a plane for each angle. See: [Issue #27](https://github.com/fiedl/hole-ice-study/issues/27).
+
+```bash
+$ICESIM/env-shell.sh
+cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
+./run.rb --scattering-factor=0.1 --absorption-factor=1.0 \
+    --distance=1.0 --plane-wave \
+    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-runs=2 --number-of-parallel-runs=2
+open results/current/plot_with_reference.png
+```
+
+![plot](https://user-images.githubusercontent.com/1679688/36029509-bc087af8-0da3-11e8-82ec-28b792254ca0.png)
 
 ## Usage
 
