@@ -162,6 +162,28 @@ make -j 2
 
 If `make -j 2` raises an error at some point, try continuing using `make`. The parameter `-j 2` uses two cpu cores to compile. But this does not always work due to dependency issues.
 
+
+## Install patched clsim
+
+This study needs a version of clsim that does support hole ice simulations. Until these changes are made public in the svn, you need to install the this clsim fork:
+
+```bash
+# Get clsim fork
+git clone git@github.com:fiedl/clsim.git ~/clsim
+cd ~/clsim
+git checkout sf/hole-ice-2017
+
+# Symlink it into the icesim source
+cd $ICESIM_ROOT/src
+rm -rf clsim
+ln -s ~/clsim clsim
+
+# Compile it
+cd $ICESIM_ROOT/debug_build
+make -j 6
+```
+
+
 ## Testing
 
 ### Start the icesim environment

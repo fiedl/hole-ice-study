@@ -131,6 +131,8 @@ This study needs a version of clsim that does support hole ice simulations. Unti
 ```bash
 # Get clsim fork
 git clone git@github.com:fiedl/clsim.git $SCRATCH/clsim
+cd $SCRATCH/clsim
+git checkout sf/hole-ice-2017
 
 # Symlink it into the icesim source
 cd $ICESIM_ROOT/src

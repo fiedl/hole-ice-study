@@ -89,7 +89,7 @@ Hole ice simulation adds another task to each simulation step: Calculate the por
 
 ![image](https://user-images.githubusercontent.com/1679688/36200747-f1b8378c-117d-11e8-9e3f-8c0a5e8b944e.png)
 
-For details, please have a look at the [hole_ice.c README](https://github.com/fiedl/clsim.private/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice).
+For details, please have a look at the [hole_ice.c README](https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice).
 
 ## Installation
 
@@ -102,7 +102,23 @@ This software requires the icecube simulation framework. I've used version icecu
 
 ### Install clsim fork
 
-- Use fork until merged into icesim trunk
+This study needs a version of clsim that does support hole ice simulations. Until these changes are made public in the svn, you need to install the this clsim fork: https://github.com:fiedl/clsim.
+
+```bash
+# Get clsim fork
+git clone git@github.com:fiedl/clsim.git ~/clsim
+cd ~/clsim
+git checkout sf/hole-ice-2017
+
+# Symlink it into the icesim source
+cd $ICESIM_ROOT/src
+rm -rf clsim
+ln -s ~/clsim clsim
+
+# Compile it
+cd $ICESIM_ROOT/debug_build
+make -j 6
+```
 
 ### Troubleshooting
 
