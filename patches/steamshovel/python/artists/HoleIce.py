@@ -31,13 +31,29 @@ class HoleIce(PyArtist):
         for i, position in enumerate(hole_ice_cylinder_positions):
             radius = hole_ice_cylinder_radii[i]
 
-            position_vec = vec3d(position.x, position.y, bedrock_z)
+            # If z is given, draw a cylinder of 1m height.
+            # If z is 0, draw a cylinder from the very top to the very bottom.
+            #
+            # See: https://github.com/fiedl/hole-ice-study/issues/34
+            #
+            if position.z == 0:
 
-            cylinder = output.addCylinder(
-                position_vec,                           # Vertex
-                vec3d(0, 0, ice_top_z - bedrock_z),     # Axes
-                radius,                                 # Base Radius
-                radius                                  # Top Radius
-            )
+              position_vec = vec3d(position.x, position.y, bedrock_z)
+              cylinder = output.addCylinder(
+                  position_vec,                           # Vertex
+                  vec3d(0, 0, ice_top_z - bedrock_z),     # Axes
+                  radius,                                 # Base Radius
+                  radius                                  # Top Radius
+              )
+              cylinder.setColor(PyQColor(255, 255, 255, 120))
 
-            cylinder.setColor(PyQColor(255, 255, 255, 120))
+            else:
+
+              position_vec = vec3d(position.x, position.y, position.z - 0.5)
+              cylinder = output.addCylinder(
+                  position_vec,                           # Vertex
+                  vec3d(0, 0, 1.0),                       # Axes
+                  radius,                                 # Base Radius
+                  radius                                  # Top Radius
+              )
+              cylinder.setColor(PyQColor(255, 255, 255, 120))
