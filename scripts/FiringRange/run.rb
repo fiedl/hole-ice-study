@@ -56,17 +56,19 @@ log.success "OK."
 # Detector geometry
 #
 log.section "Detector geometry"
+dom_radius = 0.16510
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
   seed: 123456,
   hole_ice_cylinder_positions: [
-    [-256.02301025390625, -521.281982421875],
-#    [-256.02301025390625, -521.281982421875]
+    # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
+    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
+    [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.30,
-#    0.15
+    0.08,
+    0.02
   ]
 }
 log.configuration detector_geometry_options
@@ -91,6 +93,7 @@ else
     " + options[:hole_ice_cylinder_positions].enum_for(:each_with_index).collect { |pos, index|
       "--cylinder-x=#{options[:hole_ice_cylinder_positions][index][0]} \\
       --cylinder-y=#{options[:hole_ice_cylinder_positions][index][1]} \\
+      --cylinder-z=#{options[:hole_ice_cylinder_positions][index][2]} \\
       --cylinder-radius=#{options[:hole_ice_cylinder_radii][index]} \\
       "
     }.join + "> #{options[:create_gcd_log]} 2>&1"

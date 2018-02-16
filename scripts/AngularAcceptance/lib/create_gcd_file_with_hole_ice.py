@@ -18,13 +18,14 @@ parser.add_option("--output-gcd-file")
 # parser.add_option("--cylinder-position-and-radius", "--xyr", action="append", help="Format: 'x,y,r'. Allowed multiple times like this: --xyr 200,200,1 --xyr 300,300,1.")
 parser.add_option("--cylinder-x", type = "float", action="append")
 parser.add_option("--cylinder-y", type = "float", action="append")
+parser.add_option("--cylinder-z", type = "float", action="append")
 parser.add_option("--cylinder-radius", type = "float", action="append")
 (options, args) = parser.parse_args()
 
 hole_ice_cylinders = []
 for i, opt in enumerate(options.cylinder_x): # http://stackoverflow.com/a/2756310/2066546
   cylinder = {
-    "position": dataclasses.I3Position(options.cylinder_x[i], options.cylinder_y[i], 0),
+    "position": dataclasses.I3Position(options.cylinder_x[i], options.cylinder_y[i], options.cylinder_z[i]),
     "radius": options.cylinder_radius[i]
   }
   hole_ice_cylinders.append(cylinder)
