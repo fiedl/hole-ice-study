@@ -1,0 +1,9 @@
+@@ -84,7 +84,7 @@
+
+ Detector::Detector(){
+ 	addSetting( "DOM labels", false );
+-	addSetting( "DOM radius", RangeSetting(0.0, 10.0, 100, 1.0) );
++	addSetting( "DOM radius", RangeSetting(0.0, 10.0, 10000, 0.165) );
+ 	addSetting( "DOM color", QColor::fromRgbF(1.0, 1.0, 1.0, 1.0) );
+ 	addSetting( "string color", QColor::fromRgbF(1.0, 1.0, 1.0, 0.3) );
+ 	addSetting( "string width", RangeSetting(0.0, 10.0, 100, 1.0) );
