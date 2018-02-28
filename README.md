@@ -20,7 +20,7 @@ cd $HOLE_ICE_STUDY/scripts/FiringRange
 steamshovel tmp/propagated_photons.i3
 ```
 
-![instant absorption example](https://user-images.githubusercontent.com/1679688/36201180-6b1c1796-117f-11e8-9d06-cf682ad139f0.png)
+![instant absorption example](https://user-images.githubusercontent.com/1679688/36786032-371bd6c8-1c85-11e8-817a-0ed12e35e3b1.png)
 
 ### Angular Acceptance Example
 
