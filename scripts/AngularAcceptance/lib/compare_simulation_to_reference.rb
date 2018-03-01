@@ -141,6 +141,7 @@ gnuplot_script = "
   set xlabel 'cos(η)';
   set ylabel 'relative sensitivity';
   set logscale y;
+  set key right bottom;
 
   #{polynomial_parameters}
 
