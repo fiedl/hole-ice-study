@@ -160,8 +160,8 @@ gnuplot_script = "
     chisq_nu = results[input_file]['chi^2_nu'].to_f.round(4)
 "
     '#{input_file}'
-    using (cos(\\$1 / 360 * 2 * pi)):(\\$2 / \\$4 * #{scale}):(\\$3 / \\$4 * #{scale})
-    with errorbars
+    using (cos(\\$1 / 360 * 2 * pi)):(\\$2 / \\$4 * #{scale}):(\\$3 / \\$4 * #{scale}):(\\$1 <= 180 ? 1 : 2)
+    with errorbars linecolor variable
     title '#{label}, χ^2_ν=#{chisq_nu}',
 "
 }.join("\n") + "
