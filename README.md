@@ -32,7 +32,7 @@ In the following example, the hole ice scattering length is defined to be 1/10 o
 $ICESIM/env-shell.sh
 cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
 ./run.rb --scattering-factor=0.1 --absorption-factor=0.1 --distance=1.0 \
-    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180 \
     --number-of-runs=2 --number-of-parallel-runs=2
 open results/current/plot_with_reference.png
 ```
@@ -48,7 +48,7 @@ $ICESIM/env-shell.sh
 cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
 ./run.rb --scattering-factor=0.1 --absorption-factor=1.0 \
     --distance=1.0 --plane-wave \
-    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180 \
     --number-of-runs=2 --number-of-parallel-runs=2
 open results/current/plot_with_reference.png
 ```
@@ -64,7 +64,7 @@ $ICESIM/env-shell.sh
 cd $HOLE_ICE_STUDY/scripts/AngularAcceptance
 ./run.rb --scattering-factor=0.1 --absorption-factor=1.0 \
     --distance=1.0 --plane-wave \
-    --number-of-photons=1e5 --angles=0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180] \
+    --number-of-photons=1e5 --angles=0,10,20,30,40,50,60,70,90,120,140,150,160,170,190,200,210,220,240,260,270,290,300,310,320,330,340,350 \
     --number-of-runs=2 --number-of-parallel-runs=2 \
     --cylinder-shift=0.2
 open results/current/plot_with_reference.png
