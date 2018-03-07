@@ -36,6 +36,9 @@ OptionParser.new do |opts|
   opts.on "--plane-wave", "Start photons from a plane rather than a point." do
     options[:plane_wave] = true
   end
+  opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
+    options[:cylinder_shift] = metres
+  end
 end.parse!
 
 log.head "Firing Range: Fire Photons Onto a DOM"
@@ -63,11 +66,13 @@ detector_geometry_options = {
   seed: 123456,
   hole_ice_cylinder_positions: [
     # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
-    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
+    #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
+    #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
     [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.08,
+    #0.30,
+    #0.08,
     0.02
   ]
 }
