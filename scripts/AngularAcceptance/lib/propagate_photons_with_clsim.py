@@ -94,6 +94,7 @@ def PerformPropagationSimulation():
         UnWeightedPhotons = True,
         #UnWeightedPhotonsScalingFactor=0.01,
         DOMOversizeFactor = 1.0,
+        UnshadowedFraction = 1.0,
         FlasherInfoVectName = "",
         FlasherPulseSeriesName = "PhotonFlasherPulseSeries",
         UseHoleIceParameterization = options.use_hole_ice_approximation,  # Angular Acceptance Modification.
