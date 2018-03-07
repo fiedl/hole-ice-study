@@ -42,7 +42,7 @@ cp -r Gemfile Gemfile.lock lib run.rb $TMPDIR/AngularAcceptance/
 cd $TMPDIR/AngularAcceptance
 ruby --version
 bundle install
-$LOADENV zsh -c "env && bundle exec ruby run.rb $*"
+$LOADENV zsh -c "env && bundle exec ruby run.rb --cluster $*"
 
 # Copy result files back.
 cp -r results tmp $RESULTSDESTINATION/

@@ -9,6 +9,10 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: bundle exec ruby run.rb [options]"
 
+  opts.on "--cluster", "Configure for running on the cluster: Skip plotting." do
+    options[:cluster] = true
+  end
+
   opts.on "--resume" do
     options[:resume] = true
   end
@@ -291,24 +295,28 @@ shell "cat tmp/angle_mean_hits_std_deviation_and_photons_*.txt \\
   > tmp/angle_hits_deviation_and_photons.txt"
 log.ensure_file "tmp/angle_hits_deviation_and_photons.txt"
 
-gnuplot_commands = "
-  set term png
-  set title 'Angular Acceptance #{options[:run_id]}'
-  set xlabel 'cos(/Symbol h)'
-  set ylabel 'relative sensitivity'
-  set logscale y
-  plot 'tmp/angle_hits_deviation_and_photons.txt' \\
-    using (cos(\$1 / 360 * 2 * pi)):(\$2 / \$4):(\$3 / \$4) \\
-    with errorbars \\
-    title 'Distance #{options[:distance]}m' \\
-    ps 5
-"
-File.open("tmp/plot.gnuplot", 'w') { |file| file.write gnuplot_commands }
-log.ensure_file "tmp/plot.gnuplot"
-log.info gnuplot_commands
+if options[:cluster]
+  log.warning "Skipping plot because running on the cluster. To plot later, use lib/plot.rb."
+else
+  gnuplot_commands = "
+    set term png
+    set title 'Angular Acceptance #{options[:run_id]}'
+    set xlabel 'cos(/Symbol h)'
+    set ylabel 'relative sensitivity'
+    set logscale y
+    plot 'tmp/angle_hits_deviation_and_photons.txt' \\
+      using (cos(\$1 / 360 * 2 * pi)):(\$2 / \$4):(\$3 / \$4) \\
+      with errorbars \\
+      title 'Distance #{options[:distance]}m' \\
+      ps 5
+  "
+  File.open("tmp/plot.gnuplot", 'w') { |file| file.write gnuplot_commands }
+  log.ensure_file "tmp/plot.gnuplot"
+  log.info gnuplot_commands
 
-shell "gnuplot tmp/plot.gnuplot > tmp/plot.png"
-log.ensure_file "tmp/plot.png"
+  shell "gnuplot tmp/plot.gnuplot > tmp/plot.png"
+  log.ensure_file "tmp/plot.png"
+end
 
 
 # Writing histograms.
@@ -327,17 +335,21 @@ histogram_options = {
 }
 log.configuration histogram_options
 options.merge! histogram_options
-shell "ruby lib/create_histograms_for_hits.rb \\
-  --input-files=#{options[:hits_histograms_input_files]} \\
-  --input-columns=#{options[:hits_histograms_input_columns]} \\
-  --output-file-pattern=#{options[:hits_histograms_output_file_pattern]} \\
-  --min-bin=#{options[:hits_histograms_min_bin]} \\
-  --max-bin=#{options[:hits_histograms_max_bin]} \\
-  > #{options[:hits_histograms_log]}
-"
-log.ensure_file options[:hits_histograms_log]
-log.ensure_file "tmp/histograms/hits_histogram_000.png"
 
+if options[:cluster]
+  log.warning "Skipping creating histograms because running on the cluster. To create them later, use lib/create_histograms_for_hits.rb."
+else
+  shell "ruby lib/create_histograms_for_hits.rb \\
+    --input-files=#{options[:hits_histograms_input_files]} \\
+    --input-columns=#{options[:hits_histograms_input_columns]} \\
+    --output-file-pattern=#{options[:hits_histograms_output_file_pattern]} \\
+    --min-bin=#{options[:hits_histograms_min_bin]} \\
+    --max-bin=#{options[:hits_histograms_max_bin]} \\
+    > #{options[:hits_histograms_log]}
+  "
+  log.ensure_file options[:hits_histograms_log]
+  log.ensure_file "tmp/histograms/hits_histogram_000.png"
+end
 
 # Writing down used options.
 #
@@ -350,7 +362,11 @@ log.ensure_file "tmp/options.txt"
 # Generate plots.
 #
 log.section "Comparing to reference plot"
-shell "ruby lib/plot.rb ./tmp"
+if options[:cluster]
+  log.warning "Skipping comparison plots because running on the cluster."
+else
+  shell "ruby lib/plot.rb ./tmp"
+end
 
 
 # Read in options, which might have been changed
