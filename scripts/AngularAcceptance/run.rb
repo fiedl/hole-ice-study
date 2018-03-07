@@ -98,11 +98,11 @@ detector_geometry_options = {
   seed: 123456,
   hole_ice_cylinder_positions: [
     # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
-    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
+    # [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
     [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.08,
+    # 0.08,
     0.02
   ]
 }
