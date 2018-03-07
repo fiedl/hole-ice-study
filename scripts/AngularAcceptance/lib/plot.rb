@@ -5,9 +5,13 @@ require 'pp'
 require 'descriptive_statistics'
 require 'active_support'
 
-options = {}
+global_options = {}
 OptionParser.new do |opts|
   opts.banner = "Creates plots from existing data. Usage: bundle exec ruby run.rb [options] data-directories"
+
+  opts.on "--nominal", "Plot against icecube nominal rather than hole-ice acceptance." do
+    global_options[:nominal] = true
+  end
 end.parse!
 command_line_arguments = ARGV
 
@@ -75,7 +79,7 @@ configurations.each do |options|
     --output-plot-file='#{options[:chi_squared_nu_plot_file]}' \\
     --results-file='#{options[:chi_squared_results_file]}' \\
     --gnuplot-log='#{options[:chi_squared_gnuplot_log_file]}' \\
-    #{'--use-hole-ice' if options[:hole_ice]}
+    #{'--use-hole-ice' if options[:hole_ice] && !global_options[:nominal]}
   "
   log.ensure_file options[:chi_squared_nu_plot_file]
   log.ensure_file options[:chi_squared_results_file]
