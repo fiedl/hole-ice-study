@@ -107,7 +107,7 @@ def PerformPropagationSimulation():
         tray.AddSegment(clsim.I3CLSimMakePhotons,
 
                         StopDetectedPhotons = False,
-                        PhotonHistoryEntries = 1000,
+                        PhotonHistoryEntries = 10000,
                         ExtraArgumentsToI3CLSimModule = dict(
                             SaveAllPhotons = True,
                             SaveAllPhotonsPrescale = 1.0,
