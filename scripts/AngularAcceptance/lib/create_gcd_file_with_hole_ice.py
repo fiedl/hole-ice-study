@@ -23,24 +23,29 @@ parser.add_option("--cylinder-radius", type = "float", action="append")
 (options, args) = parser.parse_args()
 
 hole_ice_cylinders = []
-for i, opt in enumerate(options.cylinder_x): # http://stackoverflow.com/a/2756310/2066546
-  cylinder = {
-    "position": dataclasses.I3Position(options.cylinder_x[i], options.cylinder_y[i], options.cylinder_z[i]),
-    "radius": options.cylinder_radius[i]
-  }
-  hole_ice_cylinders.append(cylinder)
+if options.cylinder_x:
+  for i, opt in enumerate(options.cylinder_x): # http://stackoverflow.com/a/2756310/2066546
+    cylinder = {
+      "position": dataclasses.I3Position(options.cylinder_x[i], options.cylinder_y[i], options.cylinder_z[i]),
+      "radius": options.cylinder_radius[i]
+    }
+    hole_ice_cylinders.append(cylinder)
 
 def add_hole_ice_to_geometry_frame(frame, positions = [], radii = []):
     frame.Put("HoleIceCylinderPositions", positions)
     frame.Put("HoleIceCylinderRadii", radii)
 
 def create_hole_ice_gcd_file(input_gcd, output_gcd, hole_ice_cylinders):
-    hole_ice_cylinder_positions = dataclasses.I3VectorI3Position(
-        [cylinder["position"] for cylinder in hole_ice_cylinders]
-    )
-    hole_ice_cylinder_radii = dataclasses.I3VectorFloat(
-        [cylinder["radius"] for cylinder in hole_ice_cylinders]
-    )
+    hole_ice_cylinder_positions = dataclasses.I3VectorI3Position()
+    hole_ice_cylinder_radii = dataclasses.I3VectorFloat()
+
+    if len(hole_ice_cylinders) > 0:
+      hole_ice_cylinder_positions = dataclasses.I3VectorI3Position(
+          [cylinder["position"] for cylinder in hole_ice_cylinders]
+      )
+      hole_ice_cylinder_radii = dataclasses.I3VectorFloat(
+          [cylinder["radius"] for cylinder in hole_ice_cylinders]
+      )
 
     tray = I3Tray()
     tray.AddModule("I3Reader",
