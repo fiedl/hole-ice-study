@@ -102,7 +102,8 @@ detector_geometry_options = {
     [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.08,
+    0.30,
+    #0.08,
     0.02
   ],
   cylinder_scattering_lengths: [
