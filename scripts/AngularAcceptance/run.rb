@@ -98,12 +98,20 @@ detector_geometry_options = {
   seed: 123456,
   hole_ice_cylinder_positions: [
     # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
-    # [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
+    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
     [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    # 0.08,
+    0.08,
     0.02
+  ],
+  cylinder_scattering_lengths: [
+    0.005,
+    100.0
+  ],
+  cylinder_absorption_lengths: [
+    100.0,
+    0.0
   ]
 }
 log.configuration detector_geometry_options
@@ -126,6 +134,8 @@ shell "python #{__dir__}/lib/create_gcd_file_with_hole_ice.py \\
     --cylinder-y=#{options[:hole_ice_cylinder_positions][index][1]} \\
     --cylinder-z=#{options[:hole_ice_cylinder_positions][index][2]} \\
     --cylinder-radius=#{options[:hole_ice_cylinder_radii][index]} \\
+    --cylinder-scattering-length=#{options[:cylinder_scattering_lengths][index] || options[:scattering_factor]} \\
+    --cylinder-absorption-length=#{options[:cylinder_absorption_lengths][index] || options[:absorption_factor]} \\
     "
   }.join + "> #{options[:create_gcd_log]} 2>&1"
 
@@ -140,7 +150,7 @@ photon_frames_options = {
   dom_index: [1, 1],
   dom_position: [-256.02301025390625, -521.281982421875, 500],
   distance: options[:distance] || 1.0,
-  angles: options[:angles] || [0,10,20,30,32,45,60,75,90,105,120,135,148,160,170,180],
+  angles: options[:angles] || [0,10,20,30,40,50,60,70,90,120,140,150,160,170,190,200,210,220,240,260,270,290,300,310,320,330,340,350],
   number_of_photons: options[:number_of_photons] || 1e5,
   number_of_runs: options[:number_of_runs] || 2,
   number_of_parallel_runs: options[:number_of_parallel_runs] || 2
@@ -193,7 +203,7 @@ end
 log.section "Propagate photons with clsim"
 global_propagation_options = {
   hole_ice: :simulation,  # false, :approximation, :simulation
-  scattering_factor: options[:scattering_factor] || 0.02,
+  scattering_factor: options[:scattering_factor] || 1.0,
   absorption_factor: options[:absorption_factor] || 1.0,
   save_photon_paths: false,
   propagation_log_file: "tmp/propagation.log",
