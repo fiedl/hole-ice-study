@@ -20,6 +20,8 @@ parser.add_option("--cylinder-x", type = "float", action="append")
 parser.add_option("--cylinder-y", type = "float", action="append")
 parser.add_option("--cylinder-z", type = "float", action="append")
 parser.add_option("--cylinder-radius", type = "float", action="append")
+parser.add_option("--cylinder-scattering-length", type = "float", action="append")
+parser.add_option("--cylinder-absorption-length", type = "float", action="append")
 (options, args) = parser.parse_args()
 
 hole_ice_cylinders = []
@@ -27,17 +29,23 @@ if options.cylinder_x:
   for i, opt in enumerate(options.cylinder_x): # http://stackoverflow.com/a/2756310/2066546
     cylinder = {
       "position": dataclasses.I3Position(options.cylinder_x[i], options.cylinder_y[i], options.cylinder_z[i]),
-      "radius": options.cylinder_radius[i]
+      "radius": options.cylinder_radius[i],
+      "scattering_length": options.cylinder_scattering_length[i],
+      "absorption_length": options.cylinder_absorption_length[i]
     }
     hole_ice_cylinders.append(cylinder)
 
-def add_hole_ice_to_geometry_frame(frame, positions = [], radii = []):
+def add_hole_ice_to_geometry_frame(frame, positions = [], radii = [], scattering_lengths = [], absorption_lengths = []):
     frame.Put("HoleIceCylinderPositions", positions)
     frame.Put("HoleIceCylinderRadii", radii)
+    frame.Put("HoleIceCylinderScatteringLengths", scattering_lengths)
+    frame.Put("HoleIceCylinderAbsorptionLengths", absorption_lengths)
 
 def create_hole_ice_gcd_file(input_gcd, output_gcd, hole_ice_cylinders):
     hole_ice_cylinder_positions = dataclasses.I3VectorI3Position()
     hole_ice_cylinder_radii = dataclasses.I3VectorFloat()
+    hole_ice_cylinder_scattering_lengths = dataclasses.I3VectorFloat()
+    hole_ice_cylinder_absorption_lengths = dataclasses.I3VectorFloat()
 
     if len(hole_ice_cylinders) > 0:
       hole_ice_cylinder_positions = dataclasses.I3VectorI3Position(
@@ -46,6 +54,12 @@ def create_hole_ice_gcd_file(input_gcd, output_gcd, hole_ice_cylinders):
       hole_ice_cylinder_radii = dataclasses.I3VectorFloat(
           [cylinder["radius"] for cylinder in hole_ice_cylinders]
       )
+      hole_ice_cylinder_scattering_lengths = dataclasses.I3VectorFloat(
+          [cylinder["scattering_length"] for cylinder in hole_ice_cylinders]
+      )
+      hole_ice_cylinder_absorption_lengths = dataclasses.I3VectorFloat(
+          [cylinder["absorption_length"] for cylinder in hole_ice_cylinders]
+      )
 
     tray = I3Tray()
     tray.AddModule("I3Reader",
@@ -53,6 +67,8 @@ def create_hole_ice_gcd_file(input_gcd, output_gcd, hole_ice_cylinders):
     tray.AddModule(add_hole_ice_to_geometry_frame,
                    positions = hole_ice_cylinder_positions,
                    radii = hole_ice_cylinder_radii,
+                   scattering_lengths = hole_ice_cylinder_scattering_lengths,
+                   absorption_lengths = hole_ice_cylinder_absorption_lengths,
                    Streams = [icetray.I3Frame.Geometry])
     tray.AddModule("I3Writer",
                    Filename = output_gcd)

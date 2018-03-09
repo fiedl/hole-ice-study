@@ -66,14 +66,24 @@ detector_geometry_options = {
   seed: 123456,
   hole_ice_cylinder_positions: [
     # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
-    #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
+    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
+    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
     #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
-    [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
+    #[-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    #0.30,
+    0.30,
+    0.28
     #0.08,
-    0.02
+    #0.02
+  ],
+  cylinder_scattering_lengths: [
+    0.001,
+    100.0
+  ],
+  cylinder_absorption_lengths: [
+    100.0,
+    0.0
   ]
 }
 log.configuration detector_geometry_options
@@ -100,6 +110,8 @@ else
       --cylinder-y=#{options[:hole_ice_cylinder_positions][index][1]} \\
       --cylinder-z=#{options[:hole_ice_cylinder_positions][index][2]} \\
       --cylinder-radius=#{options[:hole_ice_cylinder_radii][index]} \\
+      --cylinder-scattering-length=#{options[:cylinder_scattering_lengths][index]} \\
+      --cylinder-absorption-length=#{options[:cylinder_absorption_lengths][index]} \\
       "
     }.join + "> #{options[:create_gcd_log]} 2>&1"
 end
