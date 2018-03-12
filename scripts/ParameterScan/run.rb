@@ -76,15 +76,26 @@ else
 
     if options[:submit_to_cluster]
 
-      shell "qsub \\
-          -l gpu \\
-          -l tmpdir_size=10G \\
-          -l s_rt=5:00:00 \\
-          -l h_rss=2G \\
-          -m ae \\
-          -t 1-#{number_of_jobs} \\
-        batch-job.sh \\
-      "
+      if options[:cpu]
+        shell "qsub \\
+            -l tmpdir_size=10G \\
+            -l s_rt=1:00:00 \\
+            -l h_rss=2G \\
+            -m ae \\
+            -t 1-#{number_of_jobs} \\
+          batch-job.sh --cpu \\
+        "
+      else
+        shell "qsub \\
+            -l gpu \\
+            -l tmpdir_size=10G \\
+            -l s_rt=5:00:00 \\
+            -l h_rss=2G \\
+            -m ae \\
+            -t 1-#{number_of_jobs} \\
+          batch-job.sh \\
+        "
+      end
 
       log.info "The results will be copied into 'cluster-results/*' by the"
       log.info "'batch-job.sh' script."
