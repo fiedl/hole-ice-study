@@ -43,11 +43,10 @@ else
     absorption_length_range: [100],
     hole_ice_radius_range: [0.5 * dom_radius],
     distance_range: [1.0],
-    number_of_photons: 1e0,
+    number_of_photons: 1e5,
     number_of_runs: 1,
     number_of_parallel_runs: 1,
-    #angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
-    angles: [0, 180]
+    angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
   })
 
   log.info "This script will iterate over the following configuration"
