@@ -20,6 +20,10 @@ OptionParser.new do |opts|
   opts.on "--plot", "Create plots for existing data" do
     options[:plot] = true
   end
+
+  opts.on "--cpu", "Use the cpu rather than the gpu. For local testing with few photons." do
+    options[:cpu] = true
+  end
 end.parse!
 
 log.head "Parameter Scan"
@@ -31,13 +35,19 @@ else
 
   # Parameter range configuration
   #
+  dom_radius = 0.16510
   options.merge!({
-    scattering_factor_range: [0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
-    absorption_factor_range: [0.001, 0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+    #effective_scattering_length_range: [0.001, 0.003, 0.005, 0.01, 0.05, 0.1, 0.2, 0.3],
+    #hole_ice_radius_range: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0].collect { |n| n * dom_radius }
+    effective_scattering_length_range: [0.003],
+    absorption_length_range: [100],
+    hole_ice_radius_range: [0.5 * dom_radius],
     distance_range: [1.0],
-    number_of_photons: 1e5,
-    number_of_runs: 5,
-    number_of_parallel_runs: 5
+    number_of_photons: 1e0,
+    number_of_runs: 1,
+    number_of_parallel_runs: 1,
+    #angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
+    angles: [0, 180]
   })
 
   log.info "This script will iterate over the following configuration"
@@ -48,8 +58,10 @@ else
   log.info "Configuration:"
   log.configuration options
 
-  number_of_jobs = options[:scattering_factor_range].count *
-      options[:absorption_factor_range].count *
+  number_of_jobs =
+      options[:effective_scattering_length_range].count *
+      options[:absorption_length_range].count *
+      options[:hole_ice_radius_range].count *
       options[:distance_range].count
   current_cluster_node_index = ENV['SGE_TASK_ID']
 
@@ -67,9 +79,8 @@ else
       shell "qsub \\
           -l gpu \\
           -l tmpdir_size=10G \\
-          -l s_rt=11:30:00 \\
+          -l s_rt=5:00:00 \\
           -l h_rss=2G \\
-          -l hostname=kepler{16..26} \\
           -m ae \\
           -t 1-#{number_of_jobs} \\
         batch-job.sh \\
@@ -82,48 +93,52 @@ else
 
       parameter_set_index = 0
       options[:distance_range].each do |dst|
-        options[:scattering_factor_range].each do |sca|
-          options[:absorption_factor_range].each do |abs|
+        options[:effective_scattering_length_range].each do |sca|
+          options[:absorption_length_range].each do |abs|
+            options[:hole_ice_radius_range].each do |radius|
 
-            parameter_set_index += 1
+              parameter_set_index += 1
 
-            need_to_perform_this_job = ((not current_cluster_node_index) or
-                (current_cluster_node_index.to_i == parameter_set_index))
+              need_to_perform_this_job = ((not current_cluster_node_index) or
+                  (current_cluster_node_index.to_i == parameter_set_index))
 
-            if need_to_perform_this_job
-              log.section "Parameters: sca=#{sca}, abs=#{abs}, dst=#{dst}"
+              if need_to_perform_this_job
+                log.section "Parameters: sca=#{sca}, abs=#{abs}, dst=#{dst}, r=#{radius}"
 
-              results_directory = "results/sca#{sca}_abs#{abs}_dst#{dst}"
+                results_directory = "results/sca#{sca}_abs#{abs}_dst#{dst}_r#{radius}"
 
-              if File.exists?(results_directory)
-                log.warning "Skipping already existing run #{results_directory}."
-              else
-                shell "mkdir -p #{results_directory} tmp"
-                shell "cd ../AngularAcceptance && ./run.rb \\
-                  --scattering-factor=#{sca} \\
-                  --absorption-factor=#{abs} \\
-                  --distance=#{dst} \\
-                  --plane-wave \\
-                  --number-of-photons=#{options[:number_of_photons]} \\
-                  --number-of-runs=#{options[:number_of_runs]} \\
-                  --number-of-parallel-runs=#{options[:number_of_parallel_runs]}
-                  > ../ParameterScan/tmp/angular_acceptance_script.log \\
-                  2> ../ParameterScan/tmp/angular_acceptance_script.err"
+                if File.exists?(results_directory)
+                  log.warning "Skipping already existing run #{results_directory}."
+                else
+                  shell "mkdir -p #{results_directory} tmp"
+                  shell "cd ../AngularAcceptance && ./run.rb \\
+                    --cluster \\
+                    --scattering-factor=#{sca} \\
+                    --absorption-factor=#{abs} \\
+                    --distance=#{dst} \\
+                    --plane-wave \\
+                    --number-of-photons=#{options[:number_of_photons]} \\
+                    --number-of-runs=#{options[:number_of_runs]} \\
+                    --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
+                    --angles=#{options[:angles].join(',')} \\
+                    > ../ParameterScan/tmp/angular_acceptance_script.log \\
+                    2> ../ParameterScan/tmp/angular_acceptance_script.err"
 
-                log.ensure_file "tmp/angular_acceptance_script.log"
+                  log.ensure_file "tmp/angular_acceptance_script.log"
 
-                if File.stat("tmp/angular_acceptance_script.err").size > 0
-                  log.error "\nThis angular acceptance script run has produced errors:"
-                  shell "cat tmp/angular_acceptance_script.err"
-                  shell "tail -n 20 tmp/angular_acceptance_script.log"
-                  log.info "\n\n"
+                  if File.stat("tmp/angular_acceptance_script.err").size > 0
+                    log.error "\nThis angular acceptance script run has produced errors:"
+                    shell "cat tmp/angular_acceptance_script.err"
+                    shell "tail -n 20 tmp/angular_acceptance_script.log"
+                    log.info "\n\n"
+                  end
+
+                  shell "mv tmp/angular_acceptance_script.* #{results_directory}/"
+                  shell "mv ../AngularAcceptance/results/current/* #{results_directory}/"
                 end
-
-                shell "mv tmp/angular_acceptance_script.* #{results_directory}/"
-                shell "mv ../AngularAcceptance/results/current/* #{results_directory}/"
               end
-            end
 
+            end
           end
         end
       end

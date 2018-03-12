@@ -26,6 +26,16 @@ OptionParser.new do |opts|
   opts.on "--absorption-factor=ABS", "Something between 0.0 and 1.0." do |abs|
     options[:absorption_factor] = abs.to_f
   end
+  opts.on "--hole-ice-scattering-length=SCA", "Geometric scattering length in metres." do |sca|
+    options[:hole_ice_scattering_length] = sca.to_f
+  end
+  opts.on "--hole-ice-absorption-length=ABS", "Geometric absorption length in metres." do |abs|
+    options[:hole_ice_absorption_length] = abs.to_f
+  end
+  opts.on "--hole-ice-radius=RADIUS", "Geometric scattering length in metres." do |radius|
+    options[:hole_ice_radius] = radius.to_f
+  end
+
   opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres, e.g. 1.0" do |dst|
     options[:distance] = dst.to_f
   end
@@ -46,6 +56,10 @@ OptionParser.new do |opts|
   end
   opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
     options[:cylinder_shift] = metres
+  end
+
+  opts.on "--cpu", "Use the cpu rather than the gpu. For local testing with few photons." do
+    options[:cpu] = true
   end
 end.parse!
 
@@ -102,16 +116,16 @@ detector_geometry_options = {
     #[-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.30,
+    options[:hole_ice_radius] || 0.30,
     #0.08,
     #0.02
   ],
   cylinder_scattering_lengths: [
-    0.178,
+    options[:hole_ice_scattering_length] || 0.178,
     #100.0
   ],
   cylinder_absorption_lengths: [
-    100.0,
+    options[:hole_ice_absorption_length] || 100.0,
     #0.0
   ]
 }
@@ -248,6 +262,7 @@ else
         --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
         --fallback=#{options[:clsim_error_fallback]} \\
         --hole-ice=#{options[:hole_ice]} \\
+        #{'--cpu' if options[:cpu]} \\
         --scattering-factor=#{options[:scattering_factor]} \\
         --absorption-factor=#{options[:absorption_factor]} \\
         #{'--save-photon-paths' if options[:save_photon_paths]} \\
