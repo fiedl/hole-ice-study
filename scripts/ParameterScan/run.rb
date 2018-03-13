@@ -35,16 +35,21 @@ else
 
   # Parameter range configuration
   #
-  dom_radius = 0.16510
   options.merge!({
-    effective_scattering_length_range: [0.001, 0.003, 0.005, 0.01, 0.05, 0.1, 0.2, 0.3],
-    hole_ice_radius_range: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0].collect { |n| n * dom_radius },
+    effective_scattering_length_range: [0.02, 0.1, 0.2, 0.35, 0.5, 1.0, 1.5, 2.5, 3.0, 3.3, 3.5],
+    hole_ice_radius_range_in_dom_radii: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0],
     absorption_length_range: [100],
     distance_range: [1.0],
     number_of_photons: 1e5,
     number_of_runs: 2,
     number_of_parallel_runs: 2,
     angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
+  })
+  dom_radius = 0.16510
+  mean_scattering_angle_cosine = 0.94
+  options.merge!({
+    scattering_length_range: options[:effective_scattering_length_range].collect { |s| s * ( 1 - 0.94) },
+    hole_ice_radius_range: options[:hole_ice_radius_range_in_dom_radii].collect { |n| n * dom_radius }
   })
 
   log.info "This script will iterate over the following configuration"
@@ -56,7 +61,7 @@ else
   log.configuration options
 
   number_of_jobs =
-      options[:effective_scattering_length_range].count *
+      options[:scattering_length_range].count *
       options[:absorption_length_range].count *
       options[:hole_ice_radius_range].count *
       options[:distance_range].count
@@ -101,7 +106,7 @@ else
 
       parameter_set_index = 0
       options[:distance_range].each do |dst|
-        options[:effective_scattering_length_range].each do |sca|
+        options[:scattering_length_range].each do |sca|
           options[:absorption_length_range].each do |abs|
             options[:hole_ice_radius_range].each do |radius|
 
@@ -121,8 +126,9 @@ else
                   shell "mkdir -p #{results_directory} tmp"
                   shell "cd ../AngularAcceptance && ./run.rb \\
                     --cluster \\
-                    --scattering-factor=#{sca} \\
-                    --absorption-factor=#{abs} \\
+                    --hole-ice-scattering-length=#{sca} \\
+                    --hole-ice-absorption-length=#{abs} \\
+                    --hole-ice-radius=#{radius} \\
                     --distance=#{dst} \\
                     --plane-wave \\
                     --number-of-photons=#{options[:number_of_photons]} \\

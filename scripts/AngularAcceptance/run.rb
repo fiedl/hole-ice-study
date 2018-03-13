@@ -106,6 +106,7 @@ options.merge! run_id_options
 #
 log.section "Detector geometry"
 dom_radius = 0.16510
+mean_scattering_angle_cosine = 0.94
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
@@ -131,6 +132,10 @@ detector_geometry_options = {
 }
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
+
+# Write these down in other units for later use in plots.
+options[:hole_ice_radius_in_dom_radii] = options[:hole_ice_radius] / dom_radius if options[:hole_ice_radius]
+options[:hole_ice_effective_scattering_length] = options[:hole_ice_scattering_length] / (1 - mean_scattering_angle_cosine) if options[:hole_ice_scattering_length]
 
 
 # Create geometry file with hole-ice cylinder
