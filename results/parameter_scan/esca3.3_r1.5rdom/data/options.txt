@@ -1,0 +1,62 @@
+{:cluster=>true,
+ :hole_ice_scattering_length=>0.19800000000000018,
+ :hole_ice_absorption_length=>100.0,
+ :hole_ice_radius=>0.24764999999999998,
+ :distance=>1.0,
+ :plane_wave=>true,
+ :number_of_photons=>100000.0,
+ :number_of_runs=>2.0,
+ :number_of_parallel_runs=>2.0,
+ :angles=>[0, 10, 20, 30, 40, 50, 60, 70, 90, 120, 140, 150, 160, 170, 180],
+ :run_id=>"Run-2018-eeKie9ui",
+ :started_at=>"2018-03-13 23:56:09 +0100",
+ :gcd_file=>
+  "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
+ :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
+ :seed=>123456,
+ :hole_ice_cylinder_positions=>[[-256.02301025390625, -521.281982421875, 0]],
+ :hole_ice_cylinder_radii=>[0.24764999999999998],
+ :cylinder_scattering_lengths=>[0.19800000000000018],
+ :cylinder_absorption_lengths=>[100.0],
+ :hole_ice_radius_in_dom_radii=>1.5,
+ :hole_ice_effective_scattering_length=>3.3,
+ :gcd_file_with_hole_ice=>"tmp/gcd_with_hole_ice.i3",
+ :create_gcd_log=>"tmp/create_gcd_with_hole_ice.log",
+ :dom_index=>[1, 1],
+ :dom_position=>[-256.02301025390625, -521.281982421875, 500],
+ :hole_ice=>:simulation,
+ :scattering_factor=>1.0,
+ :absorption_factor=>1.0,
+ :save_photon_paths=>false,
+ :propagation_log_file=>"tmp/propagation.log",
+ :clsim_error_fallback=>"skip",
+ :propagation_finished_at=>"2018-03-14 00:29:58 +0100",
+ :hits_histograms_input_files=>"tmp/photons_from_angle_*_dom_hits.txt",
+ :hits_histograms_input_columns=>"hits",
+ :hits_histograms_output_file_pattern=>
+  "tmp/histograms/hits_histogram_ANGLE.png",
+ :hits_histograms_min_bin=>0,
+ :hits_histograms_max_bin=>300,
+ :hits_histograms_log=>"tmp/hits_histograms.log",
+ :options_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/options.txt",
+ :data_directory=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data",
+ :chi_squared_nu_plot_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/plot_with_reference.png",
+ :chi_squared_results_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/chi_square_results.txt",
+ :chi_squared_gnuplot_log_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/chi_square_gnuplot.log",
+ :chi_squared_data_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/angle_hits_deviation_and_photons.txt",
+ :chi_squared_data_without_zero_errors_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/angle_hits_deviation_and_photons_without_zero_errors.txt",
+ :chi_squared_results=>
+  {"/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+    {:id=>"sca0.19800000000000018_abs100_dst1.0_r0.24764999999999998",
+     "scale"=>"165.012805771018",
+     "N"=>"12",
+     "nu"=>"1",
+     "chi^2_nu"=>"321.590123518603"}},
+ :agreement=>"321.590123518603"}
