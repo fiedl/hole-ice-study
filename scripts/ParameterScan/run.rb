@@ -36,8 +36,8 @@ else
   # Parameter range configuration
   #
   options.merge!({
-    effective_scattering_length_range: [0.02, 0.1, 0.2, 0.35, 0.5, 1.0, 1.5, 2.5, 3.0, 3.3, 3.5],
-    hole_ice_radius_range_in_dom_radii: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0],
+    effective_scattering_length_range: (0.01..0.20).step(0.01).to_a.collect { |x| x.round(2) },
+    hole_ice_radius_range_in_dom_radii: (0.1..2.0).step(0.1).to_a.collect { |x| x.round(2) },
     absorption_length_range: [100],
     distance_range: [1.0],
     number_of_photons: 1e5,
@@ -91,7 +91,7 @@ else
         shell "qsub \\
             -l gpu \\
             -l tmpdir_size=10G \\
-            -l s_rt=0:29:00 \\
+            -l s_rt=11:00:00 \\
             -l h_rss=2G \\
             -m ae \\
             -t 1-#{number_of_jobs} \\
@@ -116,9 +116,13 @@ else
                   (current_cluster_node_index.to_i == parameter_set_index))
 
               if need_to_perform_this_job
-                log.section "Parameters: sca=#{sca}, abs=#{abs}, dst=#{dst}, r=#{radius}"
 
-                results_directory = "results/sca#{sca}_abs#{abs}_dst#{dst}_r#{radius}"
+                effective_scattering_length = (sca / (1 - 0.94)).round(2)
+                radius_in_dom_radii = radius / dom_radius
+
+                log.section "Parameters: esca=#{effective_scattering_length} sca=#{sca}, abs=#{abs}, dst=#{dst}, r=#{radius}=#{radius_in_dom_radii}r_dom"
+
+                results_directory = "results/esca#{effective_scattering_length}_r#{radius_in_dom_radii}rdom_abs#{abs}"
 
                 if File.exists?(results_directory)
                   log.warning "Skipping already existing run #{results_directory}."
