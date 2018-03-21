@@ -37,8 +37,9 @@ run_id_options = {
 }
 log.configuration run_id_options
 options.merge! run_id_options
+shell "mkdir -p tmp"
 File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
-
+log.ensure_file "tmp/options.txt"
 
 # Detector geometry
 #
@@ -86,7 +87,6 @@ File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 if File.exist? options[:gcd_file_with_hole_ice]
   log.warning "File #{options[:gcd_file_with_hole_ice]} exists. Please remove it if you want it to be recreated."
 else
-  shell "mkdir -p tmp"
   shell "python #{__dir__}/../AngularAcceptance/lib/create_gcd_file_with_hole_ice.py \\
     --input-gcd-file=#{options[:gcd_file]} \\
     --output-gcd-file=#{options[:gcd_file_with_hole_ice]} \\
