@@ -162,8 +162,8 @@ else
     --use-gpus=#{options[:cpu] ? 'False' : 'True'} \\
     --save-photon-paths=#{options[:save_photon_paths] ? 'True' : 'False'} \\
     --number-of-parallel-runs=1 \\
-    --use-hole-ice-approximation=#{(options[:hole_ice] == :approximation) ? 'True' : 'False'} \\
-    --use-hole-ice-simulation=#{(options[:hole_ice] == :simulation) ? 'True' : 'False'} \\
+    --use-hole-ice-approximation=#{(options[:hole_ice].to_s == 'approximation') ? 'True' : 'False'} \\
+    --use-hole-ice-simulation=#{(options[:hole_ice].to_s == 'simulation') ? 'True' : 'False'} \\
     --use-flasher-info-vect=True \\
     #{options[:input_file]} \\
     2>&1 | tee #{options[:clsim_log_file]}
