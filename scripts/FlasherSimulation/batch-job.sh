@@ -27,7 +27,7 @@ ofile="$RESULTSDESTINATION/stdout.log"
 errfile="$RESULTSDESTINATION/stderr.log"
 
 # Copy logs back to $REMOTE when the script stops.
-trap 'cp "$TMPDIR"/stdout.log $ofile; cp "$TMPDIR"/stderr.log $errfile' 0
+trap 'cat "$TMPDIR"/stdout.log >> $ofile; cat "$TMPDIR"/stderr.log >> $errfile' 0
 trap 'echo exit 2; exit 2' USR1 USR1 XCPU
 
 # Load environment
