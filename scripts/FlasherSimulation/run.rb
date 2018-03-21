@@ -110,7 +110,7 @@ flasher_options = {
   dom_number: 30,
   i3_file: "tmp/flasher.i3",
   brightness: 40,
-  width: 13, #20,
+  width: 20,
   mask: "111111000000" # "0001"
 }
 log.configuration flasher_options
