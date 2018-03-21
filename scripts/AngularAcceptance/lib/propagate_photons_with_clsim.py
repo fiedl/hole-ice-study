@@ -16,10 +16,10 @@ from I3Tray import * # otherwise the C++ modules have the wrong signatures
 # =============================================================================
 
 parser = OptionParser(usage = "Usage: python propagate_photons_with_clsim.py options infile1.i3 infile2.i3 ...")
-parser.add_option("--scattering-factor", "--sca", type = "float")
-parser.add_option("--absorption-factor", "--abs", type = "float")
+parser.add_option("--scattering-factor", "--sca", type = "float", default = 1.0)
+parser.add_option("--absorption-factor", "--abs", type = "float", default = 1.0)
 parser.add_option("--output-i3-file", help = "I3 File to write the numbers of dom hits for each run to, e.g. tmp/numbers_of_dom_hits.i3")
-parser.add_option("--output-text-file", help = "File to write the number of dom hits for each run to, one line per run, e.g. tmp/numbers_of_dom_hits.txt")
+parser.add_option("--output-text-file", help = "File to write the number of dom hits for each run to, one line per run, e.g. tmp/numbers_of_dom_hits.txt", default = "tmp/number_of_dom_1_1_hits.txt")
 parser.add_option("--ice-model", dest = "ice_model_file", help = "e.g. $I3_SRC/clsim/resources/ice/spice_mie")
 parser.add_option("--seed", type = "int", help = "e.g. 123456")
 parser.add_option("--save-photon-paths", help = "True or False")
@@ -28,6 +28,7 @@ parser.add_option("--number-of-parallel-runs", type = "int")
 parser.add_option("--number-of-frames", type = "int", default = 0)
 parser.add_option("--use-hole-ice-approximation", help = "Use angular acceptance modification (UseHoleIceParameterization), but no simulated hole ice.")
 parser.add_option("--use-hole-ice-simulation", help = "Simulate hole ice in the propagation kernel with the --scattering-factor and the --absorption-factor parameters.")
+parser.add_option("--use-flasher-info-vect", default = False)
 
 (options, args) = parser.parse_args()
 
@@ -95,8 +96,8 @@ def PerformPropagationSimulation():
         #UnWeightedPhotonsScalingFactor=0.01,
         DOMOversizeFactor = 1.0,
         UnshadowedFraction = 1.0,
-        FlasherInfoVectName = "",
-        FlasherPulseSeriesName = "PhotonFlasherPulseSeries",
+        FlasherInfoVectName = ("I3FlasherInfo" if options.use_flasher_info_vect else ""),
+        FlasherPulseSeriesName = ("PhotonFlasherPulseSeries" if not options.use_flasher_info_vect else ""),
         UseHoleIceParameterization = options.use_hole_ice_approximation,  # Angular Acceptance Modification.
     )
 
