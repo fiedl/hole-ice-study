@@ -109,8 +109,8 @@ flasher_options = {
   string_number: 62,
   dom_number: 30,
   i3_file: "tmp/flasher.i3",
-  brightness: 40,
-  width: 20,
+  brightness: 127,
+  width: 127,
   mask: "111111000000" # "0001"
 }
 log.configuration flasher_options
