@@ -39,22 +39,22 @@
  :hits_histograms_max_bin=>300,
  :hits_histograms_log=>"tmp/hits_histograms.log",
  :options_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/options.txt",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/options.txt",
  :data_directory=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data",
  :chi_squared_nu_plot_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/plot_with_reference.png",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/plot_with_reference.png",
  :chi_squared_results_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/chi_square_results.txt",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/chi_square_results.txt",
  :chi_squared_gnuplot_log_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/chi_square_gnuplot.log",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/chi_square_gnuplot.log",
  :chi_squared_data_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/angle_hits_deviation_and_photons.txt",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/angle_hits_deviation_and_photons.txt",
  :chi_squared_data_without_zero_errors_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/angle_hits_deviation_and_photons_without_zero_errors.txt",
+  "/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/angle_hits_deviation_and_photons_without_zero_errors.txt",
  :chi_squared_results=>
-  {"/Users/fiedl/hole-ice-study/results/parameter_scan/sca0.09000000000000008_abs100_dst1.0_r0.04953/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
-    {:id=>"sca0.09000000000000008_abs100_dst1.0_r0.04953",
+  {"/Users/fiedl/hole-ice-study/results/parameter_scan/esca1.5_r0.3rdom/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+    {:id=>"esca1.5_r0.3rdom",
      "scale"=>"164.338787252341",
      "N"=>"14",
      "nu"=>"3",
