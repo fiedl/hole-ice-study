@@ -54,7 +54,7 @@ class mySimpleMuon(icetray.I3Module):
         self.AddParameter("SphereRadius", "", 600 * I3Units.m)
         self.AddParameter("NEvents", "", 100)
 
-        self.AddOutBox("OutBox")        
+        self.AddOutBox("OutBox")
 
     def Configure(self):
         self.rs = self.GetParameter("I3RandomService")
@@ -84,9 +84,9 @@ class mySimpleMuon(icetray.I3Module):
                                                       math.cos(zen)])
 
         pos = diskCenter + r
-    
+
         # set the particle's energy
-        energy = self.rs.uniform(self.energyMin,self.energyMax) * I3Units.GeV        
+        energy = self.rs.uniform(self.energyMin,self.energyMax) * I3Units.GeV
 
         daughter = dataclasses.I3Particle()
         daughter.type = self.particleType
@@ -116,19 +116,19 @@ class mySimpleMuon(icetray.I3Module):
         x = math.sin(zenith) * math.cos(azimuth)
         y = math.sin(zenith) * math.sin(azimuth)
         z = math.cos(zenith)
-        
+
         v = numpy.array([x,y,z])
-        
+
         # construct another vector in a random direction
         ru_azimuth = self.rs.uniform(0,2.* math.pi)
         ru_zenith = math.acos(self.rs.uniform(-1.0,1.0))
-        
+
         xi = math.sin(ru_zenith) * math.cos(ru_azimuth)
         yi = math.sin(ru_zenith) * math.sin(ru_azimuth)
         zi = math.cos(ru_zenith)
-        
+
         vi = numpy.array([xi,yi,zi])
-        
+
         # calculate the displacement vector from the center of the disk
         # construct a vector in the disk plane
         v_cross_vi = numpy.cross(v,vi)
@@ -174,14 +174,14 @@ tray.AddModule(mySimpleMuon, "injectMuon",
 if options.APPLYMMC:
     tray.AddSegment(PropagateMuons, "PropagateMuons",
             RandomService = randomService)
-               
+
 
 tray.AddModule("I3Writer","writer",
     Filename = options.OUTFILE)
 
 tray.AddModule("TrashCan", "the can")
 
-tray.Execute(options.NUMEVENTS+3)
+tray.Execute(options.NUMEVENTS+4) # I-G-C-D-Q-Q-Q
 tray.Finish()
 
 
