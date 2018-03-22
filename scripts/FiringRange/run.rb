@@ -39,6 +39,12 @@ OptionParser.new do |opts|
   opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
     options[:cylinder_shift] = metres
   end
+  opts.on "--hole-ice=METHOD", "simulation or approximation" do |method|
+    options[:hole_ice] = method
+  end
+  opts.on "--no-hole-ice", "Run without hole-ice code" do
+    options[:hole_ice] = false
+  end
 end.parse!
 
 log.head "Firing Range: Fire Photons Onto a DOM"
@@ -161,9 +167,9 @@ log.ensure_file "tmp/photons.i3"
 #
 log.section "Propagate photons with clsim"
 global_propagation_options = {
-  hole_ice: :simulation,  # false, :approximation, :simulation
-  scattering_factor: options[:scattering_factor] || 0.1,
-  absorption_factor: options[:absorption_factor] || 0.1,
+  hole_ice: (options[:hole_ice].nil? ? :simulation : options[:hole_ice]),
+  scattering_factor: options[:scattering_factor] || 1.0,
+  absorption_factor: options[:absorption_factor] || 1.0,
   save_photon_paths: options[:save_photon_paths],
   propagation_log_file: "tmp/propagation.log",
   clsim_log_file: "tmp/clsim.log",
