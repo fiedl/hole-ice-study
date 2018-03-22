@@ -185,24 +185,9 @@ File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 
 shell "python #{__dir__}/../AngularAcceptance/lib/read_out_photon_hits.py \\
   --string=#{options[:receiving_string]} \\
-  #{options[:output_i3_file]} \\
-  > tmp/hits_results.log \\
+  --i3-file=#{options[:output_i3_file]} \\
+  --outfile=#{options[:numbers_of_hits_file]} \\
 "
-# HITS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-hits = `cat tmp/hits_results.log |grep 'HITS ='`.split(" = [")[1].gsub("]", "").split(", ").map(&:to_i)
-
-results = []
-results << "string dom number_of_hits"
-hits.each_with_index do |number_of_hits, i|
-  string_number = options[:receiving_string]
-  dom_number = i + 1
-  results << [string_number, dom_number, number_of_hits].join(" ")
-end
-results = results.join("\n")
-
-File.open options[:numbers_of_hits_file], "w" do |file|
-  file.write results
-end
 log.ensure_file options[:numbers_of_hits_file]
 
 

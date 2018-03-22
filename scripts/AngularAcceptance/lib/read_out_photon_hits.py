@@ -5,10 +5,12 @@ from os.path import expandvars
 
 parser = OptionParser()
 parser.add_option("--string", type = "int", default = 63)
+parser.add_option("--i3-file")
+parser.add_option("--outfile", default = "tmp/read_out_hits.txt")
 
 (options, args) = parser.parse_args()
 
-input_file = args[0]
+input_file = options.i3_file
 
 from I3Tray import *
 from icecube import icetray, dataclasses, dataio, phys_services, clsim, sim_services
@@ -33,14 +35,30 @@ from icecube import icetray, dataclasses, dataio, phys_services, clsim, sim_serv
 #       </second>
 #     </item>
 
-hits = [0] * 59
+# hits = [0] * 59
+# def read_out_hits(frame):
+#   for index, dom_number in enumerate(range(1, 60)):
+#     om_key = OMKey(options.string, dom_number)
+#     n = 0
+#     if not frame['MCPESeriesMap'].get(om_key) is None:
+#       n = len(frame['MCPESeriesMap'].get(om_key))
+#     hits[index] = n
+
+import pandas
+
+data = pandas.DataFrame([])
 def read_out_hits(frame):
+  global data
   for index, dom_number in enumerate(range(1, 60)):
     om_key = OMKey(options.string, dom_number)
-    n = 0
     if not frame['MCPESeriesMap'].get(om_key) is None:
-      n = len(frame['MCPESeriesMap'].get(om_key))
-    hits[index] = n
+      for entry in frame['MCPESeriesMap'].get(om_key):
+        data = data.append(pandas.DataFrame({
+          "string": options.string,
+          "dom": dom_number,
+          "time": entry.time,
+          "charge": entry.npe
+        }, index = [0]), ignore_index = True)
 
 tray = I3Tray()
 
@@ -53,4 +71,8 @@ tray.AddModule(read_out_hits,
 tray.Execute()
 tray.Finish()
 
-print("HITS = " + str(hits))
+#print("HITS = " + str(hits))
+
+data.to_csv(options.outfile, sep=" ", header = True, index = False,
+    columns = ["string", "dom", "time", "charge"])
+
