@@ -165,7 +165,7 @@ gnuplot_script = "
     title '#{label}, χ^2_ν=#{chisq_nu}',
 "
 }.join("\n") + "
-    f(x) title 'Reference Plot' lt rgb 'red' lw 3;
+    f(x) title 'Reference Plot' lt rgb 'red' lw 1;
 "
 
 shell "gnuplot -e \"#{gnuplot_script}\" > #{options[:output_plot_file]}"
