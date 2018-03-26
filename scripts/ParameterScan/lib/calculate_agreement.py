@@ -32,9 +32,15 @@ for data_dir in data_dirs:
   #
   angles = data["angle"].unique()
   ln_likelihood_summands = [0] * len(angles)
+
+  # Calculate normalization factor to make sure that the area under the sensitivity
+  # curve is noramlized to 1.
+  normalization_factor = sum((data[data.angle == angle]["photons"].sum() for angle in angles)) / \
+      sum((data[data.angle == angle]["hits"].sum() for angle in angles))
+
   for i, angle in enumerate(angles):
     n = data[data.angle == angle]["photons"].sum()
-    k_i = data[data.angle == angle]["hits"].sum()
+    k_i = data[data.angle == angle]["hits"].sum() * normalization_factor
     p_i = reference_curve(angle)
 
     ln_binomial_coefficient = \
