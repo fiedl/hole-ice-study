@@ -38,15 +38,16 @@ for data_dir in data_dirs:
   angles = data["angle"].unique()
   ln_likelihood_summands = [0] * len(angles)
 
-  # Calculate normalization factor to make sure that the area under the sensitivity
-  # curve is noramlized to 1.
-  normalization_factor = sum((data[data.angle == angle]["photons"].sum() for angle in angles)) / \
-      sum((data[data.angle == angle]["hits"].sum() for angle in angles))
+  # Gauge factor
+  #
+  # See: https://github.com/fiedl/hole-ice-study/issues/12#issuecomment-376580354
+  #
+  p_0 = 0.003850
 
   for i, angle in enumerate(angles):
     n = data[data.angle == angle]["photons"].sum()
-    k_i = data[data.angle == angle]["hits"].sum() * normalization_factor
-    p_i = reference_curve(angle)
+    k_i = data[data.angle == angle]["hits"].sum()
+    p_i = reference_curve(angle) * p_0
 
     ln_binomial_coefficient = \
         scipy.special.gammaln(n + 1) - scipy.special.gammaln(k_i + 1) - scipy.special.gammaln(n - k_i + 1)
