@@ -108,6 +108,18 @@ configurations.each_with_index do |options, index|
 end
 
 log.head "Parameter scan plots"
+log.section "Calculate parameter scan agreements"
+shell "python #{__dir__}/../../ParameterScan/lib/calculate_agreement.py #{data_directories.join(' ')}"
+configurations.each do |options|
+  agreement_file = "#{options[:data_directory]}/ln_likelihood.txt"
+  if File.exists? agreement_file
+    options[:agreement] = - File.read(agreement_file).to_f
+  else
+    options[:agreement] = nil
+  end
+  File.open(options[:options_file], 'w') { |file| PP.pp(options, file) }
+end
+
 log.section "Extract parameters and agreements"
 agreement_data = "effective_scattering_length hole_ice_radius_in_dom_radii agreement duration\n" + configurations.collect { |options|
   absorption_length = options[:hole_ice_absorption_length]
@@ -123,3 +135,6 @@ agreement_data = "effective_scattering_length hole_ice_radius_in_dom_radii agree
 }.join("\n")
 File.open("parameter_scan.txt", "w") { |f| f.write agreement_data }
 log.ensure_file "parameter_scan.txt"
+
+log.section "Contour plot"
+shell "python #{__dir__}/../../AngularAcceptance/lib/create_contour_plot.py #{__dir__}/parameter_scan.txt"

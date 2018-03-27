@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+
+# Usage:
+# python calculate_agreement.py ~/hole-ice-study/results/parameter_scan
+
 import sys
 import pandas
 
@@ -50,10 +55,17 @@ for data_dir in data_dirs:
         ln_binomial_coefficient + k_i * np.log(p_i) + (n - k_i) * np.log(1 - p_i)
 
   ln_likelihood = sum(ln_likelihood_summands)
+
+  print("Writing " + str(ln_likelihood) + " to " + data_dir + "/ln_likelihood.txt.")
+  export_file = open(data_dir + "/ln_likelihood.txt", "w")
+  export_file.write(str(ln_likelihood))
+  export_file.close()
+
   neg_ln_likelihood = - ln_likelihood
   neg_ln_likelihoods.append(neg_ln_likelihood)
 
 best_index = neg_ln_likelihoods.index(min(neg_ln_likelihoods))
-print("best neg ln likelihood:")
+print("\nbest neg ln likelihood:")
 print(neg_ln_likelihoods[best_index])
 print(data_dirs[best_index])
+

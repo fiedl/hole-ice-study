@@ -28,7 +28,8 @@ fig0, ax0 = plt.subplots(facecolor='white')
 # contour the gridded data, plotting dots at the nonuniform data points.
 ax0.contour(xi, yi, zi, 15, linewidths=0.5, colors='k')
 #cf0 = ax0.contourf(xi, yi, zi, 15, locator=ticker.LogLocator())
-cf0 = ax0.contourf(xi, yi, zi, np.arange(0, 300, 5), extend='max')
+#cf0 = ax0.contourf(xi, yi, zi, np.arange(0, 300, 5), extend='max')
+cf0 = ax0.contourf(xi, yi, zi, 15, vmax=abs(zi).max(), vmin=-abs(zi).max())
 
 plt.colorbar(cf0)  # draw colorbar
 
@@ -36,7 +37,7 @@ plt.colorbar(cf0)  # draw colorbar
 ax0.scatter(x, y, marker='o', s=5, zorder=10)
 
 plt.title('Agreement of hole-ice simulation and reference angular acceptance')
-plt.xlabel('hole-ice column radius [m]')
+plt.xlabel('hole-ice column radius [r_DOM]')
 plt.ylabel('effective scattering length [m]')
 
 plt.show()
