@@ -36,8 +36,8 @@ else
   # Parameter range configuration
   #
   options.merge!({
-    effective_scattering_length_range: (0.6..2.2).step(0.05).to_a.collect { |x| x.round(2) },
-    hole_ice_radius_range_in_dom_radii: (0.8..1.7).step(0.1).to_a.collect { |x| x.round(2) },
+    effective_scattering_length_range: (0.5..3.5).step(0.5).to_a.collect { |x| x.round(2) },
+    hole_ice_radius_range_in_dom_radii: (0.5..2.5).step(0.5).to_a.collect { |x| x.round(2) },
     absorption_length_range: [100],
     distance_range: [1.0],
     number_of_photons: 1e5,
