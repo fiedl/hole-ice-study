@@ -43,7 +43,7 @@ for data_dir in data_dirs:
   # See: https://github.com/fiedl/hole-ice-study/issues/12#issuecomment-376580354
   #
   # p_0 = 0.0039667 # plane waves
-  p_0 = 0.044499999999999998 # pencil beam
+  p_0 = 0.045007900000000003 # pencil beam
 
   for i, angle in enumerate(angles):
     n = data[data.angle == angle]["photons"].sum()
