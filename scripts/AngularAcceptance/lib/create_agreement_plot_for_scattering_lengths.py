@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # prepare canvas
-fig, ax = plt.subplots(facecolor="white")
+fig, (ax0, ax1) = plt.subplots(2, 1, facecolor="white")
 
 #for r in data["hole_ice_radius_in_dom_radii"].unique():
 for r in [0.1, 0.5, 1.0, 2.0]:
@@ -19,20 +19,15 @@ for r in [0.1, 0.5, 1.0, 2.0]:
   y = subplot_data["agreement"]
 
   # line plot
-  ax.semilogy(x, y, label = "hole-ice radius = " + str(r) + " dom radii")
+  ax0.semilogy(x, y, label = "hole-ice radius = " + str(r) + " dom radii")
 
   # labels
-  ax.set(xlabel = "effective scattering length [m]", ylabel="Reduced chi squared",
+  ax0.set(xlabel = "effective scattering length [m]", ylabel="Reduced chi squared",
       title = "Agreement of data and reference")
 
-ax.grid()
-ax.legend(loc = "upper center")
-plt.show()
+ax0.grid()
+ax0.legend(loc = "upper center")
 
-
-
-# prepare canvas
-fig, ax = plt.subplots(facecolor="white")
 
 #for s in data["effective_scattering_length"].unique():
 for s in [0.020000000000000004, 0.35, 1.0, 3.0]:
@@ -43,12 +38,12 @@ for s in [0.020000000000000004, 0.35, 1.0, 3.0]:
   y = subplot_data["agreement"]
 
   # line plot
-  ax.semilogy(x, y, label = "effective scattering length = " + str(round(s, 2)) + "m")
+  ax1.semilogy(x, y, label = "effective scattering length = " + str(round(s, 2)) + "m")
 
   # labels
-  ax.set(xlabel = "hole-ice radius [dom radii]", ylabel="Reduced chi squared",
-      title = "Agreement of data and reference")
+  ax1.set(xlabel = "hole-ice radius [dom radii]", ylabel="Reduced chi squared")
 
-ax.grid()
-ax.legend(loc = "upper center")
+ax1.grid()
+ax1.legend(loc = "upper center")
+
 plt.show()
