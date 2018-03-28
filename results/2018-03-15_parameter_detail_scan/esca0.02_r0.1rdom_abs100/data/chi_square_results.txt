@@ -1,0 +1,6 @@
+{"/Users/fiedl/zeuthen/hole-ice-study/scripts/ParameterScan/cluster-results/sca0.0012000000000000012_abs100_dst1.0_r0.01651/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+  {:id=>"sca0.0012000000000000012_abs100_dst1.0_r0.01651",
+   "scale"=>"136.519782983596",
+   "N"=>"13",
+   "nu"=>"2",
+   "chi^2_nu"=>"2638.1664654341"}}
