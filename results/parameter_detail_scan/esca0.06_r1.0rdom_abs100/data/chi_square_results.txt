@@ -1,0 +1,6 @@
+{"/Users/fiedl/hole-ice-study/results/2018-03-15_parameter_detail_scan/esca0.06_r1.0rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+  {:id=>"esca0.06_r1.0rdom_abs100",
+   "scale"=>"544.954766403527",
+   "N"=>"13",
+   "nu"=>"2",
+   "chi^2_nu"=>"1535.63538847271"}}

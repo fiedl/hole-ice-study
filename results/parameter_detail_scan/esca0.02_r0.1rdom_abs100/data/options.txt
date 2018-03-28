@@ -37,4 +37,9 @@
   "tmp/histograms/hits_histogram_ANGLE.png",
  :hits_histograms_min_bin=>0,
  :hits_histograms_max_bin=>300,
- :hits_histograms_log=>"tmp/hits_histograms.log"}
+ :hits_histograms_log=>"tmp/hits_histograms.log",
+ :options_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_detail_scan/esca0.02_r0.1rdom_abs100/data/options.txt",
+ :data_directory=>
+  "/Users/fiedl/hole-ice-study/results/parameter_detail_scan/esca0.02_r0.1rdom_abs100/data",
+ :agreement=>1444.0569632}
