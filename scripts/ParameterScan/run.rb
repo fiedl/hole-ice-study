@@ -134,7 +134,6 @@ else
                     --hole-ice-absorption-length=#{abs} \\
                     --hole-ice-radius=#{radius} \\
                     --distance=#{dst} \\
-                    --plane-wave \\
                     --number-of-photons=#{options[:number_of_photons]} \\
                     --number-of-runs=#{options[:number_of_runs]} \\
                     --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
