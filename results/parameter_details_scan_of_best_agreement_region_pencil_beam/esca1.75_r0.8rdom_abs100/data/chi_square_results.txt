@@ -1,0 +1,6 @@
+{"/Users/fiedl/hole-ice-study/results/parameter_details_scan_of_best_agreement_region_pencil_beam/esca1.75_r0.8rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+  {:id=>"esca1.75_r0.8rdom_abs100",
+   "scale"=>"22.213828141755",
+   "N"=>"14",
+   "nu"=>"3",
+   "chi^2_nu"=>"30028.4241407812"}}
