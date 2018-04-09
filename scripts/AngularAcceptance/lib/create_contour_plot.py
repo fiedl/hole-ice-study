@@ -31,7 +31,15 @@ ax0.contour(xi, yi, zi, 15, linewidths=0.5, colors='k')
 #cf0 = ax0.contourf(xi, yi, zi, np.arange(0, 300, 5), extend='max')
 cf0 = ax0.contourf(xi, yi, zi, 15, vmax=abs(zi).max(), vmin=-abs(zi).max())
 
-plt.colorbar(cf0)  # draw colorbar
+# confidence intervals
+z_min = np.min(z)
+z_1_sigma = z_min + 0.5
+z_2_sigma = z_min + 2.0
+z_3_sigma = z_min + 4.5
+cf1 = ax0.contour(xi, yi, zi, [z_1_sigma, z_2_sigma, z_3_sigma], colors='red')
+
+# draw colorbar
+plt.colorbar(cf0)
 
 # plot data points.
 ax0.scatter(x, y, marker='o', s=5, zorder=10)
