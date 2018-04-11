@@ -1,0 +1,6 @@
+{"/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.85_r0.9rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+  {:id=>"esca1.85_r0.9rdom_abs100",
+   "scale"=>"229.075061731586",
+   "N"=>"14",
+   "nu"=>"3",
+   "chi^2_nu"=>"2.3775397657063"}}

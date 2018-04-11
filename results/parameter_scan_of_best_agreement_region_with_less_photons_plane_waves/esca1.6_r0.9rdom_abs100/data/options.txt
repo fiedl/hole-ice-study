@@ -37,4 +37,26 @@
   "tmp/histograms/hits_histogram_ANGLE.png",
  :hits_histograms_min_bin=>0,
  :hits_histograms_max_bin=>300,
- :hits_histograms_log=>"tmp/hits_histograms.log"}
+ :hits_histograms_log=>"tmp/hits_histograms.log",
+ :options_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/options.txt",
+ :data_directory=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data",
+ :chi_squared_nu_plot_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/plot_with_reference.png",
+ :chi_squared_results_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/chi_square_results.txt",
+ :chi_squared_gnuplot_log_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/chi_square_gnuplot.log",
+ :chi_squared_data_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/angle_hits_deviation_and_photons.txt",
+ :chi_squared_data_without_zero_errors_file=>
+  "/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt",
+ :chi_squared_results=>
+  {"/Users/fiedl/hole-ice-study/results/parameter_scan_of_best_agreement_region_with_less_photons_plane_waves/esca1.6_r0.9rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
+    {:id=>"esca1.6_r0.9rdom_abs100",
+     "scale"=>"223.196861857372",
+     "N"=>"12",
+     "nu"=>"1",
+     "chi^2_nu"=>"2.55113633237895"}},
+ :agreement=>48.3553606518}
