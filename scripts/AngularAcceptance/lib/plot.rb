@@ -122,24 +122,30 @@ configurations.each_with_index do |options, index|
 end
 
 log.section "Extract parameters and agreements"
-global_options.merge!({
-  parameter_scan_agreements_file: "tmp/parameter_scan_agreements.txt"
-})
-log.configuration global_options
-agreement_data = "effective_scattering_length hole_ice_radius_in_dom_radii agreement duration\n" + configurations.collect { |options|
-  absorption_length = options[:hole_ice_absorption_length]
-  effective_scattering_length = options[:hole_ice_effective_scattering_length]
-  hole_ice_radius_in_dom_radii = options[:hole_ice_radius_in_dom_radii]
-  agreement = options[:agreement]
-  duration = Time.parse(options[:propagation_finished_at]) - Time.parse(options[:started_at])
-  if agreement
-    "#{effective_scattering_length} #{hole_ice_radius_in_dom_radii} #{agreement} #{duration}"
-  else
-    nil
-  end
-}.join("\n")
-File.open(global_options[:parameter_scan_agreements_file], "w") { |f| f.write agreement_data }
-log.ensure_file global_options[:parameter_scan_agreements_file]
+agreement_files = []
+for data_directory in data_directories
+  agreement_options = {
+    parameter_scan_agreements_file: (File.join(data_directory, "parameter_scan_agreements.txt"))
+  }
+  log.configuration agreement_options
+  agreement_files << agreement_options[:parameter_scan_agreements_file]
+  agreement_data = "effective_scattering_length hole_ice_radius_in_dom_radii agreement duration\n" + configurations.select { |options|
+    options[:data_directory].include? data_directory
+  }.collect { |options|
+    absorption_length = options[:hole_ice_absorption_length]
+    effective_scattering_length = options[:hole_ice_effective_scattering_length]
+    hole_ice_radius_in_dom_radii = options[:hole_ice_radius_in_dom_radii]
+    agreement = options[:agreement]
+    duration = Time.parse(options[:propagation_finished_at]) - Time.parse(options[:started_at])
+    if agreement
+      "#{effective_scattering_length} #{hole_ice_radius_in_dom_radii} #{agreement} #{duration}"
+    else
+      nil
+    end
+  }.join("\n")
+  File.open(agreement_options[:parameter_scan_agreements_file], "w") { |f| f.write agreement_data }
+  log.ensure_file agreement_options[:parameter_scan_agreements_file]
+end
 
 log.section "Contour plot"
-shell "python #{__dir__}/../../AngularAcceptance/lib/create_contour_plot.py #{global_options[:parameter_scan_agreements_file]}"
+shell "python #{__dir__}/../../AngularAcceptance/lib/create_contour_plot.py #{agreement_files.join(' ')}"
