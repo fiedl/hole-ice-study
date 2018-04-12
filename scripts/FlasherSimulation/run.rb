@@ -111,7 +111,7 @@ flasher_options = {
   i3_file: "tmp/flasher.i3",
   brightness: 127,
   width: 127,
-  mask: "111111000000" # "0001"
+  mask: "111111111111" # https://wiki.icecube.wisc.edu/index.php/Flasher_LED_mask
 }
 log.configuration flasher_options
 options.merge!({flasher: flasher_options})

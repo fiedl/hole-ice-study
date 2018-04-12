@@ -45,7 +45,7 @@ tray.AddModule(clsim.FakeFlasherInfoGenerator, "FakeFlasherInfoGenerator",
   #FlasherMask = 0b10101, # 505nm LEDs only (on a cDOM)
   #FlasherBrightness = 127, # full brightness
   #FlasherWidth = 127)      # full width
-  FlasherMask = options.mask,
+  FlasherMask = options.mask, # https://wiki.icecube.wisc.edu/index.php/Flasher_LED_mask
   FlasherBrightness = options.brightness,
   FlasherWidth = options.width)
 
