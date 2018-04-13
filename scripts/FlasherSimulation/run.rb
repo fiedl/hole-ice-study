@@ -18,6 +18,15 @@ OptionParser.new do |opts|
   opts.on "--width=WIDTH", "Flahser pulse width, min = 0, max = 127" do |width|
     options[:width] = width.to_i
   end
+  opts.on "--effective-scattering-length=METRES" do |esca|
+    options[:effective_scattering_length] = esca.to_f
+  end
+  opts.on "--absorption-length=METRES" do |abs|
+    options[:absorption_length] = abs.to_f
+  end
+  opts.on "--hole-ice-radius-in-dom-radii=R" do |r|
+    options[:hole_ice_radius_in_dom_radii] = r.to_f
+  end
 end.parse!
 
 log.head "Flasher simulation"
@@ -66,13 +75,16 @@ detector_geometry_options = {
 
   # Hole-ice configuration from Martin's best estimates
   hole_ice_cylinder_radii: [
-    0.5 * dom_radius, 0.5 * dom_radius
+    (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius,
+    (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius
   ],
   cylinder_scattering_lengths: [
-    0.05 * (1 - 0.94), 0.05 * (1 - 0.94)
+    (options[:effective_scattering_length] || 0.05) * (1 - 0.94),
+    (options[:effective_scattering_length] || 0.05) * (1 - 0.94)
   ],
   cylinder_absorption_lengths: [
-    100.0, 100.0
+    (options[:absorption_length] || 100.0),
+    (options[:absorption_length] || 100.0)
   ]
 }
 log.configuration detector_geometry_options
