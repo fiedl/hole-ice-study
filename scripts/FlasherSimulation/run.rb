@@ -14,6 +14,10 @@ OptionParser.new do |opts|
   opts.on "--no-hole-ice", "Run without hole-ice code" do
     options[:hole_ice] = false
   end
+
+  opts.on "--width=WIDTH", "Flahser pulse width, min = 0, max = 127" do |width|
+    options[:width] = width.to_i
+  end
 end.parse!
 
 log.head "Flasher simulation"
@@ -110,7 +114,7 @@ flasher_options = {
   dom_number: 30,
   i3_file: "tmp/flasher.i3",
   brightness: 127,
-  width: 127,
+  width: options[:width] || 127,
   mask: "111111111111" # https://wiki.icecube.wisc.edu/index.php/Flasher_LED_mask
 }
 log.configuration flasher_options
