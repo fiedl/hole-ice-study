@@ -191,6 +191,14 @@ shell "python #{__dir__}/../AngularAcceptance/lib/read_out_photon_hits.py \\
 log.ensure_file options[:numbers_of_hits_file]
 
 
+# Log finish time.
+#
+options.merge!({
+  finished_at: Time.now.to_s
+})
+File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
+
+
 # Export results.
 #
 log.section "Exporting results"
