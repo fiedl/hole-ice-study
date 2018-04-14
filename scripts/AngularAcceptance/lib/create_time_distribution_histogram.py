@@ -12,32 +12,47 @@ import numpy as np
 data_files = sys.argv[1:]
 
 # prepare canvas
-fig, axes = plt.subplots(1, len(data_files), facecolor="white", squeeze=False)
+fig, ax = plt.subplots(1, 1, facecolor="white")
+
+weights_array = []
+bins_array = []
+titles_array = []
+
+time_min = 500
+time_max = 3000 # ns
 
 for index, data_file in enumerate(data_files):
+  title = ""
 
-  # subplot
-  ax = axes[0][index]
-  title = data_file.split("/")[-1]
-
-  # read and filter data
-  if ".txt" in title: # simulation data
+  # flasher data files are already binned (width = 25ns).
+  if ".txt" in data_file: # simulation data
     data = pandas.read_csv(data_file, delim_whitespace=True)
     receiver_data = data[data.string == 63][data.dom == 30]
-    title = title + " (simulation)"
+    receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
+    title = data_file.split("/")[-2] + " (simulation)"
 
+    # simulation data needs to be binned.
     bin_width = 25
-    ax.hist(receiver_data["time"], bins = np.arange(min(receiver_data["time"]), max(receiver_data["time"]) + bin_width, bin_width))
+    bins = range(time_min, time_max, bin_width)
+    weights, time_edges = np.histogram(receiver_data["time"], bins + [max(bins) + bin_width])
 
   else: # flasher data
     data = pandas.read_csv(data_file, delim_whitespace=True, names = ["string_number", "dom_number", "time", "charge"])
     receiver_data = data[data.string_number == 63][data.dom_number == 30]
-    title = title + " (data)"
+    receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
+    title = data_file.split("/")[-1] + " (data)"
 
-    ax.hist(receiver_data["time"], len(receiver_data["time"]), weights = receiver_data["charge"])
+    bins = receiver_data["time"]
+    weights = receiver_data["charge"]
 
-  ax.set_xlabel("Arrival time after emission [ns]")
-  ax.set_ylabel("Collected charge [unit?]")
-  ax.set_title(title)
+  bins_array.append(bins)
+  weights_array.append(weights)
+  titles_array.append(title)
 
+ax.hist(bins_array, (time_max - time_min)/25/3, weights = weights_array, label = titles_array, normed = True)
+
+ax.set_xlabel("Arrival time after emission [ns]")
+ax.set_ylabel("Collected charge [unit?]")
+
+plt.legend(loc='upper right')
 plt.show()
