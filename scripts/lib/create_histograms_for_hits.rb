@@ -4,7 +4,7 @@ require 'optparse'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Create histograms for the number of hits for all angles. Usage: lib/create_histograms_for_hits.rb [options]"
+  opts.banner = "Create histograms for the number of hits for all angles. Usage: ../lib/create_histograms_for_hits.rb [options]"
 
   opts.on "--input-files=PATTERN", "e.g. tmp/angle_hits_and_photons_*.txt" do |pattern|
     options[:input_files] = pattern

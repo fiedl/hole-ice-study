@@ -4,7 +4,7 @@ require 'optparse'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: lib/propagate_photons_and_count_hits.rb [options]"
+  opts.banner = "Usage: ../lib/propagate_photons_and_count_hits.rb [options]"
 
   opts.on "--input-file=FILENAME", "e.g. tmp/photons_from_angle_180.i3" do |input_file|
     options[:input_file] = input_file

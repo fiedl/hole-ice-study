@@ -108,7 +108,7 @@ if File.exist? options[:gcd_file_with_hole_ice]
   log.warning "File #{options[:gcd_file_with_hole_ice]} exists. Please remove it if you want it to be recreated."
 else
   shell "mkdir -p tmp"
-  shell "python #{__dir__}/../AngularAcceptance/lib/create_gcd_file_with_hole_ice.py \\
+  shell "python #{__dir__}/../lib/create_gcd_file_with_hole_ice.py \\
     --input-gcd-file=#{options[:gcd_file]} \\
     --output-gcd-file=#{options[:gcd_file_with_hole_ice]} \\
     " + options[:hole_ice_cylinder_positions].enum_for(:each_with_index).collect { |pos, index|
@@ -146,7 +146,7 @@ if File.exist?(options[:photons_i3_file]) && (!options[:scattering_factor]) && (
 else
   log.configuration photon_frames_options
 
-  shell "ruby ../AngularAcceptance/lib/create_qframe_i3_files_with_photons_from_all_angles.rb \\
+  shell "ruby ../lib/create_qframe_i3_files_with_photons_from_all_angles.rb \\
     --dom-position=#{options[:dom_position].join(',')} \\
     --distance=#{options[:distance]} \\
     #{"--angles=#{options[:angles].join(',')}" if options[:angles]} \\
@@ -191,7 +191,7 @@ propagation_options = {
 shell "rm #{propagation_options[:output_text_file]}"
 shell "rm #{options[:clsim_log_file]}"
 
-shell "ruby ../AngularAcceptance/lib/propagate_photons_and_count_hits.rb \\
+shell "ruby ../lib/propagate_photons_and_count_hits.rb \\
   --input-file=#{propagation_options[:input_file]} \\
   --number-of-runs=#{options[:number_of_runs]} \\
   --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\

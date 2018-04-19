@@ -146,7 +146,7 @@ options.merge!({
   create_gcd_log: "tmp/create_gcd_with_hole_ice.log"
 })
 
-shell "python #{__dir__}/lib/create_gcd_file_with_hole_ice.py \\
+shell "python #{__dir__}/../lib/create_gcd_file_with_hole_ice.py \\
   --input-gcd-file=#{options[:gcd_file]} \\
   --output-gcd-file=#{options[:gcd_file_with_hole_ice]} \\
   " + options[:hole_ice_cylinder_positions].enum_for(:each_with_index).collect { |pos, index|
@@ -189,7 +189,7 @@ else
 
   log.configuration photon_frames_options
 
-  # shell "python lib/create_qframe_i3_file_with_photons_from_angle.py \\
+  # shell "python ../lib/create_qframe_i3_file_with_photons_from_angle.py \\
   #   --photon-position=#{options[:dom_position].join(',')} \\
   #   --photon-direction-theta=1.2 \\
   #   --photon-direction-phi=0 \\
@@ -198,7 +198,7 @@ else
   #   --output-file=tmp/generated_photons.i3
   # "
 
-  shell "ruby lib/create_qframe_i3_files_with_photons_from_all_angles.rb \\
+  shell "ruby ../lib/create_qframe_i3_files_with_photons_from_all_angles.rb \\
     --dom-position=#{options[:dom_position].join(',')} \\
     --distance=#{options[:distance]} \\
     #{"--angles=#{options[:angles].join(',')}" if options[:angles]} \\
@@ -261,7 +261,7 @@ else
     else
       shell "rm #{propagation_options[:output_text_file]}" if options[:resume]
 
-      shell "ruby lib/propagate_photons_and_count_hits.rb \\
+      shell "ruby ../lib/propagate_photons_and_count_hits.rb \\
         --input-file=#{propagation_options[:input_file]} \\
         --number-of-runs=#{options[:number_of_runs]} \\
         --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
@@ -328,7 +328,7 @@ shell "cat tmp/angle_mean_hits_std_deviation_and_photons_*.txt \\
 log.ensure_file "tmp/angle_hits_deviation_and_photons.txt"
 
 if options[:cluster]
-  log.warning "Skipping plot because running on the cluster. To plot later, use lib/plot.rb."
+  log.warning "Skipping plot because running on the cluster. To plot later, use ../lib/plot.rb."
 else
   gnuplot_commands = "
     set term png
@@ -369,9 +369,9 @@ log.configuration histogram_options
 options.merge! histogram_options
 
 if options[:cluster]
-  log.warning "Skipping creating histograms because running on the cluster. To create them later, use lib/create_histograms_for_hits.rb."
+  log.warning "Skipping creating histograms because running on the cluster. To create them later, use ../lib/create_histograms_for_hits.rb."
 else
-  shell "ruby lib/create_histograms_for_hits.rb \\
+  shell "ruby ../lib/create_histograms_for_hits.rb \\
     --input-files=#{options[:hits_histograms_input_files]} \\
     --input-columns=#{options[:hits_histograms_input_columns]} \\
     --output-file-pattern=#{options[:hits_histograms_output_file_pattern]} \\
@@ -397,7 +397,7 @@ log.section "Comparing to reference plot"
 if options[:cluster]
   log.warning "Skipping comparison plots because running on the cluster."
 else
-  shell "ruby lib/plot.rb ./tmp"
+  shell "ruby ../lib/plot.rb ./tmp"
 end
 
 

@@ -103,7 +103,7 @@ File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 if File.exist? options[:gcd_file_with_hole_ice]
   log.warning "File #{options[:gcd_file_with_hole_ice]} exists. Please remove it if you want it to be recreated."
 else
-  shell "python #{__dir__}/../AngularAcceptance/lib/create_gcd_file_with_hole_ice.py \\
+  shell "python #{__dir__}/../lib/create_gcd_file_with_hole_ice.py \\
     --input-gcd-file=#{options[:gcd_file]} \\
     --output-gcd-file=#{options[:gcd_file_with_hole_ice]} \\
     " + options[:hole_ice_cylinder_positions].enum_for(:each_with_index).collect { |pos, index|
@@ -136,7 +136,7 @@ File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 if File.exists? options[:flasher][:i3_file]
   log.warning "Skipping creation of already existing file #{options[:flasher][:i3_file]}."
 else
-  shell "python #{__dir__}/../AngularAcceptance/lib/create_flasher_pulse.py \\
+  shell "python #{__dir__}/../lib/create_flasher_pulse.py \\
     --gcd=#{options[:gcd_file_with_hole_ice]} \\
     --string=#{flasher_options[:string_number]} \\
     --dom=#{flasher_options[:dom_number]} \\
@@ -171,7 +171,7 @@ else
 
   shell "rm #{options[:clsim_log_file]}"
 
-  shell "python #{__dir__}/../AngularAcceptance/lib/propagate_photons_with_clsim.py \\
+  shell "python #{__dir__}/../lib/propagate_photons_with_clsim.py \\
     --ice-model=#{options[:ice_model_file]} \\
     --seed=#{options[:seed]} \\
     --output-i3-file=#{options[:output_i3_file]} \\
@@ -199,7 +199,7 @@ options.merge! read_out_options
 log.configuration read_out_options
 File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 
-shell "python #{__dir__}/../AngularAcceptance/lib/read_out_photon_hits.py \\
+shell "python #{__dir__}/../lib/read_out_photon_hits.py \\
   --string=#{options[:receiving_string]} \\
   --i3-file=#{options[:output_i3_file]} \\
   --outfile=#{options[:numbers_of_hits_file]} \\

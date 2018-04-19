@@ -81,7 +81,7 @@ configurations.each_with_index do |options, index|
     File.open(options[:chi_squared_data_without_zero_errors_file], 'w') { |file| file.write(data_rows.join("\n")) }
     log.info ""
 
-    shell "ruby lib/compare_simulation_to_reference.rb \\
+    shell "ruby #{__dir__}/compare_simulation_to_reference.rb \\
       --input-files='#{options[:chi_squared_data_without_zero_errors_file]}' \\
       --data-label='#{options[:run_id]}, esca=#{options[:hole_ice_effective_scattering_length].round(3)}m, r=#{options[:hole_ice_radius_in_dom_radii]}r_{dom}' \\
       --output-plot-file='#{options[:chi_squared_nu_plot_file]}' \\
@@ -109,7 +109,7 @@ end
 
 log.head "Parameter scan plots"
 log.section "Calculate parameter scan agreements"
-shell "python #{__dir__}/../../ParameterScan/lib/calculate_agreement.py #{data_directories.join(' ')}"
+shell "python #{__dir__}/calculate_agreement.py #{data_directories.join(' ')}"
 configurations.each_with_index do |options, index|
   agreement_file = "#{options[:data_directory]}/ln_likelihood.txt"
   if File.exists? agreement_file
@@ -148,4 +148,4 @@ for data_directory in data_directories
 end
 
 log.section "Contour plot"
-shell "python #{__dir__}/../../AngularAcceptance/lib/create_contour_plot.py #{agreement_files.join(' ')}"
+shell "python #{__dir__}/create_contour_plot.py #{agreement_files.join(' ')}"

@@ -5,7 +5,7 @@ require 'pp'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Compare simulation data to reference plot. Usage: lib/compare_simulation_to_reference.rb [options]"
+  opts.banner = "Compare simulation data to reference plot. Usage: ../lib/compare_simulation_to_reference.rb [options]"
 
   opts.on "--input-files=PATTERN_LIST", "e.g. tmp/angle_hits_deviation_and_photons.txt,results/**/data/angle_hits_deviation_and_photons.txt" do |pattern|
     options[:input_files] = pattern.split(",").collect { |path| Dir.glob(path) }.flatten

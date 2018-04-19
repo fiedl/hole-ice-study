@@ -89,7 +89,7 @@ options.merge!({
   create_gcd_log: "tmp/create_gcd_with_hole_ice.log"
 })
 
-shell "python #{__dir__}/../AngularAcceptance/lib/create_gcd_file_with_hole_ice.py \\
+shell "python #{__dir__}/../lib/create_gcd_file_with_hole_ice.py \\
   --input-gcd-file=#{options[:gcd_file]} \\
   --output-gcd-file=#{options[:gcd_file_with_hole_ice]} \\
   " + options[:hole_ice_cylinder_positions].enum_for(:each_with_index).collect { |pos, index|
