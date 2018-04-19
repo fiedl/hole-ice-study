@@ -93,6 +93,7 @@ else
                 --effective-scattering-length=#{esca} \\
                 --absorption-length=#{abs} \\
                 --hole-ice-radius-in-dom-radii=#{radius_in_dom_radii} \\
+                --width=#{width} \\
                 > ../FlasherParameterScan/tmp/flasher_simulation.log \\
                 2> ../FlasherParameterScan/tmp/flasher_simulation.err"
 
