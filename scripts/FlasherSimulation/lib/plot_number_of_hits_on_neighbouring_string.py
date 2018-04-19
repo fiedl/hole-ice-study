@@ -13,9 +13,13 @@ flasher_data = flasher_data[flasher_data.string_number == 63]
 # simulation data
 simulation_titles = [
   "hole-ice simulation (Run-2018-paYeiy3v, r=0.5 r_dom, esca=5cm)",
+  "hole-ice approximation (Run-2018-bi3riu7r)",
+  "no hole ice (Run-2018-Fahpon9u)"
 ]
 simulation_data_files = [
-  "~/hole-ice-study/scripts/FlasherSimulation/cluster-results/Run-2018-paYeiy3v/hits.txt"
+  "~/hole-ice-study/scripts/FlasherSimulation/cluster-results/Run-2018-paYeiy3v/hits.txt",
+  "~/hole-ice-study/scripts/FlasherSimulation/cluster-results/Run-2018-bi3riu7r/hits.txt",
+  "~/hole-ice-study/scripts/FlasherSimulation/cluster-results/Run-2018-Fahpon9u/hits.txt",
 ]
 simulation_plot_styles = ["bo", "go", "yo"]
 
@@ -36,7 +40,7 @@ ax.plot(
   label = "flasher data 2012"
 )
 
-#ax.set_yscale("log")
+# ax.set_yscale("log")
 
 # extract relevant simulation data
 for i, simulation_title in enumerate(simulation_titles):
