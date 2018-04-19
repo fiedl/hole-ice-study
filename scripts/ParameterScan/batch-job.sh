@@ -8,6 +8,9 @@
 # See: https://github.com/fiedl/hole-ice-study/issues/15
 export CUDA_CACHE_DISABLE=1
 
+# The scripts are located here:
+SCRIPTS="$SCRATCH/hole-ice-study/scripts"
+
 # The $REMOTE directory from which the data and scripts are taken and
 # where the results will be sent to.
 REMOTE="$SCRATCH/hole-ice-study/scripts/ParameterScan"
@@ -34,11 +37,11 @@ trap 'echo exit 2; exit 2' USR1 USR1 XCPU
 source /cvmfs/icecube.opensciencegrid.org/py2-v3_early_access/setup.sh
 
 # Copy scripts to the cluster.
-mkdir -p "$TMPDIR/ParameterScan" "$TMPDIR/AngularAcceptance"
-cd "$SCRATCH/hole-ice-study/scripts/ParameterScan"
-cp Gemfile Gemfile.lock run.rb $TMPDIR/ParameterScan/
-cd "$SCRATCH/hole-ice-study/scripts/AngularAcceptance"
-cp -r Gemfile Gemfile.lock lib run.rb $TMPDIR/AngularAcceptance/
+for folder in ParameterScan AngularAcceptance lib; do
+  mkdir -p "$TMPDIR/$folder"
+  cd "$SCRIPTS/$folder"
+  cp *.rb *.py Gemfile* "$TMPDIR/$folder/"
+done
 
 # Execute script.
 cd $TMPDIR/ParameterScan
