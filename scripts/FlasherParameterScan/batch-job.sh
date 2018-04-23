@@ -40,7 +40,11 @@ source /cvmfs/icecube.opensciencegrid.org/py2-v3_early_access/setup.sh
 for folder in FlasherParameterScan FlasherSimulation lib; do
   mkdir -p "$TMPDIR/$folder"
   cd "$SCRIPTS/$folder"
-  cp *.rb *.py Gemfile* "$TMPDIR/$folder/"
+  pwd
+  ls
+  cp *.rb "$TMPDIR/$folder/" || true
+  cp *.py "$TMPDIR/$folder/" || true
+  cp Gemfile* "$TMPDIR/$folder/" || true
 done
 
 # Execute script.
