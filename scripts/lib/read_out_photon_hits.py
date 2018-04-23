@@ -4,7 +4,6 @@ from optparse import OptionParser
 from os.path import expandvars
 
 parser = OptionParser()
-parser.add_option("--string", type = "int", default = 63)
 parser.add_option("--i3-file")
 parser.add_option("--outfile", default = "tmp/read_out_hits.txt")
 
@@ -49,16 +48,14 @@ import pandas
 data = pandas.DataFrame([])
 def read_out_hits(frame):
   global data
-  for index, dom_number in enumerate(range(1, 60)):
-    om_key = OMKey(options.string, dom_number)
-    if not frame['MCPESeriesMap'].get(om_key) is None:
-      for entry in frame['MCPESeriesMap'].get(om_key):
-        data = data.append(pandas.DataFrame({
-          "string": options.string,
-          "dom": dom_number,
-          "time": entry.time,
-          "charge": entry.npe
-        }, index = [0]), ignore_index = True)
+  for dom_key, photons in frame['MCPESeriesMap'].iteritems():
+    for photon in photons:
+      data = data.append(pandas.DataFrame({
+        "string": key.string,
+        "dom": key.om,
+        "time": photon.time,
+        "charge": photon.npe
+      }, index = [0]), ignore_index = True)
 
 tray = I3Tray()
 
@@ -74,5 +71,5 @@ tray.Finish()
 #print("HITS = " + str(hits))
 
 data.to_csv(options.outfile, sep=" ", header = True, index = False,
-    columns = ["string", "dom", "time", "charge"])
+    columns = ["string", "dom", "time", "hits"])
 

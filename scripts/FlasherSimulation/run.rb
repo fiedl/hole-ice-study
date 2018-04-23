@@ -200,7 +200,6 @@ log.configuration read_out_options
 File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
 
 shell "python #{__dir__}/../lib/read_out_photon_hits.py \\
-  --string=#{options[:receiving_string]} \\
   --i3-file=#{options[:output_i3_file]} \\
   --outfile=#{options[:numbers_of_hits_file]} \\
 "
