@@ -51,10 +51,10 @@ def read_out_hits(frame):
   for dom_key, photons in frame['MCPESeriesMap'].iteritems():
     for photon in photons:
       data = data.append(pandas.DataFrame({
-        "string": key.string,
-        "dom": key.om,
+        "string": dom_key.string,
+        "dom": dom_key.om,
         "time": photon.time,
-        "charge": photon.npe
+        "hits": photon.npe
       }, index = [0]), ignore_index = True)
 
 tray = I3Tray()
