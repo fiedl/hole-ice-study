@@ -2,8 +2,9 @@
  :effective_scattering_length=>0.05,
  :absorption_length=>100.0,
  :hole_ice_radius_in_dom_radii=>0.5,
- :run_id=>"Run-2018-rahK7eib",
- :started_at=>"2018-04-13 18:10:57 +0200",
+ :width=>127,
+ :run_id=>"Run-2018-vugo7Nie",
+ :started_at=>"2018-04-23 16:17:49 +0200",
  :gcd_file=>
   "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
  :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
@@ -29,4 +30,4 @@
  :clsim_log_file=>"tmp/clsim.log",
  :receiving_string=>63,
  :numbers_of_hits_file=>"tmp/hits.txt",
- :finished_at=>"2018-04-14 16:48:41 +0200"}
+ :finished_at=>"2018-04-24 14:39:50 +0200"}

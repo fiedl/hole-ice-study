@@ -2,8 +2,9 @@
  :effective_scattering_length=>0.05,
  :absorption_length=>100.0,
  :hole_ice_radius_in_dom_radii=>0.5,
- :run_id=>"Run-2018-peef3doh",
- :started_at=>"2018-04-13 18:10:03 +0200",
+ :width=>64,
+ :run_id=>"Run-2018-atai4ipo",
+ :started_at=>"2018-04-23 16:09:19 +0200",
  :gcd_file=>
   "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
  :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
@@ -19,7 +20,7 @@
    :dom_number=>30,
    :i3_file=>"tmp/flasher.i3",
    :brightness=>127,
-   :width=>127,
+   :width=>64,
    :mask=>"111111111111"},
  :save_photon_paths=>false,
  :cpu=>false,
@@ -29,4 +30,4 @@
  :clsim_log_file=>"tmp/clsim.log",
  :receiving_string=>63,
  :numbers_of_hits_file=>"tmp/hits.txt",
- :finished_at=>"2018-04-14 17:08:59 +0200"}
+ :finished_at=>"2018-04-24 05:34:26 +0200"}
