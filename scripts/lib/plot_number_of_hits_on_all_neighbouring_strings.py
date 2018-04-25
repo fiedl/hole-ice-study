@@ -43,8 +43,8 @@ import numpy as np
 # prepare canvas
 fig, ax = plt.subplots(facecolor="white")
 
-ax.plot(doms, flasher_data_hits, "ro", label = "flasher data 2012")
-ax.plot(doms, simulation_data_hits, "bo", label = "simulation")
+ax.plot(doms, flasher_data_hits, "ro", label = "flasher data 2012, total hits = " + str(flasher_data["charge"].sum()))
+ax.plot(doms, simulation_data_hits, "bo", label = "simulation, total hits = " + str(simulation_data["charge"].sum()))
 
 ax.set_title("Comparing flasher data to simulation, emitting DOM 63_30")
 ax.set_xlabel("DOM number ~ z coordinate")

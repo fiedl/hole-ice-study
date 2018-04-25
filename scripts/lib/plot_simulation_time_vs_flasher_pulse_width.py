@@ -28,6 +28,7 @@ simulation_times = []
 simulation_times_minutes = []
 simulation_times_hours = []
 simulation_numbers_of_hits = []
+simulation_overscaling_factors = []
 
 for options_file in options_files:
   options = json.load(open(options_file))
@@ -43,8 +44,12 @@ for options_file in options_files:
   total_number_of_hits_in_detector = simulation_data["charge"].sum()
   simulation_numbers_of_hits.append(total_number_of_hits_in_detector)
 
+  data_total_number_of_hits = 72039 # https://github.com/fiedl/hole-ice-study/issues/57#issuecomment-383990496
+  overscaling_factor = total_number_of_hits_in_detector * 1.0 / data_total_number_of_hits
+  simulation_overscaling_factors.append(overscaling_factor)
+
 # prepare canvas
-fig, [ax0, ax1, ax2] = plt.subplots(3, 1, facecolor="white")
+fig, [ax0, ax1, ax2, ax3] = plt.subplots(4, 1, facecolor="white")
 
 ax0.plot(pulse_widths, simulation_times_hours, "o")
 ax0.set_xlabel("Flasher pulse width setting")
@@ -58,5 +63,9 @@ ax1.set_ylabel("Total number of hits in detector")
 ax2.plot(simulation_numbers_of_hits, simulation_times_hours, "ro")
 ax2.set_xlabel("Total number of hits in detector")
 ax2.set_ylabel("Simulation time [hours]")
+
+ax3.plot(simulation_overscaling_factors, simulation_times_hours, "ro")
+ax3.set_xlabel("Simulation vs. data overscaling factor")
+ax3.set_ylabel("Simulation time [hours]")
 
 plt.show()
