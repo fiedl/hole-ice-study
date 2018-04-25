@@ -59,33 +59,31 @@ log.ensure_file "tmp/options.txt"
 log.section "Detector geometry"
 dom_radius = 0.16510
 
-# DOM Positions: https://wiki.icecube.wisc.edu/index.php/Geometry_releases
+# Place hole-ice cylinders around these sending and receiving strings.
+# See: https://github.com/fiedl/hole-ice-study/issues/57
 #
-string_62_position = [-189.98, 257.42]
-string_63_position = [ -66.70, 276.92]
+strings_with_hole_ice = [63] + [62, 54, 55, 64, 71, 70]
+require_relative '../lib/string_positions'
 
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
   seed: 123456,
-  hole_ice_cylinder_positions: [
-    string_62_position + [0],
-    string_63_position + [0]
-  ],
+  hole_ice_cylinder_positions: strings_with_hole_ice.collect { |string|
+    string_position = StringPosition.for_string(string)
+    [string_position[:x], string_position[:y], 0]
+  },
 
-  # Hole-ice configuration from Martin's best estimates
+  # Hole-ice configuration defaults from Martin's best estimates
   hole_ice_cylinder_radii: [
-    (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius,
     (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius
-  ],
+  ] * strings_with_hole_ice.count,
   cylinder_scattering_lengths: [
-    (options[:effective_scattering_length] || 0.05) * (1 - 0.94),
     (options[:effective_scattering_length] || 0.05) * (1 - 0.94)
-  ],
+  ] * strings_with_hole_ice.count,
   cylinder_absorption_lengths: [
-    (options[:absorption_length] || 100.0),
     (options[:absorption_length] || 100.0)
-  ]
+  ] * strings_with_hole_ice.count
 }
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
