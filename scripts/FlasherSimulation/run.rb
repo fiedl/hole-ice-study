@@ -124,7 +124,7 @@ log.ensure_file options[:gcd_file_with_hole_ice], show_log: options[:create_gcd_
 #
 log.section "Create simulated flashes"
 flasher_options = {
-  string_number: 62,
+  string_number: 63,
   dom_number: 30,
   i3_file: "tmp/flasher.i3",
   brightness: options[:brightness] || 127,
@@ -194,7 +194,6 @@ log.ensure_file propagation_options[:output_i3_file]
 #
 log.section "Read out numbers of hits"
 read_out_options = {
-  receiving_string: 63,
   numbers_of_hits_file: "tmp/hits.txt"
 }
 options.merge! read_out_options
