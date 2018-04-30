@@ -23,7 +23,8 @@ options.merge!({
   effective_scattering_length_range: [0.02, 0.1, 0.2, 0.35, 0.5, 1.0, 1.5, 2.5, 3.0, 3.3, 3.5],
   hole_ice_radius_range_in_dom_radii: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0],
   absorption_length_range: [100],
-  flasher_pulse_width_range: [127]
+  flasher_pulse_width_range: [127],
+  flasher_pulse_brightness_range: [63]
 })
 
 dom_radius = 0.16510
@@ -39,7 +40,8 @@ number_of_jobs =
     options[:scattering_length_range].count *
     options[:absorption_length_range].count *
     options[:hole_ice_radius_range].count *
-    options[:flasher_pulse_width_range].count
+    options[:flasher_pulse_width_range].count *
+    options[:flasher_pulse_brightness_range].count
 current_cluster_node_index = ENV['SGE_TASK_ID']
 
 
@@ -69,48 +71,51 @@ if options[:submit_to_cluster]
 else
 
   parameter_set_index = 0
-  options[:flasher_pulse_width_range].each do |width|
-    options[:effective_scattering_length_range].each do |esca|
-      options[:absorption_length_range].each do |abs|
-        options[:hole_ice_radius_range_in_dom_radii].each do |radius_in_dom_radii|
+  options[:flasher_pulse_brightness_range].each do |brightness|
+    options[:flasher_pulse_width_range].each do |width|
+      options[:effective_scattering_length_range].each do |esca|
+        options[:absorption_length_range].each do |abs|
+          options[:hole_ice_radius_range_in_dom_radii].each do |radius_in_dom_radii|
 
-          parameter_set_index += 1
+            parameter_set_index += 1
 
-          need_to_perform_this_job = ((not current_cluster_node_index) or
-              (current_cluster_node_index.to_i == parameter_set_index))
+            need_to_perform_this_job = ((not current_cluster_node_index) or
+                (current_cluster_node_index.to_i == parameter_set_index))
 
-          if need_to_perform_this_job
-            log.section "Parameters: esca=#{esca}, abs=#{abs}, pulse_width=#{width}, r=#{radius_in_dom_radii}r_dom"
+            if need_to_perform_this_job
+              log.section "Parameters: esca=#{esca}, abs=#{abs}, pulse_width=#{width}, brightness=#{brightness}, r=#{radius_in_dom_radii}r_dom"
 
-            results_directory = "results/esca#{esca}_r#{radius_in_dom_radii}rdom_abs#{abs}_width#{width}"
+              results_directory = "results/esca#{esca}_r#{radius_in_dom_radii}rdom_abs#{abs}_width#{width}_bright#{brightness}"
 
-            if File.exists?(results_directory)
-              log.warning "Skipping already existing run #{results_directory}."
-            else
-              shell "mkdir -p #{results_directory} tmp"
-              shell "cd ../FlasherSimulation && ./run.rb \\
-                --hole-ice=simulation \\
-                --effective-scattering-length=#{esca} \\
-                --absorption-length=#{abs} \\
-                --hole-ice-radius-in-dom-radii=#{radius_in_dom_radii} \\
-                --width=#{width} \\
-                > ../FlasherParameterScan/tmp/flasher_simulation.log \\
-                2> ../FlasherParameterScan/tmp/flasher_simulation.err"
+              if File.exists?(results_directory)
+                log.warning "Skipping already existing run #{results_directory}."
+              else
+                shell "mkdir -p #{results_directory} tmp"
+                shell "cd ../FlasherSimulation && ./run.rb \\
+                  --hole-ice=simulation \\
+                  --effective-scattering-length=#{esca} \\
+                  --absorption-length=#{abs} \\
+                  --hole-ice-radius-in-dom-radii=#{radius_in_dom_radii} \\
+                  --width=#{width} \\
+                  --brightness=#{brightness} \\
+                  > ../FlasherParameterScan/tmp/flasher_simulation.log \\
+                  2> ../FlasherParameterScan/tmp/flasher_simulation.err"
 
-              log.ensure_file "tmp/flasher_simulation.log"
+                log.ensure_file "tmp/flasher_simulation.log"
 
-              if File.stat("tmp/flasher_simulation.err").size > 0
-                log.error "\nThis flasher simulation script run has produced errors:"
-                shell "cat tmp/flasher_simulation.err"
-                shell "tail -n 20 tmp/flasher_simulation.log"
-                log.info "\n\n"
+                if File.stat("tmp/flasher_simulation.err").size > 0
+                  log.error "\nThis flasher simulation script run has produced errors:"
+                  shell "cat tmp/flasher_simulation.err"
+                  shell "tail -n 20 tmp/flasher_simulation.log"
+                  log.info "\n\n"
+                end
+
+                shell "mv tmp/flasher_simulation.* #{results_directory}/"
+                shell "mv ../FlasherSimulation/results/*/* #{results_directory}/"
               end
-
-              shell "mv tmp/flasher_simulation.* #{results_directory}/"
-              shell "mv ../FlasherSimulation/results/*/* #{results_directory}/"
             end
-          end
 
+          end
         end
       end
     end

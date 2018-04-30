@@ -19,6 +19,9 @@ OptionParser.new do |opts|
   opts.on "--width=WIDTH", "Flahser pulse width, min = 0, max = 127" do |width|
     options[:width] = width.to_i
   end
+  opts.on "--brightness=BRIGHTNESS", "Flasher pulse brightness, min = 0, max = 127" do |brightness|
+    options[:brightness] = brightness.to_i
+  end
   opts.on "--effective-scattering-length=METRES" do |esca|
     options[:effective_scattering_length] = esca.to_f
   end
@@ -124,7 +127,7 @@ flasher_options = {
   string_number: 62,
   dom_number: 30,
   i3_file: "tmp/flasher.i3",
-  brightness: 127,
+  brightness: options[:brightness] || 127,
   width: options[:width] || 127,
   mask: "111111111111" # https://wiki.icecube.wisc.edu/index.php/Flasher_LED_mask
 }
