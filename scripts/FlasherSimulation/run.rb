@@ -3,6 +3,7 @@ require 'fiedl/log'
 require 'optparse'
 require 'pp'
 require 'pawgen'
+require 'json'
 
 options = {}
 OptionParser.new do |opts|
@@ -210,6 +211,11 @@ options.merge!({
   finished_at: Time.now.to_s
 })
 File.open("tmp/options.txt", 'w') { |file| PP.pp(options, file) }
+
+
+# Export json options for processing those with python later.
+#
+File.open("tmp/options.json", 'w') { |file| file.write options.to_json }
 
 
 # Export results.
