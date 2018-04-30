@@ -60,9 +60,9 @@ log.section "Detector geometry"
 dom_radius = 0.16510
 
 # Place hole-ice cylinders around these sending and receiving strings.
-# See: https://github.com/fiedl/hole-ice-study/issues/57
+# See: https://github.com/fiedl/hole-ice-study/issues/59
 #
-strings_with_hole_ice = [63] + [62, 54, 55, 64, 71, 70]
+strings_with_hole_ice = [63] + [62, 54, 55, 64, 71, 70] + [61, 53, 44, 45, 46, 56, 65, 72, 78, 77, 76, 69]
 require_relative '../lib/string_positions'
 
 detector_geometry_options = {
