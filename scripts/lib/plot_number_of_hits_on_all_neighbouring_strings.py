@@ -36,6 +36,7 @@ for simulation_data_file in simulation_data_files:
     global receiving_strings
     global doms
     number_of_total_hits_in_detector = data["charge"].sum()
+    number_of_total_hits_in_receiving_strings = data[data.string_number.isin(receiving_strings)]["charge"].sum()
     hits = []
     for dom in doms:
       hits_at_this_z = data \
