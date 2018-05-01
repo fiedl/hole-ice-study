@@ -32,7 +32,7 @@ for simulation_data_file in simulation_data_files:
   simulation_options_file = os.path.join(os.path.dirname(simulation_data_file), "options.json")
   simulation_options = json.load(open(simulation_options_file))
 
-  receiving_strings = [62, 54, 55, 64, 71, 70]
+  receiving_strings = [62, 54, 55, 64, 71, 70] # + [61, 53, 44, 45, 46, 56, 65, 72, 78, 77, 76, 69]
   doms = range(1, 60)
 
   flasher_data_total_hits_in_detector = flasher_data["charge"].sum()
