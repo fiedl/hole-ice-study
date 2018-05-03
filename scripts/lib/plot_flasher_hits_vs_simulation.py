@@ -10,6 +10,8 @@ import pandas
 
 flasher_data_file = "~/icecube/flasher-data/oux.63_30"
 flasher_data = pandas.read_csv(flasher_data_file, delim_whitespace = True, names = ["string_number", "dom_number", "time", "charge"])
+flasher_brightness = 127
+flasher_width = 127
 
 import os
 import glob2
@@ -35,8 +37,9 @@ for simulation_data_file in simulation_data_files:
   receiving_strings = [62, 54, 55, 64, 71, 70] # + [61, 53, 44, 45, 46, 56, 65, 72, 78, 77, 76, 69]
   doms = range(1, 60)
 
-  flasher_data_total_hits_in_detector = flasher_data["charge"].sum()
-  simulation_total_hits_in_detector = simulation_data["charge"].sum()
+  flasher_scaling = flasher_brightness * flasher_width
+  simulation_scaling = simulation_options["brightness"] * simulation_options["width"]
+  simulation_scaling_factor = flasher_scaling / simulation_scaling
 
   data_hits = []
   simulation_hits = []
@@ -46,17 +49,16 @@ for simulation_data_file in simulation_data_files:
       k_simulation = simulation_data[simulation_data.string_number == string][simulation_data.dom_number == dom]["charge"].sum()
       if (k_data > 0) or (k_simulation > 0):
         data_hits.append(k_data)
-        simulation_hits.append(k_simulation)
-
-  relative_data_hits = data_hits / flasher_data_total_hits_in_detector
-  relative_simulation_hits = simulation_hits / flasher_data_total_hits_in_detector
+        simulation_hits.append(k_simulation * simulation_scaling_factor)
 
   # Plot this data point
   fig, ax = plt.subplots(1, 1, facecolor="white")
-  ax.plot(relative_data_hits, label = "data 2012")
-  ax.plot(relative_simulation_hits, label = "simulation: " + "esca = " + str(simulation_options["effective_scattering_length"]) + "m, r = " + str(simulation_options["hole_ice_radius_in_dom_radii"]) + " r_DOM")
+
+  ax.plot(data_hits, label = "data 2012")
+  ax.plot(simulation_hits, label = "simulation: " + "esca = " + str(simulation_options["effective_scattering_length"]) + "m, r = " + str(simulation_options["hole_ice_radius_in_dom_radii"]) + " r_DOM")
+  ax.set_ylabel("number of hits")
+
   ax.legend(loc = "upper right")
   ax.set_xlabel("DOM, strings " + ', '.join([str(x) for x in receiving_strings]))
-  ax.set_ylabel("number of hits / total hits in detector")
   ax.set_title("Flasher study: Simulation vs. data")
   plt.show()
