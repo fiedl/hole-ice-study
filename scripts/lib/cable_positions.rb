@@ -1,6 +1,7 @@
 # Data source: https://icecube.wisc.edu/~dima/work/IceCube-ftp/leds/, 2018-01-18
 
 require 'csv'
+require_relative 'dom_positions'
 
 # Usage:
 #
@@ -21,6 +22,7 @@ class CablePosition
   end
 
   def self.data_file
+    # https://icecube.wisc.edu/~dima/work/IceCube-ftp/leds/results.txt
     File.expand_path("~/icecube/cable-data/icecube.wisc.edu/~dima/work/IceCube-ftp/leds/results.txt")
   end
 
@@ -38,6 +40,34 @@ class CablePosition
 
   def angle_from_grid_north_in_degrees
     data.first["cable_dir"].to_f
+  end
+
+  def angle_from_grid_north_in_rad
+    angle_from_grid_north_in_degrees * 2.0 * Math::PI / 360
+  end
+
+  def self.dom_radius
+   0.16510
+  end
+
+  def dom_position
+    DomPosition.find_by(string: string, dom: dom)
+  end
+
+  def self.cable_radius
+    0.02
+  end
+
+  def x
+    dom_position.x + Math.sin(angle_from_grid_north_in_rad) * (self.class.dom_radius + self.class.cable_radius)
+  end
+
+  def y
+    dom_position.y + Math.cos(angle_from_grid_north_in_rad) * (self.class.dom_radius + self.class.cable_radius)
+  end
+
+  def z
+    dom_position.z
   end
 
 end
