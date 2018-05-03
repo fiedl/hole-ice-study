@@ -31,6 +31,10 @@ OptionParser.new do |opts|
   opts.on "--hole-ice-radius-in-dom-radii=R" do |r|
     options[:hole_ice_radius_in_dom_radii] = r.to_f
   end
+
+  opts.on "--cables", "Simulate cable shadows" do
+    options[:cables] = true
+  end
 end.parse!
 
 log.head "Flasher simulation"
@@ -69,25 +73,51 @@ dom_radius = 0.16510
 strings_with_hole_ice = [63] + [62, 54, 55, 64, 71, 70] + [61, 53, 44, 45, 46, 56, 65, 72, 78, 77, 76, 69]
 require_relative '../lib/string_positions'
 
+# bubble-column cylinders
+# defaults from Martin's best estimates
+bubble_column_cylinder_positions = strings_with_hole_ice.collect { |string|
+  string_position = StringPosition.for_string(string)
+  [string_position[:x], string_position[:y], 0]
+}
+bubble_column_cylinder_radii = [
+  (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius
+] * strings_with_hole_ice.count
+bubble_column_scattering_lengths = [
+  (options[:effective_scattering_length] || 0.05) * (1 - 0.94)
+] * strings_with_hole_ice.count
+bubble_column_absorption_lengths = [
+  (options[:absorption_length] || 100.0)
+] * strings_with_hole_ice.count
+
+# Simulate cable shadows using absorbing cylinders
+# https://github.com/fiedl/hole-ice-study/issues/60
+#
+strings_with_cables = if options[:cables]
+  strings_with_hole_ice
+else
+  []
+end
+
+require_relative '../lib/cable_positions'
+doms = (1..60)
+cable_positions = strings_with_cables.collect { |string|
+  doms.collect { |dom|
+    cable_position = CablePosition.find_by(string: string, dom: dom)
+    [cable_position.x, cable_position.y, cable_position.z]
+  }
+}.flatten(1)
+cable_radii = [0.02] * (strings_with_cables.count * doms.count)
+cable_scattering_lengths = [100.0] * (strings_with_cables.count * doms.count)
+cable_absorption_lengths = [0.0] * (strings_with_cables.count * doms.count)
+
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
   seed: 123456,
-  hole_ice_cylinder_positions: strings_with_hole_ice.collect { |string|
-    string_position = StringPosition.for_string(string)
-    [string_position[:x], string_position[:y], 0]
-  },
-
-  # Hole-ice configuration defaults from Martin's best estimates
-  hole_ice_cylinder_radii: [
-    (options[:hole_ice_radius_in_dom_radii] || 0.5) * dom_radius
-  ] * strings_with_hole_ice.count,
-  cylinder_scattering_lengths: [
-    (options[:effective_scattering_length] || 0.05) * (1 - 0.94)
-  ] * strings_with_hole_ice.count,
-  cylinder_absorption_lengths: [
-    (options[:absorption_length] || 100.0)
-  ] * strings_with_hole_ice.count
+  hole_ice_cylinder_positions: bubble_column_cylinder_positions + cable_positions,
+  hole_ice_cylinder_radii: bubble_column_cylinder_radii + cable_radii,
+  cylinder_scattering_lengths: bubble_column_scattering_lengths + cable_scattering_lengths,
+  cylinder_absorption_lengths: bubble_column_absorption_lengths + cable_absorption_lengths
 }
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
