@@ -7,7 +7,7 @@
 import sys
 import pandas
 
-data_file = "~/hole-ice-study/scripts/FiringRange/tmp/cross_check_output.txt"
+data_file = "~/hole-ice-study/results/cross_checks/cross_check_64.txt"
 data = pandas.read_csv(data_file, delim_whitespace = True, names = ["cross", "check", "key", "equals", "photonTotalPathLength"])
 
 import numpy as np
