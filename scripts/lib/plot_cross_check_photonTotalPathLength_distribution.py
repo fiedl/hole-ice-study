@@ -39,6 +39,7 @@ for ax in axes:
 
 axes[1].set_yscale("log")
 
-fig.suptitle("Cross check #64: Photons within hole ice", fontsize = 14)
+number_of_photons = data["photonTotalPathLength"].count()
+fig.suptitle("Cross check #64: Photons within hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
 
 plt.show()
