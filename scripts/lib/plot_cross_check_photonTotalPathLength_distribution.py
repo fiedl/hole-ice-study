@@ -30,7 +30,7 @@ for ax in axes:
   y = ss.expon.pdf(x, *fit_params)
   scale = 1.0 * sum(n) / sum(y)
   bin_width = (data["photonTotalPathLength"].max() - data["photonTotalPathLength"].min()) / 50
-  ax.plot(x + bin_width / 2, y * scale, label = 'exponential fit, $\lambda_{\mathrm{abs}}$ = ' + str(round(fit_params[1], 3)) + 'm')
+  ax.plot(x + bin_width / 2, y * scale, label = 'exponential fit, $\lambda_{\mathrm{abs}}$ = ' + str(round(fit_params[1], 3)) + 'm', linewidth = 2.0)
 
   ax.set_title("Cross check #64: Photons within hole ice")
   ax.set_xlabel("photon total path length [m]")
