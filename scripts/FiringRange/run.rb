@@ -12,6 +12,12 @@ OptionParser.new do |opts|
   opts.on "--absorption-factor=ABS", "Something between 0.0 and 1.0." do |abs|
     options[:absorption_factor] = abs.to_f
   end
+  opts.on "--effective-scattering-length=METRES", "Effective scattering length of the hole ice in metres" do |esca|
+    options[:effective_scattering_length] = esca.to_f
+  end
+  opts.on "--absorption-length=METRES", "Absorption length of the hole ice in metres" do |abs|
+    options[:absorption_length] = abs.to_f
+  end
   opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres." do |dst|
     options[:distance] = dst.to_f
   end
@@ -35,6 +41,9 @@ OptionParser.new do |opts|
   end
   opts.on "--plane-wave", "Start photons from a plane rather than a point." do
     options[:plane_wave] = true
+  end
+  opts.on "--hole-ice-radius=METRES", "Hole-ice radius in metres" do |radius|
+    options[:hole_ice_radius] = radius.to_f
   end
   opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
     options[:cylinder_shift] = metres
@@ -66,6 +75,16 @@ log.success "OK."
 #
 log.section "Detector geometry"
 dom_radius = 0.16510
+mean_scattering_angle_cosine = 0.94
+
+if options[:effective_scattering_length] && !options[:scattering_length]
+  options[:scattering_length] = options[:effective_scattering_length] * (1 - mean_scattering_angle_cosine)
+elsif options[:scattering_length] && !options[:effective_scattering_length]
+  options[:effective_scattering_length] = options[:scattering_length] / (1 - mean_scattering_angle_cosine)
+elsif options[:effective_scattering_length] && options[:scattering_length]
+  raise 'both effective_scattering_lenght and scattering_length are given'
+end
+
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
   ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
@@ -73,23 +92,23 @@ detector_geometry_options = {
   hole_ice_cylinder_positions: [
     # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
     [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
-    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
+    #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # outer column
     #[-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
     #[-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
   ],
   hole_ice_cylinder_radii: [
-    0.30,
-    0.28
+    options[:hole_ice_radius] || 0.30,
+    #0.28
     #0.08,
     #0.02
   ],
   cylinder_scattering_lengths: [
-    0.001,
-    100.0
+    options[:scattering_length] || 100.0,
+    #100.0
   ],
   cylinder_absorption_lengths: [
-    100.0,
-    0.0
+    options[:absorption_length] || 100.0,
+    #0.0
   ]
 }
 log.configuration detector_geometry_options
