@@ -19,7 +19,7 @@ fig, axes = plt.subplots(1, 2, facecolor="white")
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, label = "simulation data")
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, label = 'simulation data, $\lambda_{\mathrm{abs}}$ = 0.1m')
 
   ## fit the exponential distribution
   import scipy.stats as ss
@@ -30,7 +30,7 @@ for ax in axes:
   y = ss.expon.pdf(x, *fit_params)
   scale = 1.0 * sum(n) / sum(y)
   bin_width = (data["photonTotalPathLength"].max() - data["photonTotalPathLength"].min()) / 50
-  ax.plot(x + bin_width / 2, y * scale, label = "exponential fit")
+  ax.plot(x + bin_width / 2, y * scale, label = 'exponential fit, $\lambda_{\mathrm{abs}}$ = ' + str(round(fit_params[1], 3)) + 'm')
 
   ax.set_title("Cross check #64: Photons within hole ice")
   ax.set_xlabel("photon total path length [m]")
