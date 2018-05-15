@@ -17,6 +17,9 @@ import matplotlib.pyplot as plt
 # prepare canvas
 fig, axes = plt.subplots(1, 2, facecolor="white")
 
+true_first_lambda = 1.0
+true_second_lambda = 0.1
+
 plot_range_min = 0.0
 plot_range_border = 1.0
 plot_range_max = 2.2
@@ -34,7 +37,7 @@ def exponential(x, n0, lambd):
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1}$ = 1.0m, $\lambda_{\mathrm{abs},2}$ = 0.1m')
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1}$ = ' + str(true_first_lambda) + 'm, $\lambda_{\mathrm{abs},2}$ = ' + str(true_second_lambda) + 'm')
   bin_width = (plot_range_max - plot_range_min) / 50
   x = bins[0:-1] + bin_width / 2
 
@@ -64,6 +67,6 @@ for ax in axes:
 axes[1].set_yscale("log")
 
 number_of_photons = data["photonTotalPathLength"].count()
-fig.suptitle("Cross check #65: Photons within hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
+fig.suptitle("Cross check #65: Photons entering hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
 
 plt.show()
