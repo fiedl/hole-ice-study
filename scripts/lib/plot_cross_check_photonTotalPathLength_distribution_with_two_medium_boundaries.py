@@ -17,12 +17,16 @@ import matplotlib.pyplot as plt
 # prepare canvas
 fig, axes = plt.subplots(1, 2, facecolor="white")
 
+true_first_lambda = 1.0
+true_second_lambda = 0.75
+true_third_lambda = 1.0
+
 range_min = 0.0
 boundary1 = 1.0
 boundary2 = 2.0
 range_max = 5.0
 plot_range = (range_min, range_max)
-num_of_bins = 50
+num_of_bins = 60
 
 def three_exponentials(x, first_n0, second_n0, third_n0, first_inverse_lambda, second_inverse_lambda, third_inverse_lambda):
   global boundary1, boundary2
@@ -33,7 +37,7 @@ def three_exponentials(x, first_n0, second_n0, third_n0, first_inverse_lambda, s
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = num_of_bins, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1}$ = 1.0m, $\lambda_{\mathrm{abs},2}$ = 0.1m')
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = num_of_bins, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1,3}$ = ' + str(true_first_lambda) + 'm, $\lambda_{\mathrm{abs},2}$ = ' + str(true_second_lambda) + 'm')
   bin_width = (range_max - range_min) / num_of_bins
   x = bins[0:-1] + bin_width / 2
 
@@ -68,6 +72,6 @@ for ax in axes:
 axes[1].set_yscale("log")
 
 number_of_photons = data["photonTotalPathLength"].count()
-fig.suptitle("Cross check #66: Photons within hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
+fig.suptitle("Cross check #66: Photons passing through hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
 
 plt.show()
