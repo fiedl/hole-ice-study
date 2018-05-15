@@ -22,10 +22,10 @@ plot_range_border = 1.0
 plot_range_max = 2.2
 plot_range = (plot_range_min, plot_range_max)
 
-def two_exponentials(x, first_n0, second_n0, first_inverse_lambda, second_inverse_lambda, plot_range_border):
-  #global plot_range_border
+def two_exponentials(x, first_n0, second_n0, first_inverse_lambda, second_inverse_lambda):
+  global plot_range_border
   return np.piecewise(x, \
-      [x < plot_range_border - 0.05, x >= plot_range_border + 0.05], \
+      [x < 0.95, x >= 1.05], \
       [lambda x: first_n0 * np.exp(-x * first_inverse_lambda), lambda x: second_n0 * np.exp(-(x - plot_range_border) * second_inverse_lambda)])
 
 def exponential(x, n0, lambd):
@@ -40,8 +40,7 @@ for ax in axes:
 
   # fit
   from scipy.optimize import curve_fit
-  parameters, cov = curve_fit(two_exponentials, x, n,
-      bounds = [[0, 0, 0, 0, plot_range_min], [np.inf, np.inf, np.inf, np.inf, plot_range_max]])
+  parameters, cov = curve_fit(two_exponentials, x, n)
 
   print parameters
   first_lambda = 1.0 / parameters[2]
