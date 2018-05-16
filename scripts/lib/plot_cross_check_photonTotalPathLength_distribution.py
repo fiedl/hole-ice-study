@@ -24,12 +24,12 @@ plot_range_max = 1.0
 plot_range = (plot_range_min, plot_range_max)
 
 def str_round(number):
-  return "{:.3f}".format(number)
+  return "{:.4f}".format(number)
 
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs}}$ = 0.1m')
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs}}$ = ' + str_round(0.1) + 'm')
   bin_width = (plot_range_max - plot_range_min) / 50
   x = bins[0:-1] #+ bin_width / 2
   n_error = np.sqrt(n)
