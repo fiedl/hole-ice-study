@@ -16,21 +16,47 @@ import matplotlib.pyplot as plt
 # prepare canvas
 fig, axes = plt.subplots(1, 2, facecolor="white")
 
+def exponential(x, n0, lambd):
+  return n0 * np.exp(-x * 1.0 / lambd)
+
+plot_range_min = 0.0
+plot_range_max = 1.0
+plot_range = (plot_range_min, plot_range_max)
+
+def str_round(number):
+  return "{:.3f}".format(number)
+
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, label = 'simulation data, $\lambda_{\mathrm{abs}}$ = 0.1m')
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = 50, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs}}$ = 0.1m')
+  bin_width = (plot_range_max - plot_range_min) / 50
+  x = bins[0:-1] #+ bin_width / 2
+  n_error = np.sqrt(n)
 
-  ## fit the exponential distribution
-  import scipy.stats as ss
-  fit_params = ss.expon.fit(data["photonTotalPathLength"])
+  # filter for inf values: `ValueError: Residuals are not finite in the initial point.`
+  # https://stackoverflow.com/a/33876974/2066546
+  valid = ~(n == 0)
+  n = n[valid]
+  x = x[valid]
+  n_error = n_error[valid]
+
+  # fit
+  from scipy.optimize import curve_fit
+  parameters, cov = curve_fit(exponential, x, n,
+      bounds = [[0, 0], [np.inf, np.inf]],
+      sigma = n_error)
+
+  fit_n0 = parameters[0]
+  fit_lambd = parameters[1]
+  errors = np.sqrt(np.diag(cov))
+  fit_lambd_error = errors[1]
 
   # plot fit
-  x = np.linspace(data["photonTotalPathLength"].min(), data["photonTotalPathLength"].max(), 50)
-  y = ss.expon.pdf(x, *fit_params)
-  scale = 1.0 * sum(n) / sum(y)
-  bin_width = (data["photonTotalPathLength"].max() - data["photonTotalPathLength"].min()) / 50
-  ax.plot(x + bin_width / 2, y * scale, label = 'exponential fit, $\lambda_{\mathrm{abs}}$ = ' + str(round(fit_params[1], 3)) + 'm', linewidth = 2.0)
+  x = np.linspace(plot_range_min, plot_range_max, 50)
+  y = exponential(x, fit_n0, fit_lambd)
+  bin_width = (plot_range_max - plot_range_min) / 50
+  ax.plot(x + bin_width / 2, y, label = 'exponential fit, $\lambda_{\mathrm{abs}}$ = ' + str_round(fit_lambd) + 'm $\pm$ ' + str_round(fit_lambd_error) + 'm', linewidth = 2.0)
 
   ax.set_xlabel("photon total path length [m]")
 
