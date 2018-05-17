@@ -90,6 +90,7 @@ for ax in axes:
   ax.legend(loc = "upper right")
 
 axes[1].set_yscale("log")
+axes[1].set_ylim(ymax = 1e4)
 
 number_of_photons = data["photonTotalPathLength"].count()
 fig.suptitle("Cross check #66: Photons passing through hole ice, number of photons = " + str(number_of_photons), fontsize = 14)
