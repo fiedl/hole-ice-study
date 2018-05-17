@@ -28,40 +28,60 @@ range_max = 5.0
 plot_range = (range_min, range_max)
 num_of_bins = 60
 
-def three_exponentials(x, first_n0, second_n0, third_n0, first_inverse_lambda, second_inverse_lambda, third_inverse_lambda):
+def three_exponentials(x, first_n0, second_n0, third_n0, first_lambda, second_lambda, third_lambda):
   global boundary1, boundary2
   return np.piecewise(x, \
       [x < boundary1 - 0.05, (x > boundary1 + 0.05) & (x < boundary2 - 0.05), x > boundary2 + 0.05], \
-      [lambda x: first_n0 * np.exp(-x * first_inverse_lambda), lambda x: second_n0 * np.exp(-(x - boundary1) * second_inverse_lambda), lambda x: third_n0 * np.exp(-(x - boundary2) * third_inverse_lambda)])
+      [lambda x: first_n0 * np.exp(-x * 1.0 / first_lambda), lambda x: second_n0 * np.exp(-(x - boundary1) * 1.0 / second_lambda), lambda x: third_n0 * np.exp(-(x - boundary2) * 1.0 / third_lambda)])
+
+def str_round(number):
+  return "{:.4f}".format(number)
 
 for ax in axes:
 
   # histogram the data
-  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = num_of_bins, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1,3}$ = ' + str(true_first_lambda) + 'm, $\lambda_{\mathrm{abs},2}$ = ' + str(true_second_lambda) + 'm')
+  n, bins, patches = ax.hist(data["photonTotalPathLength"], bins = num_of_bins, range = plot_range, label = 'simulation data, $\lambda_{\mathrm{abs},1,3}$ = ' + str_round(true_first_lambda) + 'm, $\lambda_{\mathrm{abs},2}$ = ' + str_round(true_second_lambda) + 'm')
   bin_width = (range_max - range_min) / num_of_bins
   x = bins[0:-1] + bin_width / 2
+  n_error = np.sqrt(n)
+
+  # filter for inf values: `ValueError: Residuals are not finite in the initial point.`
+  # https://stackoverflow.com/a/33876974/2066546
+  valid = ~(n == 0)
+  n = n[valid]
+  x = x[valid]
+  n_error = n_error[valid]
 
   # fit
   from scipy.optimize import curve_fit
-  parameters, cov = curve_fit(three_exponentials, x, n)
+  parameters, cov = curve_fit(three_exponentials, x, n,
+      bounds = [[0, 0, 0, 0, 0, 0], [np.inf, np.inf, np.inf, np.inf, np.inf, np.inf]],
+      sigma = n_error)
+
+  first_lambda = parameters[3]
+  second_lambda = parameters[4]
+  third_lambda = parameters[5]
+
+  errors = np.sqrt(np.diag(cov))
+  first_lambda_error = errors[3]
+  second_lambda_error = errors[4]
+  third_lambda_error = errors[5]
 
   print parameters
-  first_lambda = 1.0 / parameters[3]
-  second_lambda = 1.0 / parameters[4]
-  third_lambda = 1.0 / parameters[5]
+  print errors
 
   # plot fit piecewise
   x = np.linspace(0.0, boundary1 - 0.05, 25)
   y = parameters[0] * np.exp(-x / first_lambda)
-  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},1}$ = ' + str(round(first_lambda, 3)) + 'm', linewidth = 2.0)
+  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},1}$ = ' + str_round(first_lambda) + 'm $\pm$ ' + str_round(first_lambda_error) + 'm', linewidth = 2.0)
 
   x = np.linspace(boundary1 + 0.05, boundary2 - 0.05, 25)
   y = parameters[1] * np.exp(-(x - boundary1) / second_lambda)
-  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},2}$ = ' + str(round(second_lambda, 3)) + 'm', linewidth = 2.0)
+  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},2}$ = ' + str_round(second_lambda) + 'm $\pm$ ' + str_round(second_lambda_error) + 'm', linewidth = 2.0)
 
   x = np.linspace(boundary2, range_max, 25)
   y = parameters[2] * np.exp(-(x - boundary2) / third_lambda)
-  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},3}$ = ' + str(round(third_lambda, 3)) + 'm', linewidth = 2.0)
+  ax.plot(x, y, label = 'exponential fit, $\lambda_{\mathrm{abs},3}$ = ' + str_round(third_lambda) + 'm $\pm$ ' + str_round(third_lambda_error) + 'm', linewidth = 2.0)
 
 
   ax.set_xlabel("photon total path length [m]")
