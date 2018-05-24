@@ -123,16 +123,18 @@ def PerformPropagationSimulation():
                         )
         icetray.set_log_level(icetray.I3LogLevel.LOG_DEBUG)
     else:
+
+        extra_args = dict()
+        if options.use_hole_ice_simulation:
+            extra_args = dict(
+                SimulateHoleIce = options.use_hole_ice_simulation,
+                HoleIceScatteringLengthFactor = options.scattering_factor,
+                HoleIceAbsorptionLengthFactor = options.absorption_factor
+                )
+
         tray.AddSegment(clsim.I3CLSimMakeHits,
-
                         StopDetectedPhotons = True,
-
-                        ExtraArgumentsToI3CLSimModule = dict(
-                            SimulateHoleIce = options.use_hole_ice_simulation,
-                            HoleIceScatteringLengthFactor = options.scattering_factor,
-                            HoleIceAbsorptionLengthFactor = options.absorption_factor
-                        ),
-
+                        ExtraArgumentsToI3CLSimModule = extra_args,
                         **common_clsim_parameters
                         )
 
