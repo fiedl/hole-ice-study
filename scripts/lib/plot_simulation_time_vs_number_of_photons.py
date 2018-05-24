@@ -29,6 +29,7 @@ simulation_times_minutes = []
 simulation_times_hours = []
 simulation_numbers_of_hits = []
 simulation_total_number_of_photons = []
+simulation_times_ns_per_photon = []
 
 # https://github.com/fiedl/hole-ice-study/issues/68#issuecomment-391656065
 simulation_total_number_of_photons_by_width = {
@@ -59,24 +60,40 @@ for options_file in options_files:
   simulation_total_number_of_photons.append(
       simulation_total_number_of_photons_by_width[options["flasher"]["width"]])
 
+  simulation_times_ns_per_photon.append(
+      duration_in_seconds * 1e9 /
+      simulation_total_number_of_photons_by_width[options["flasher"]["width"]])
+
 # prepare canvas
-fig, [ax0, ax1, ax2, ax3] = plt.subplots(4, 1, facecolor="white")
+fig, [ax0, ax1, ax2] = plt.subplots(3, 1, facecolor="white")
 
-ax0.plot(pulse_widths, simulation_times_hours, "o")
+# ax0.plot(pulse_widths, simulation_times_hours, "o")
+# ax0.set_xlabel("Flasher pulse width setting")
+# ax0.set_ylabel("Simulation time [hours]")
+# ax0.set_title("Flasher simulation performance")
+#
+# ax1.plot(pulse_widths, simulation_numbers_of_hits, "o")
+# ax1.set_xlabel("Flasher pulse width setting")
+# ax1.set_ylabel("Total number of hits in detector")
+#
+# ax2.plot(simulation_numbers_of_hits, simulation_times_hours, "ro")
+# ax2.set_xlabel("Total number of hits in detector")
+# ax2.set_ylabel("Simulation time [hours]")
+#
+# ax3.plot(simulation_total_number_of_photons, simulation_times_hours, "ro")
+# ax3.set_xlabel("Total number of propagated photons")
+# ax3.set_ylabel("Simulation time [hours]")
+
+ax0.plot(pulse_widths, simulation_total_number_of_photons, "o")
 ax0.set_xlabel("Flasher pulse width setting")
-ax0.set_ylabel("Simulation time [hours]")
-ax0.set_title("Flasher simulation performance")
+ax0.set_ylabel("Number of propagated photons")
 
-ax1.plot(pulse_widths, simulation_numbers_of_hits, "o")
-ax1.set_xlabel("Flasher pulse width setting")
-ax1.set_ylabel("Total number of hits in detector")
+ax1.plot(simulation_total_number_of_photons, simulation_times, "ro")
+ax1.set_xlabel("Number of propagated photons")
+ax1.set_ylabel("Simulation time [s]")
 
-ax2.plot(simulation_numbers_of_hits, simulation_times_hours, "ro")
-ax2.set_xlabel("Total number of hits in detector")
-ax2.set_ylabel("Simulation time [hours]")
-
-ax3.plot(simulation_total_number_of_photons, simulation_times_hours, "ro")
-ax3.set_xlabel("Total number of propagated photons")
-ax3.set_ylabel("Simulation time [hours]")
+ax2.plot(pulse_widths, simulation_times_ns_per_photon, "o")
+ax2.set_xlabel("Flasher pulse width setting")
+ax2.set_ylabel("Simulation time per photon [ns]")
 
 plt.show()
