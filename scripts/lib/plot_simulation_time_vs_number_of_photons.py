@@ -32,7 +32,7 @@ simulation_total_number_of_photons = []
 simulation_times_ns_per_photon = []
 
 # https://github.com/fiedl/hole-ice-study/issues/68#issuecomment-391656065
-simulation_total_number_of_photons_by_width = {
+simulation_total_number_of_downloaded_photons_by_width = {
   112: 36993469,
   127: 41876232,
   16: 5745055,
@@ -42,6 +42,13 @@ simulation_total_number_of_photons_by_width = {
   80: 26573831,
   96: 31791195
 }
+
+# https://github.com/fiedl/hole-ice-study/issues/68#issuecomment-392248631
+# https://github.com/fiedl/hole-ice-study/issues/68#issuecomment-392249575
+# This scaling factor is only an estimate because it applies only to
+# a specific flasher simulation configuration.
+scaling_factor_of_total_vs_downloaded_photons = 2600
+
 
 for options_file in options_files:
   options = json.load(open(options_file))
@@ -58,11 +65,13 @@ for options_file in options_files:
   simulation_numbers_of_hits.append(total_number_of_hits_in_detector)
 
   simulation_total_number_of_photons.append(
-      simulation_total_number_of_photons_by_width[options["flasher"]["width"]])
+      simulation_total_number_of_downloaded_photons_by_width[options["flasher"]["width"]] *
+      scaling_factor_of_total_vs_downloaded_photons)
 
   simulation_times_ns_per_photon.append(
       duration_in_seconds * 1e9 /
-      simulation_total_number_of_photons_by_width[options["flasher"]["width"]])
+      simulation_total_number_of_downloaded_photons_by_width[options["flasher"]["width"]] /
+      scaling_factor_of_total_vs_downloaded_photons)
 
 # prepare canvas
 fig, [ax0, ax1, ax2] = plt.subplots(3, 1, facecolor="white")
