@@ -56,8 +56,8 @@ if options[:submit_to_cluster]
   shell "qsub \\
       -l gpu \\
       -l tmpdir_size=10G \\
-      -l s_rt=24:00:00 \\
-      -l h_rss=24G \\
+      -l s_rt=11:00:00 \\
+      -l h_rss=30G \\
       -m ae \\
       -t 1-#{number_of_jobs} \\
     batch-job.sh \\
