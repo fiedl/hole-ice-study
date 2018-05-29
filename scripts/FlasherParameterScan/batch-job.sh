@@ -23,7 +23,7 @@ mkdir -p $RESULTSDESTINATION
 exec > "$TMPDIR"/stdout.log 2> "$TMPDIR"/stderr.log
 
 # The environment that will be loaded.
-LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07/debug_build/env-shell.sh"
+LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07/build/env-shell.sh"
 
 # Where to copy the output after completing the job.
 ofile="$RESULTSDESTINATION/stdout.log"
