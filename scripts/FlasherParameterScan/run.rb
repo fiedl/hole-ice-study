@@ -24,7 +24,7 @@ options.merge!({
   hole_ice_radius_range_in_dom_radii: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0, 1.5, 2.0],
   absorption_length_range: [100],
   flasher_pulse_width_range: [24],
-  flasher_pulse_brightness_range: [24]
+  flasher_pulse_brightness_range: [127]
 })
 
 dom_radius = 0.16510
