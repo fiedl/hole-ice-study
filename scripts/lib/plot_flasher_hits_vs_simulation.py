@@ -61,4 +61,10 @@ for simulation_data_file in simulation_data_files:
   ax.legend(loc = "upper right")
   ax.set_xlabel("DOM, strings " + ', '.join([str(x) for x in receiving_strings]))
   ax.set_title("Flasher study: Simulation vs. data")
-  plt.show()
+
+  output_file = os.path.join(os.path.dirname(simulation_data_file), "flasher_hits_vs_simulation.png")
+  plt.savefig(output_file, bbox_inches='tight')
+
+  print "=> " + output_file + "\n"
+  os.system("open '" + output_file + "'")
+
