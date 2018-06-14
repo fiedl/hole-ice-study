@@ -118,7 +118,7 @@ This study needs a version of clsim that does support hole ice simulations. Unti
 # Get clsim fork
 git clone git@github.com:fiedl/clsim.git ~/clsim
 cd ~/clsim
-git checkout sf/hole-ice-2017
+git checkout sf/hole-ice-2018
 
 # Symlink it into the icesim source
 cd $ICESIM_ROOT/src
@@ -129,6 +129,14 @@ ln -s ~/clsim clsim
 cd $ICESIM_ROOT/debug_build
 make -j 6
 ```
+
+### Install steamshovel artist
+
+In order to visualize hole-ice cylinders with [steamshovel](https://wiki.icecube.wisc.edu/index.php/Steamshovel), install the corresponding [artist plugins](https://github.com/fiedl/hole-ice-study/tree/master/patches/steamshovel).
+
+TODO: Install instructions
+
+TODO: Instructions for visualizing photons
 
 ### Troubleshooting
 
