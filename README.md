@@ -4,17 +4,27 @@ This project aims to incorporate the effects of [hole ice](https://wiki.icecube.
 
 Hole ice is the ice in the refrozen columns around the detector module strings. Because its properties may differ from the properties of the surrounding ice, photon propagation simulation needs to reflect the changed properties by allowing different photon scattering and absorption behaviour within the hole ice.
 
+The same mechanism can be used to incorporate other objects into the simulation, for example [cables](https://github.com/fiedl/hole-ice-study/issues/35).
+
+However, the new simulation code comes at a price regarding [simulation performance](https://github.com/fiedl/hole-ice-study/issues/18): When simulating objects with small scattering length, the photons need to be scattered much more often, which increases simulation time considerably.
+
 ## Results
 
 ### Instant Absorption Example
 
 When simulating photon propagation for a hole ice with zero absorption length, one can visualize instant photon absorption within the hole ice cylinder.
 
+Units: Metric units. Angles in degrees.
+
 ```bash
 $ICESIM/env-shell.sh
 cd $HOLE_ICE_STUDY/scripts/FiringRange
-./run.rb --scattering-factor=1.0 --absorption-factor=0.0 --distance=1.0 \
-    --number-of-photons=1e3 --angle=90 \
+./run.rb \
+    --hole-ice=simulation --hole-ice-radius=0.25 \
+    --effective-scattering-length=20.0 \
+    --absorption-length=0.0 \
+    --distance=1.0 --angle=90 \
+    --number-of-photons=1e3 \
     --number-of-runs=1 --number-of-parallel-runs=1 \
     --save-photon-paths --cpu
 steamshovel tmp/propagated_photons.i3
