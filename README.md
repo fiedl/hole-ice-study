@@ -8,6 +8,8 @@ The same mechanism can be used to incorporate other objects into the simulation,
 
 However, the new simulation code comes at a price regarding [simulation performance](https://github.com/fiedl/hole-ice-study/issues/18): When simulating objects with small scattering length, the photons need to be scattered much more often, which increases simulation time considerably.
 
+**Attention: This simulation code is not ready for production use, yet.** There are [a number of issues to be resolved](https://github.com/fiedl/hole-ice-study/issues), yet. For example, [ice tilt and ice anisotropy are still missing](https://github.com/fiedl/hole-ice-study/issues/48).
+
 ## Results
 
 ### Instant Absorption Example
