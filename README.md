@@ -87,9 +87,73 @@ open results/current/plot_with_reference.png
 
 ## Usage
 
-- Which framework version is required (or tested)?
-- How to set ice properties
-- How to set hole ice cylinder positions
+This code has been tested against icecube-simulation V05-00-07. Until the hole-ice code has been merged into the main repository, a patched version of clsim is required. See section [Installation](#installation) on this page.
+
+### How to activate hole-ice simulation
+
+In order to configure clsim to simulate photon propagation through hole ice, deactivate the hole-ice approximation via angular acceptance (`UseHoleIceParameterization`) and activate hole-ice simulation (`SimulateHoleIce`) instead:
+
+```python
+tray.AddSegment(clsim.I3CLSimMakeHits,
+  # ...
+  UnWeightedPhotons = True,
+  DOMOversizeFactor = 1.0,
+  UnshadowedFraction = 1.0,
+  UseHoleIceParameterization = False,
+  ExtraArgumentsToI3CLSimModule = dict(
+    # ...
+    SimulateHoleIce = True
+  )
+)
+```
+
+For a working example, see [scripts/lib/propagate_photons_with_clsim.py](scripts/lib/propagate_photons_with_clsim.py).
+
+### How to use a geometry file with hole ice
+
+TODO: https://github.com/fiedl/hole-ice-study/issues/61
+
+### How to configure hole ice manually
+
+The hole-ice cylinders are configured in the I3 geometry frame rather than in a separate configuration file, because the event viewer [steamshovel](https://wiki.icecube.wisc.edu/index.php/Steamshovel) can read out the geometry frame and display the hole-ice cylinders. See also section [Install steamshovel artist](#install-steamshovel-artist) below.
+
+In order to add hole-ice cylinders to the geometry frame, add the following keys:
+
+```python
+cylinder_position = dataclasses.I3Position(
+    -256.02301025390625, -521.281982421875, 0)
+cylinder_radius = 0.3 # metres
+cylinder_effective_scattering_length = 0.1 # metres
+cylinder_absorption_length = 100.0 # metres
+
+cylinder_scattering_length = (1.0 - 0.94) *
+    cylinder_effective_scattering_length
+
+cylinder_positions = dataclasses.I3VectorI3Position(
+    [cylinder_position])
+cylinder_radii = dataclasses.I3VectorFloat(
+    [cylinder_radius])
+
+cylinder_scattering_lengths = dataclasses.I3VectorFloat(
+    [cylinder_scattering_length])
+cylinder_absorption_lengths = dataclasses.I3VectorI3Position(
+    [cylinder_absorption_length])
+
+geometry_frame.Put("HoleIceCylinderPositions",
+    cylinder_positions)
+geometry_frame.Put("HoleIceCylinderRadii",
+    cylinder_radii)
+geometry_frame.Put("HoleIceCylinderScatteringLengths",
+    cylinder_scattering_lengths)
+geometry_frame.Put("HoleIceCylinderAbsorptionLengths",
+    cylinder_absorption_lengths)
+```
+
+Please make sure to write the geometric scattering length to the geometry frame, not the [effective scattering length](https://wiki.icecube.wisc.edu/index.php/Effective_scattering_length). See also: https://github.com/fiedl/hole-ice-study/issues/52
+
+![image](https://user-images.githubusercontent.com/1679688/41498407-40efb5f6-716d-11e8-859b-3a68aa8a245f.png)
+
+For a working example, see [scripts/lib/create_gcd_file_with_bubble_columns_and_cables.py](scripts/lib/create_gcd_file_with_bubble_columns_and_cables.py) or [scripts/lib/create_gcd_file_with_hole_ice.py](scripts/lib/create_gcd_file_with_hole_ice.py).
 
 ## How does it work?
 
