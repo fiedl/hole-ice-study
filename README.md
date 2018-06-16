@@ -95,13 +95,15 @@ open results/current/plot_with_reference.png
 
 In photon propagation simulation, one simulation step consists of everything between two scatterings, i.a. randomizing the distance to the next scattering point, randomizing the scattering angle, moving the photon to the next scattering point, checking for absorption and checking for detection at a DOM.
 
-![image](https://user-images.githubusercontent.com/1679688/36198584-4339cfbe-1177-11e8-81b1-5188ff6be2e4.png)
+<img width="500" src="https://user-images.githubusercontent.com/1679688/36198584-4339cfbe-1177-11e8-81b1-5188ff6be2e4.png" />
 
 Hole ice simulation adds another task to each simulation step: Calculate the portion of the photon trajectory in the step that runs through hole ice and correct the distance to the next scattering point for the changed ice properties within the hole ice.
 
-![image](https://user-images.githubusercontent.com/1679688/36200747-f1b8378c-117d-11e8-9e3f-8c0a5e8b944e.png)
+<img width="500" src="https://user-images.githubusercontent.com/1679688/36200747-f1b8378c-117d-11e8-9e3f-8c0a5e8b944e.png" />
 
-For details, please have a look at the [hole_ice.c README](https://github.com/fiedl/clsim/tree/sf/hole-ice-2017/resources/kernels/lib/hole_ice).
+The following flow chart shows where the hole-ice corrections take place within the photon-propagation algorithm.
+
+<img alt="algorithm" width="500" src="https://user-images.githubusercontent.com/1679688/41497756-2cc33348-715c-11e8-8eda-f7b655610f50.png" />
 
 ## Installation
 
