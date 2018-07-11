@@ -1,0 +1,2 @@
+effective_scattering_length hole_ice_radius_in_dom_radii agreement duration
+0.49999999999999956 1.8170805572380375 591.132781583 284.0
