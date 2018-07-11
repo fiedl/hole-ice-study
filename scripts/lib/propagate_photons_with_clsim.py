@@ -29,6 +29,7 @@ parser.add_option("--number-of-frames", type = "int", default = 0)
 parser.add_option("--use-hole-ice-approximation", help = "Use angular acceptance modification (UseHoleIceParameterization), but no simulated hole ice.")
 parser.add_option("--use-hole-ice-simulation", help = "Simulate hole ice in the propagation kernel with the --scattering-factor and the --absorption-factor parameters.")
 parser.add_option("--use-flasher-info-vect", default = False)
+parser.add_option("--thinning-factor", type = "float", default = 1.0, help = "Run expensive simulations with less photons. See https://github.com/fiedl/hole-ice-study/issues/85.")
 
 (options, args) = parser.parse_args()
 
@@ -92,8 +93,8 @@ def PerformPropagationSimulation():
         UseCPUs = not options.use_gpus,
         ParallelEvents = options.number_of_parallel_runs,
         IceModelLocation = options.ice_model_file,
-        UnWeightedPhotons = True,
-        #UnWeightedPhotonsScalingFactor=0.01,
+        UnWeightedPhotons = False,
+        UnWeightedPhotonsScalingFactor = options.thinning_factor,
         DOMOversizeFactor = 1.0,
         UnshadowedFraction = 1.0,
         FlasherInfoVectName = ("I3FlasherInfo" if options.use_flasher_info_vect else ""),

@@ -61,6 +61,9 @@ OptionParser.new do |opts|
   opts.on "--cpu", "Use the cpu rather than the gpu. For local testing with few photons." do
     options[:cpu] = true
   end
+  opts.on "--thinning-factor=FACTOR", "between 0.0 and 1.0. See https://github.com/fiedl/hole-ice-study/issues/85" do |factor|
+    options[:thinning_factor] = factor.to_f
+  end
 end.parse!
 
 
@@ -227,6 +230,7 @@ global_propagation_options = {
   scattering_factor: options[:scattering_factor] || 1.0,
   absorption_factor: options[:absorption_factor] || 1.0,
   save_photon_paths: false,
+  thinning_factor: options[:thinning_factor] || 1.0,
   propagation_log_file: "tmp/propagation.log",
   clsim_error_fallback: 'skip' # or: gpu-1-parallel OR cpu OR sleep OR skip
 }
@@ -267,6 +271,7 @@ else
         --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
         --fallback=#{options[:clsim_error_fallback]} \\
         --hole-ice=#{options[:hole_ice]} \\
+        --thinning-factor=#{options[:thinning_factor]} \\
         #{'--cpu' if options[:cpu]} \\
         --scattering-factor=#{options[:scattering_factor]} \\
         --absorption-factor=#{options[:absorption_factor]} \\

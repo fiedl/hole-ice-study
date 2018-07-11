@@ -54,6 +54,9 @@ OptionParser.new do |opts|
   opts.on "--cpu", "use the cpu rather than the gpu for the simulation" do
     options[:cpu] = true
   end
+  opts.on "--thinning-factor=FACTOR", "between 0.0 and 1.0. See https://github.com/fiedl/hole-ice-study/issues/85" do |factor|
+    options[:thinning_factor] = factor.to_f
+  end
 
 end.parse!
 
@@ -93,6 +96,7 @@ number_of_loops = options[:number_of_runs] / options[:number_of_parallel_runs]
     --output-i3-file=#{options[:output_i3_file]} \\
     --output-text-file=#{options[:output_text_file]}.temp \\
     --use-gpus=#{options[:cpu] ? 'False' : 'True'} \\
+    --thinning-factor=#{options[:thinning_factor]} \\
     --save-photon-paths=#{options[:save_photon_paths] ? 'True' : 'False'} \\
     --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
     --use-hole-ice-approximation=#{(options[:hole_ice] == :approximation) ? 'True' : 'False'} \\
@@ -158,6 +162,7 @@ number_of_loops = options[:number_of_runs] / options[:number_of_parallel_runs]
           --output-i3-file=#{options[:output_i3_file]} \\
           --output-text-file=#{options[:output_text_file]}.temp.part \\
           --use-gpus=True \\
+          --thinning-factor=#{options[:thinning_factor]} \\
           --save-photon-paths=False \\
           --number-of-parallel-runs=1 \\
           --number-of-frames=#{4 + 1} \\
@@ -179,6 +184,7 @@ number_of_loops = options[:number_of_runs] / options[:number_of_parallel_runs]
         --output-i3-file=#{options[:output_i3_file]} \\
         --output-text-file=#{options[:output_text_file]}.temp \\
         --use-gpus=False \\
+        --thinning-factor=#{options[:thinning_factor]} \\
         --save-photon-paths=False \\
         --number-of-parallel-runs=1 \\
         #{i3_files.join(' ')} \\
@@ -201,6 +207,7 @@ number_of_loops = options[:number_of_runs] / options[:number_of_parallel_runs]
         --output-i3-file=#{options[:output_i3_file]} \\
         --output-text-file=#{options[:output_text_file]}.temp \\
         --use-gpus=True \\
+        --thinning-factor=#{options[:thinning_factor]} \\
         --save-photon-paths=False \\
         --number-of-parallel-runs=#{options[:number_of_parallel_runs]} \\
         #{i3_files.join(' ')} \\
