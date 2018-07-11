@@ -23,8 +23,9 @@ options.merge!({
   effective_scattering_length_range: [0.001, 0.005, 0.01, 0.05, 0.10],
   hole_ice_radius_range_in_dom_radii: [0.001, 0.5, 1.0, 1.5, 2.0, 2.5],
   absorption_length_range: [100],
-  flasher_pulse_width_range: [24],
-  flasher_pulse_brightness_range: [127]
+  flasher_pulse_width_range: [127],
+  flasher_pulse_brightness_range: [127],
+  thinning_factor: 0.01
 })
 
 dom_radius = 0.16510
@@ -98,6 +99,7 @@ else
                   --hole-ice-radius-in-dom-radii=#{radius_in_dom_radii} \\
                   --width=#{width} \\
                   --brightness=#{brightness} \\
+                  --thinning-factor=#{options[:thinning_factor] || 1.0} \\
                   > ../FlasherParameterScan/tmp/flasher_simulation.log \\
                   2> ../FlasherParameterScan/tmp/flasher_simulation.err"
 

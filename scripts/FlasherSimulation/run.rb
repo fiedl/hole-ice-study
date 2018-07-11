@@ -22,6 +22,9 @@ OptionParser.new do |opts|
   opts.on "--brightness=BRIGHTNESS", "Flasher pulse brightness, min = 0, max = 127" do |brightness|
     options[:brightness] = brightness.to_i
   end
+  opts.on "--thinning-factor=FACTOR", "between 0.0 and 1.0. See https://github.com/fiedl/hole-ice-study/issues/85" do |factor|
+    options[:thinning_factor] = factor.to_f
+  end
   opts.on "--effective-scattering-length=METRES" do |esca|
     options[:effective_scattering_length] = esca.to_f
   end
@@ -208,6 +211,7 @@ else
     --seed=#{options[:seed]} \\
     --output-i3-file=#{options[:output_i3_file]} \\
     --use-gpus=#{options[:cpu] ? 'False' : 'True'} \\
+    --thinning-factor=#{options[:thinning_factor] || 1.0} \\
     --save-photon-paths=#{options[:save_photon_paths] ? 'True' : 'False'} \\
     --number-of-parallel-runs=1 \\
     --use-hole-ice-approximation=#{(options[:hole_ice].to_s == 'approximation') ? 'True' : 'False'} \\
