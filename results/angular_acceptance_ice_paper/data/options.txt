@@ -37,4 +37,7 @@
   "tmp/histograms/hits_histogram_ANGLE.png",
  :hits_histograms_min_bin=>0,
  :hits_histograms_max_bin=>300,
- :hits_histograms_log=>"tmp/hits_histograms.log"}
+ :hits_histograms_log=>"tmp/hits_histograms.log",
+ :options_file=>"../../results/angular_acceptance_ice_paper/data/options.txt",
+ :data_directory=>"../../results/angular_acceptance_ice_paper/data",
+ :agreement=>591.132781583}
