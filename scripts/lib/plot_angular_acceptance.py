@@ -7,12 +7,15 @@ import sys
 import pandas
 import json
 
-data_root_folder = sys.argv[1]
+data_root_folders = sys.argv[1:]
 
 import os
 import glob2
 
-options_files = glob2.glob(os.path.join(data_root_folder, "./**/options.txt"))
+options_files = []
+for data_root_folder in data_root_folders:
+  options_files += glob2.glob(os.path.join(data_root_folder, "./**/options.txt"))
+
 data_dirs = list((os.path.dirname(options_file) for options_file in options_files))
 
 import matplotlib as mpl
