@@ -93,7 +93,7 @@ def PerformPropagationSimulation():
         UseCPUs = not options.use_gpus,
         ParallelEvents = options.number_of_parallel_runs,
         IceModelLocation = options.ice_model_file,
-        UnWeightedPhotons = False,
+        UnWeightedPhotons = True,
         UnWeightedPhotonsScalingFactor = options.thinning_factor,
         DOMOversizeFactor = 1.0,
         UnshadowedFraction = 1.0,
