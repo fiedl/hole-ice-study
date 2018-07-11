@@ -36,6 +36,9 @@ OptionParser.new do |opts|
   opts.on "--cpu", "use the cpu rather than the gpu for the simulation" do
     options[:cpu] = true
   end
+  opts.on "--thinning-factor=FACTOR", "between 0.0 and 1.0. See https://github.com/fiedl/hole-ice-study/issues/85" do |factor|
+    options[:thinning_factor] = factor.to_f
+  end
   opts.on "--angle=DEGREES", "e.g. 45" do |angle|
     options[:angles] = [angle.to_i]
   end
@@ -154,8 +157,8 @@ photon_frames_options = {
   distance: options[:distance] || 1.0,
   angles: options[:angles] || [90],
   number_of_photons: options[:number_of_photons] || 1e5,
-  number_of_runs: options[:number_of_runs] || 2,
-  number_of_parallel_runs: options[:number_of_parallel_runs] || 2,
+  number_of_runs: options[:number_of_runs] || 1,
+  number_of_parallel_runs: options[:number_of_parallel_runs] || 1,
   photons_i3_file: "tmp/photons.i3"
 }
 options.merge! photon_frames_options
@@ -220,6 +223,7 @@ shell "ruby ../lib/propagate_photons_and_count_hits.rb \\
   --absorption-factor=#{options[:absorption_factor]} \\
   #{'--save-photon-paths' if options[:save_photon_paths]} \\
   #{'--cpu' if options[:cpu]} \\
+  --thinning-factor=#{options[:thinning_factor] || 1.0} \\
   --seed=#{propagation_options[:seed]} \\
   --ice-model=#{options[:ice_model_file]} \\
   --output-i3-file=#{propagation_options[:output_i3_file]} \\
