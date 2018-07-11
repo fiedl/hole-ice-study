@@ -117,7 +117,7 @@ for data_dir in data_dirs:
   # Plot simulation data points
   ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood))
 
-  ax.set(xlabel = "cos(eta)")
+  ax.set(xlabel = "cos($\eta$)")
   ax.set(ylabel = "relative sensitivity", yscale = "log", ylim = [0.001, 1])
 
   ax.legend(loc = "best")
