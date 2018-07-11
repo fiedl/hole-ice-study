@@ -32,6 +32,14 @@ def reference_curve(angle):
 def str_round(number):
   return "{:.4f}".format(number)
 
+
+# prepare canvas
+fig, ax = plt.subplots(1, 1, facecolor="white")
+
+# Plot reference curve
+reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles), label = "DOM angular acceptance with hole-ice approximation", linewidth = 2)
+
 for data_dir in data_dirs:
   data_files = glob2.glob(os.path.join(data_dir, "./angle_hits_and_photons_*.txt"))
   data_rows = (pandas.read_csv(data_file, delim_whitespace = True, names = ["angle", "hits", "photons"]) for data_file in data_files)
@@ -102,20 +110,16 @@ for data_dir in data_dirs:
 
   ln_likelihood = sum(ln_likelihood_summands)
 
-  # prepare canvas
-  fig, ax = plt.subplots(1, 1, facecolor="white")
-
-  # Plot reference curve
-  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
-  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles), label = "DOM angular acceptance with hole-ice approximation")
 
   # Plot simulation data points
-  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "ro", yerr = sensitivity_error, label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m")
+  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str(ln_likelihood))
 
   ax.set(xlabel = "cos(eta)")
   ax.set(ylabel = "relative sensitivity")
-  ax.legend(loc = "upper left")
 
-  ax.set_title("Angular-acceptance simulation vs. reference. LLH = " + str(ln_likelihood))
+  ax.legend(loc = "best")
+  ax.grid()
 
-  plt.show()
+ax.set_title("Angular acceptance")
+
+plt.show()
