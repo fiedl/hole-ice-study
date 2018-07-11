@@ -116,6 +116,7 @@ for data_dir in data_dirs:
 
   ax.set(xlabel = "cos(eta)")
   ax.set(ylabel = "relative sensitivity")
+  ax.set_yscale("log")
 
   ax.legend(loc = "best")
   ax.grid()
