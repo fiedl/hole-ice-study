@@ -23,7 +23,7 @@ mkdir -p $RESULTSDESTINATION
 exec > "$TMPDIR"/stdout.log 2> "$TMPDIR"/stderr.log
 
 # The environment that will be loaded.
-LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07/build/env-shell.sh"
+LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07-sl7/build/env-shell.sh"
 
 # Where to copy the output after completing the job.
 ofile="$RESULTSDESTINATION/stdout.log"
@@ -34,7 +34,7 @@ trap 'cat "$TMPDIR"/stdout.log >> $ofile; cat "$TMPDIR"/stderr.log >> $errfile' 
 trap 'echo exit 2; exit 2' USR1 USR1 XCPU
 
 # Load environment
-source /cvmfs/icecube.opensciencegrid.org/py2-v3_early_access/setup.sh
+source /cvmfs/icecube.opensciencegrid.org/py2-v2/setup.sh
 
 # Copy scripts to the cluster.
 for folder in FlasherParameterScan FlasherSimulation lib; do
