@@ -114,6 +114,8 @@ else
 
                 shell "mv tmp/flasher_simulation.* #{results_directory}/"
                 shell "mv ../FlasherSimulation/results/*/* #{results_directory}/"
+
+                shell "rm #{results_directory}/*.i3"
               end
             end
 
