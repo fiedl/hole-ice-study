@@ -34,7 +34,8 @@ def poisson_infinite_statistics(k, lambd):
 #
 def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling):
   #receiving_strings = [62, 54, 55, 64, 71, 70]
-  receiving_strings = [62, 54]
+  #receiving_strings = [62, 54]
+  receiving_strings = [55, 64, 71, 70]
   doms = range(1, 60)
 
   #flasher_data_total_hits_in_detector = flasher_data["charge"].sum()
