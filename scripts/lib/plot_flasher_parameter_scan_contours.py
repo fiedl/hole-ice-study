@@ -60,8 +60,8 @@ def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling
 
   simulation_scaling_factor = 1.0 * flasher_scaling / simulation_scaling
 
-  k = np.asarray(k) * simulation_scaling_factor
-  lambd = np.asarray(lambd) * 1.0
+  k = np.asarray(k) * 1.0
+  lambd = np.asarray(lambd) * simulation_scaling_factor
   return poisson_infinite_statistics(k, lambd)
 
 import json
