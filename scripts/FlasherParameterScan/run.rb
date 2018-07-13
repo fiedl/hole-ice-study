@@ -20,7 +20,7 @@ log.info "README: https://github.com/fiedl/hole-ice-study/tree/master/scripts/Fl
 log.section "Parameter Scan Configuration"
 
 options.merge!({
-  effective_scattering_length_range: ((0.01..0.10).step(0.01) + (0.25..2.25).step(0.25)).collect { |v| v.round(2) },
+  effective_scattering_length_range: (0.01..0.10).step(0.01).collect { |v| v.round(2) } + (0.25..2.25).step(0.25).collect { |v| v.round(2) },
   hole_ice_radius_range_in_dom_radii: [0.01] + (0.3..1.8).step(0.1).collect { |v| v.round(2) },
   absorption_length_range: [100],
   flasher_pulse_width_range: [127],
