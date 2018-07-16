@@ -93,6 +93,12 @@ for simulation_data_file in simulation_data_files:
 best_agreement = np.max(agreements)
 gofs = np.asarray(agreements) / best_agreement
 
+print("best values:")
+print("  agreement: " + str(best_agreement))
+i = np.where(agreements == best_agreement)[0][0]
+print("  esca = " + str(parameters_esca[i]) + "m")
+print("  r = " + str(parameters_r_r_dom[i]) + " r_dom")
+
 import matplotlib as mpl
 from matplotlib.mlab import griddata
 from matplotlib import ticker
