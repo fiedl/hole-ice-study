@@ -1,5 +1,10 @@
+#!/usr/bin/env python
+
+# See: https://github.com/fiedl/hole-ice-study/issues/91
+
 import sys
 import pandas
+import json
 
 import matplotlib as mpl
 from matplotlib.mlab import griddata
@@ -9,7 +14,19 @@ import numpy as np
 
 # import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
 
-data_files = sys.argv[1:]
+data_root_folders = sys.argv[1:]
+
+import os
+import glob2
+
+options_files = []
+for data_root_folder in data_root_folders:
+  options_files += glob2.glob(os.path.join(data_root_folder, "./**/options.txt"))
+
+data_dirs = list((os.path.dirname(options_file) for options_file in options_files))
+
+receiving_string = 70
+receiving_dom = 30
 
 # prepare canvas
 fig, ax = plt.subplots(1, 1, facecolor="white")
@@ -21,38 +38,58 @@ titles_array = []
 time_min = 500
 time_max = 3000 # ns
 
-for index, data_file in enumerate(data_files):
-  title = ""
+def str_round(number):
+  return "{:.4f}".format(number)
 
-  # flasher data files are already binned (width = 25ns).
-  if ".txt" in data_file: # simulation data
-    data = pandas.read_csv(data_file, delim_whitespace=True)
-    receiver_data = data[data.string == 63][data.dom == 30]
-    receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
-    title = data_file.split("/")[-2] + " (simulation)"
+# Plot real flasher data as reference
+plot_real_flasher_data = True
+if plot_real_flasher_data:
+  flasher_data_file = "~/icecube/flasher-data/oux.63_30"
+  flasher_data = pandas.read_csv(flasher_data_file, delim_whitespace = True, names = ["string_number", "dom_number", "time", "charge"])
+  flasher_brightness = 127
+  flasher_width = 127
+  receiver_data = flasher_data[flasher_data.string_number == receiving_string][flasher_data.dom_number == receiving_dom]
+  receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
+  bins = receiver_data["time"]
+  weights = receiver_data["charge"]
+  bins_array.append(bins)
+  weights_array.append(weights)
+  titles_array.append("Flasher data 2012")
 
-    # simulation data needs to be binned.
-    bin_width = 25
-    bins = range(time_min, time_max, bin_width)
-    weights, time_edges = np.histogram(receiver_data["time"], bins + [max(bins) + bin_width])
 
-  else: # flasher data
-    data = pandas.read_csv(data_file, delim_whitespace=True, names = ["string_number", "dom_number", "time", "charge"])
-    receiver_data = data[data.string_number == 63][data.dom_number == 30]
-    receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
-    title = data_file.split("/")[-1] + " (data)"
+# Plot simulation data from command line arguments
+for index, data_dir in enumerate(data_dirs):
+  data_file = data_dir + "/hits.txt"
+  data = pandas.read_csv(data_file, delim_whitespace = True, names = ["string_number", "dom_number", "time", "charge"], header = 1)
+  receiver_data = data[data.string_number == receiving_string][data.dom_number == receiving_dom]
+  receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
 
-    bins = receiver_data["time"]
-    weights = receiver_data["charge"]
+  options_file = os.path.join(data_dir, "./options.json")
+  simulation_options = json.load(open(options_file))
+
+
+  # simulation data needs to be binned.
+  bin_width = 25
+  bins = range(time_min, time_max, bin_width)
+  weights, time_edges = np.histogram(receiver_data["time"], bins + [max(bins) + bin_width])
+
+  weights = weights / simulation_options["thinning_factor"]
 
   bins_array.append(bins)
   weights_array.append(weights)
-  titles_array.append(title)
+
+  print simulation_options
+  if "without_hole_ice" in data_dir:
+    titles_array.append("Simulation without hole ice")
+  else:
+    esca = simulation_options["effective_scattering_length"]
+    r = simulation_options["hole_ice_radius_in_dom_radii"]
+    titles_array.append("Simulation: $\lambda_\mathrm{e}$=" + str_round(esca) + "m, $r$=" + str_round(r) + " $r_\mathrm{DOM}$")
 
 ax.hist(bins_array, (time_max - time_min)/25/3, weights = weights_array, label = titles_array, normed = True)
 
-ax.set_xlabel("Arrival time after emission [ns]")
-ax.set_ylabel("Collected charge [unit?]")
+ax.set_xlabel("Photon arrival time at DOM(" + str(receiving_string) + "," + str(receiving_dom) + ") after emission at DOM (63,30) [ns]")
+ax.set_ylabel("Number of photons")
 
-plt.legend(loc='upper right')
+plt.legend(loc = "best")
 plt.show()
