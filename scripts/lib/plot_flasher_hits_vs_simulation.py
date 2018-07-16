@@ -53,10 +53,10 @@ def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling
   k = np.asarray(k) * 1.0
   lambd = np.asarray(lambd) * simulation_scaling_factor
 
-  import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
-
-  return poisson_infinite_statistics(k, lambd)
-
+  if len(lambd) > 10:
+    return poisson_infinite_statistics(k, lambd)
+  else:
+    return -np.inf
 
 import matplotlib as mpl
 from matplotlib.mlab import griddata
@@ -82,7 +82,7 @@ for simulation_data_file in simulation_data_files:
     for dom in doms:
       k_data = flasher_data[flasher_data.string_number == string][flasher_data.dom_number == dom]["charge"].sum()
       k_simulation = simulation_data[simulation_data.string_number == string][simulation_data.dom_number == dom]["charge"].sum()
-      if (k_data > 0) and (k_simulation > 0):
+      if (k_data > 0): # or (k_simulation > 0):
         data_hits.append(k_data)
         simulation_hits.append(k_simulation * simulation_scaling_factor)
 
