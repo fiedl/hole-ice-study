@@ -72,15 +72,15 @@ for simulation_data_file in simulation_data_files:
   simulation_scaling = simulation_options["brightness"] * simulation_options["width"] * simulation_options["thinning_factor"]
   a = agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling)
 
-  # import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
-
   if a < 0:
     parameters_esca.append(simulation_options["effective_scattering_length"])
     parameters_r_r_dom.append(simulation_options["hole_ice_radius_in_dom_radii"])
     agreements.append(a)
 
+# import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
+
 best_agreement = np.max(agreements)
-gofs = np.asarray(agreements) / best_agreement
+neg_two_delta_llhs = - 2 * (np.asarray(agreements) - best_agreement)
 
 print("best values:")
 print("  agreement: " + str(best_agreement))
@@ -93,15 +93,13 @@ from matplotlib.mlab import griddata
 from matplotlib import ticker
 import matplotlib.pyplot as plt
 
-# import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
-
 # prepare canvas
 fig, ax = plt.subplots(1, 1, facecolor="white")
 
 # extract data
 x = parameters_r_r_dom
 y = parameters_esca
-z = gofs
+z = neg_two_delta_llhs
 
 # define grid
 xi = np.linspace(np.min(x), np.max(x), 100)
@@ -110,12 +108,13 @@ yi = np.linspace(np.min(y), np.max(y), 100)
 # grid the data
 zi = griddata(x, y, z, xi, yi, interp='linear')
 
-# cf0 = ax.contourf(xi, yi, zi, 15)
+cf0 = ax.contourf(xi, yi, zi, 15)
 # cf0 = ax.contourf(xi, yi, zi, 15, vmax = 15, extend = 'max') #, vmax=1.5e6)
-clev = np.arange(z.min(), 15, 1)
-cf0 = ax.contourf(xi, yi, zi, clev, extend = 'max')
+# clev = np.arange(z.min(), 15, 1)
+# cf0 = ax.contourf(xi, yi, zi, clev, extend = 'max')
 
-plt.colorbar(cf0)
+cbar = plt.colorbar(cf0)
+cbar.ax.set_ylabel("$-2 \Delta \mathrm{LLH}$")
 
 # plot data points.
 ax.scatter(x, y, marker='o', s=5, zorder=10)
