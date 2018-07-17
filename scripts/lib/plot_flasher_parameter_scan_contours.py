@@ -24,13 +24,13 @@ simulation_data_files = list(glob2.glob(os.path.join(os.path.expanduser(simulati
 import numpy as np
 import scipy, scipy.special
 
-# https://github.com/thoglu/mc_uncertainty/blob/master/llh_defs/poisson.py#L11
+# https://github.com/thoglu/mc_uncertainty/blob/master/llh_defs/poisson.py
 #
-def poisson_infinite_statistics(k, lambd):
-  return (-lambd+k*np.log(lambd)-scipy.special.gammaln(k+1)).sum()
+def poisson_equal_weights(k,k_mc,avgweights,prior_factor=0.0):
+       return (scipy.special.gammaln((k+k_mc+prior_factor)) -scipy.special.gammaln(k+1.0)-scipy.special.gammaln(k_mc+prior_factor) + (k_mc+prior_factor)* np.log(1.0/avgweights) - (k_mc+k+prior_factor)*np.log(1.0+1.0/avgweights)).sum()
 
 # Calculate agreement of data and simulation using a likelihood function.
-# The `agreement` is a negative log likelihood.
+# The `agreement` is a log likelihood (LLH).
 #
 def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling):
   #receiving_strings = [62, 54, 55, 64, 71, 70]
@@ -38,14 +38,9 @@ def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling
   receiving_strings = [55, 64, 71, 70]
   doms = range(1, 60)
 
-  #flasher_data_total_hits_in_detector = flasher_data["charge"].sum()
-  #simulation_total_hits_in_detector = simulation_data["charge"].sum()
-
-  #flasher_data_total_hits_in_receiving_strings = flasher_data[flasher_data.string_number.isin(receiving_strings)]["charge"].sum()
-  #simulation_total_hits_in_receiving_strings = simulation_data[simulation_data.string_number.isin(receiving_strings)]["charge"].sum()
-
   k = []
-  lambd = []
+  k_mc = []
+  weights = []
   for string in receiving_strings:
     for dom in doms:
       data_number_of_hits = flasher_data[flasher_data.string_number == string][flasher_data.dom_number == dom]["charge"].sum()
@@ -53,19 +48,11 @@ def agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling
 
       if (data_number_of_hits > 0) and (simulation_number_of_hits > 0):
         k.append(data_number_of_hits)
-        lambd.append(simulation_number_of_hits)
+        k_mc.append(simulation_number_of_hits)
+        weights.append(1.0 * flasher_scaling / simulation_scaling)
 
-  #relative_k = np.asarray(k) * 1.0 / flasher_data_total_hits_in_detector
-  #relative_lambd = np.asarray(lambd) * 1.0 / simulation_total_hits_in_detector
-  #return poisson_infinite_statistics(relative_k, relative_lambd)
-
-  simulation_scaling_factor = 1.0 * flasher_scaling / simulation_scaling
-
-  k = np.asarray(k) * 1.0
-  lambd = np.asarray(lambd) * simulation_scaling_factor
-
-  if len(lambd) > 10:
-    return poisson_infinite_statistics(k, lambd)
+  if len(k_mc) > 10:
+    return poisson_equal_weights(np.asarray(k), np.asarray(k_mc), np.asarray(weights))
   else:
     return -np.inf
 
@@ -84,6 +71,8 @@ for simulation_data_file in simulation_data_files:
   flasher_scaling = flasher_brightness * flasher_width * 1
   simulation_scaling = simulation_options["brightness"] * simulation_options["width"] * simulation_options["thinning_factor"]
   a = agreement(flasher_data, simulation_data, flasher_scaling, simulation_scaling)
+
+  # import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
 
   if a < 0:
     parameters_esca.append(simulation_options["effective_scattering_length"])
@@ -132,7 +121,7 @@ plt.colorbar(cf0)
 ax.scatter(x, y, marker='o', s=5, zorder=10)
 
 # labels
-ax.set_title("Flasher parameter scan: neg. log. likelihood (simulation vs data), poisson inf. statistics")
+ax.set_title("Flasher parameter scan: LLH (simulation vs data), poisson equal weights")
 ax.set(xlabel = 'hole-ice column radius [r_DOM]', ylabel = 'effective scattering length [m]')
 
 plt.show()
