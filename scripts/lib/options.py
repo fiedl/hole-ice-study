@@ -18,7 +18,7 @@ def read(data_dir):
 
 def scaling(data_dir):
   options = read(data_dir)
-  return 1.0 * options.get("brightness", 127) * options.get("width", 127) * options.get("thinning", 1.0)
+  return 1.0 * options["brightness"] * options["width"] * options["thinning_factor"]
 
 def write(data_dir, options):
   with open(options_file(data_dir), "w") as outfile:

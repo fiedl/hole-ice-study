@@ -6,6 +6,8 @@
 #     flasher_llh.calculate(flasher_data, simulation_data, flasher_scaling, simulation_scaling)
 #
 
+# import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
+
 import numpy as np
 import scipy, scipy.special
 
