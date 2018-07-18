@@ -34,24 +34,34 @@ parameter_points = []
 #   end
 # end
 
-# 1D scan for swedish-camera radius
-# https://github.com/fiedl/hole-ice-study/issues/92
+# # 1D scan for swedish-camera radius
+# # https://github.com/fiedl/hole-ice-study/issues/92
+# #
+# radius_in_dom_radii = 0.5
+# escas = (0.001..0.01).step(0.001)
+# escas.each { |esca| parameter_points << {radius_in_dom_radii: radius_in_dom_radii, esca: esca.round(3)} }
+
+# # Additional points for contour plot
+# # https://github.com/fiedl/hole-ice-study/issues/59#issuecomment-405671824
+# #
+# parameter_points << {radius_in_dom_radii: 1.4, esca: 0.4}
+# parameter_points << {radius_in_dom_radii: 1.4, esca: 0.5}
+# parameter_points << {radius_in_dom_radii: 1.4, esca: 0.6}
 #
-radius_in_dom_radii = 0.5
-escas = (0.001..0.01).step(0.001)
-escas.each { |esca| parameter_points << {radius_in_dom_radii: radius_in_dom_radii, esca: esca.round(3)} }
+# parameter_points << {radius_in_dom_radii: 2.0, esca: 0.5}
+# parameter_points << {radius_in_dom_radii: 2.1, esca: 0.6}
+# parameter_points << {radius_in_dom_radii: 1.9, esca: 0.4}
 
-# Additional points for contour plot
-# https://github.com/fiedl/hole-ice-study/issues/59#issuecomment-405671824
+# Random data poins within interesting area
 #
-parameter_points << {radius_in_dom_radii: 1.4, esca: 0.4}
-parameter_points << {radius_in_dom_radii: 1.4, esca: 0.5}
-parameter_points << {radius_in_dom_radii: 1.4, esca: 0.6}
+100.times do
+  x = Random.rand * (2.20 - 0.25) + 0.25
+  y_upper = 0.513 * x - 0.128
+  y_lower = 0.462 * x - 0.415
+  y = Random.rand * (y_upper - y_lower) + y_lower
 
-parameter_points << {radius_in_dom_radii: 2.0, esca: 0.5}
-parameter_points << {radius_in_dom_radii: 2.1, esca: 0.6}
-parameter_points << {radius_in_dom_radii: 1.9, esca: 0.4}
-
+  parameter_points << {radius_in_dom_radii: x, esca: y}
+end
 
 dom_radius = 0.16510
 mean_scattering_angle_cosine = 0.94
@@ -86,8 +96,8 @@ if options[:submit_to_cluster]
   shell "qsub \\
       -l gpu \\
       -l tmpdir_size=10G \\
-      -l s_rt=23:00:00 \\
-      -l h_rss=50G \\
+      -l s_rt=0:29:00 \\
+      -l h_rss=30G \\
       -m ae \\
       -t 1-#{number_of_jobs} \\
     batch-job.sh \\
