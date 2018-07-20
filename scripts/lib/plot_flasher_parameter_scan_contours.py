@@ -15,10 +15,12 @@ llhs = []
 for data_dir in cli.data_dirs():
   simulation_options = options.read(data_dir)
   llh = simulation_options["llh"]
+  esca = simulation_options["effective_scattering_length"]
+  r_r_dom = simulation_options["hole_ice_radius_in_dom_radii"]
 
-  if llh < 0:
-    parameters_esca.append(simulation_options["effective_scattering_length"])
-    parameters_r_r_dom.append(simulation_options["hole_ice_radius_in_dom_radii"])
+  if (llh < 0) and (esca > 0) and (r_r_dom > 0):
+    parameters_esca.append(esca)
+    parameters_r_r_dom.append(r_r_dom)
     llhs.append(llh)
 
 
@@ -66,7 +68,7 @@ cbar = plt.colorbar(cf0)
 cbar.ax.set_ylabel("$-2 \Delta \mathrm{LLH}$")
 
 # plot data points.
-ax.scatter(x, y, marker='o', s=5, zorder=10)
+ax.scatter(x, y, marker='o', s=1, zorder=10)
 
 # labels
 ax.set_title("Flasher parameter scan: LLH (simulation vs data), poisson equal weights")
