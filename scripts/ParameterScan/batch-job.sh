@@ -23,7 +23,7 @@ mkdir -p $RESULTSDESTINATION
 exec > "$TMPDIR"/stdout.log 2> "$TMPDIR"/stderr.log
 
 # The environment that will be loaded.
-LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07/debug_build/env-shell.sh"
+LOADENV="$SCRATCH/software/icecube-simulation-V05-00-07-sl7/build/env-shell.sh"
 
 # Where to copy the output after completing the job.
 ofile="$RESULTSDESTINATION/stdout.log"
@@ -34,7 +34,7 @@ trap 'cp "$TMPDIR"/stdout.log $ofile; cp "$TMPDIR"/stderr.log $errfile' 0
 trap 'echo exit 2; exit 2' USR1 USR1 XCPU
 
 # Load environment
-source /cvmfs/icecube.opensciencegrid.org/py2-v3_early_access/setup.sh
+source /cvmfs/icecube.opensciencegrid.org/py2-v2/setup.sh
 
 # Copy scripts to the cluster.
 for folder in ParameterScan AngularAcceptance lib; do
