@@ -8,8 +8,8 @@
  :number_of_runs=>1.0,
  :number_of_parallel_runs=>1.0,
  :angles=>[0, 10, 20, 30, 40, 50, 60, 70, 90, 120, 140, 150, 160, 170, 180],
- :run_id=>"Run-2018-pome4aeT",
- :started_at=>"2018-07-20 15:06:51 +0200",
+ :run_id=>"Run-2018-yie4deiH",
+ :started_at=>"2018-07-20 20:14:31 +0200",
  :gcd_file=>
   "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
  :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
@@ -31,7 +31,7 @@
  :thinning_factor=>1.0,
  :propagation_log_file=>"tmp/propagation.log",
  :clsim_error_fallback=>"skip",
- :propagation_finished_at=>"2018-07-20 15:09:53 +0200",
+ :propagation_finished_at=>"2018-07-20 20:17:20 +0200",
  :hits_histograms_input_files=>"tmp/photons_from_angle_*_dom_hits.txt",
  :hits_histograms_input_columns=>"hits",
  :hits_histograms_output_file_pattern=>
