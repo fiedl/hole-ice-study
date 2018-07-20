@@ -40,7 +40,7 @@ else
     hole_ice_radius_range_in_dom_radii: (0.05..2.0).step(0.05).to_a.collect { |x| x.round(2) },
     absorption_length_range: [100],
     distance_range: [1.0],
-    number_of_photons: 1e5,
+    number_of_photons: 1e6,
     number_of_runs: 1,
     number_of_parallel_runs: 1,
     angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
@@ -91,8 +91,8 @@ else
         shell "qsub \\
             -l gpu \\
             -l tmpdir_size=10G \\
-            -l s_rt=0:29:00 \\
-            -l h_rss=2G \\
+            -l s_rt=0:59:00 \\
+            -l h_rss=3G \\
             -m ae \\
             -t 1-#{number_of_jobs} \\
           batch-job.sh \\
