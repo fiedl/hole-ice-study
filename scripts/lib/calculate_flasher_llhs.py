@@ -18,7 +18,11 @@ print "Calculating flasher LLHs"
 for data_dir in cli.data_dirs():
   print "  " + data_dir
 
-  llh = flasher_llh.calculate(data_dir)
-  print "    LLH = " + str(llh)
+  opts = options.read(data_dir)
+  if "llh" in opts:
+    llh = opts["llh"]
+  else:
+    llh = flasher_llh.calculate(data_dir)
+    options.append(data_dir, {"llh": llh})
 
-  options.append(data_dir, {"llh": llh})
+  print "    LLH = " + str(llh)
