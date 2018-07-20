@@ -39,6 +39,7 @@ fig, ax = plt.subplots(1, 1, facecolor="white")
 weights_array = []
 bins_array = []
 titles_array = []
+means_array = []
 
 time_min = 500
 time_max = 4000 # ns
@@ -56,12 +57,14 @@ if plot_real_flasher_data:
   #receiver_data = flasher_data[flasher_data.string_number == receiving_string][flasher_data.dom_number == receiving_dom]
   #receiver_data = flasher_data[flasher_data.string_number != sending_string]
   receiver_data = flasher_data[flasher_data.string_number.isin(receiving_strings)]
+  #receiver_data = flasher_data[flasher_data.string_number.isin(receiving_strings)][flasher_data.dom_number == receiving_dom]
   receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
   bins = receiver_data["time"]
   weights = receiver_data["charge"]
   bins_array.append(bins)
   weights_array.append(weights)
   titles_array.append("Flasher data 2012")
+  means_array.append(np.dot(bins, weights) / weights.sum())
 
 
 # Plot simulation data from command line arguments
@@ -70,6 +73,7 @@ for index, data_dir in enumerate(data_dirs):
   data = pandas.read_csv(data_file, delim_whitespace = True, names = ["string_number", "dom_number", "time", "charge"], header = 1)
   #receiver_data = data[data.string_number == receiving_string][data.dom_number == receiving_dom]
   receiver_data = data[data.string_number.isin(receiving_strings)]
+  #receiver_data = data[data.string_number.isin(receiving_strings)][data.dom_number == receiving_dom]
   receiver_data = receiver_data[receiver_data.time < time_max][receiver_data.time > time_min] # cut
 
   options_file = os.path.join(data_dir, "./options.json")
@@ -86,6 +90,8 @@ for index, data_dir in enumerate(data_dirs):
   bins_array.append(bins)
   weights_array.append(weights)
 
+  means_array.append(np.dot(bins, weights) / weights.sum())
+
   print simulation_options
   if "without_hole_ice" in data_dir:
     titles_array.append("Simulation without hole ice")
@@ -96,10 +102,21 @@ for index, data_dir in enumerate(data_dirs):
     r = simulation_options["hole_ice_radius_in_dom_radii"]
     titles_array.append("Simulation: $\lambda_\mathrm{e}$=" + str_round(esca) + "m, $r$=" + str_round(r) + " $r_\mathrm{DOM}$")
 
-ax.hist(bins_array, (time_max - time_min) / 25 / 3, weights = weights_array, label = titles_array, normed = False, fill = False, histtype = "step")
+histograms = ax.hist(bins_array, (time_max - time_min) / 25 / 3, weights = weights_array, label = titles_array, normed = False, fill = False, histtype = "step")
 
-ax.set_xlabel("Photon arrival time at DOM(" + str(receiving_string) + "," + str(receiving_dom) + ") after emission at DOM (63,30) [ns]")
+# ax.set_xlabel("Photon arrival time at DOM(" + str(receiving_string) + "," + str(receiving_dom) + ") after emission at DOM (63,30) [ns]")
+ax.set_xlabel("Photon arrival time at receiving strings [ns]")
 ax.set_ylabel("Fraction of received photons [arbitrary units]")
+
+# import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
+
+prop_cycle = plt.rcParams['axes.prop_cycle']
+colors = prop_cycle.by_key()['color']
+
+for mean in means_array:
+  index = means_array.index(mean)
+  color = colors[index]
+  plt.axvline(mean, linestyle = 'dashed', linewidth = 1, color = color)
 
 plt.legend(loc = "best")
 plt.show()
