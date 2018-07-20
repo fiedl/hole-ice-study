@@ -36,13 +36,13 @@ else
   # Parameter range configuration
   #
   options.merge!({
-    effective_scattering_length_range: (0.6..2.2).step(0.05).to_a.collect { |x| x.round(2) },
-    hole_ice_radius_range_in_dom_radii: (0.8..1.7).step(0.1).to_a.collect { |x| x.round(2) },
+    effective_scattering_length_range: [0.01] + (0.1..3.5).step(0.1).to_a.collect { |x| x.round(2) },
+    hole_ice_radius_range_in_dom_radii: (0.05..2.0).step(0.05).to_a.collect { |x| x.round(2) },
     absorption_length_range: [100],
     distance_range: [1.0],
     number_of_photons: 1e4,
-    number_of_runs: 2,
-    number_of_parallel_runs: 2,
+    number_of_runs: 1,
+    number_of_parallel_runs: 1,
     angles: [0,10,20,30,40,50,60,70,90,120,140,150,160,170,180]
   })
   dom_radius = 0.16510
@@ -91,7 +91,7 @@ else
         shell "qsub \\
             -l gpu \\
             -l tmpdir_size=10G \\
-            -l s_rt=11:00:00 \\
+            -l s_rt=0:29:00 \\
             -l h_rss=2G \\
             -m ae \\
             -t 1-#{number_of_jobs} \\
