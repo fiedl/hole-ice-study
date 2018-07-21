@@ -3,12 +3,12 @@
  :hole_ice_absorption_length=>100.0,
  :hole_ice_radius=>0.3302,
  :distance=>1.0,
- :number_of_photons=>100000.0,
- :number_of_runs=>2.0,
- :number_of_parallel_runs=>2.0,
+ :number_of_photons=>1000000.0,
+ :number_of_runs=>1.0,
+ :number_of_parallel_runs=>1.0,
  :angles=>[0, 10, 20, 30, 40, 50, 60, 70, 90, 120, 140, 150, 160, 170, 180],
- :run_id=>"Run-2018-yecahh3o",
- :started_at=>"2018-03-29 00:21:04 +0200",
+ :run_id=>"Run-2018-uNieRi9z",
+ :started_at=>"2018-07-21 18:35:11 +0200",
  :gcd_file=>
   "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
  :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
@@ -27,35 +27,14 @@
  :scattering_factor=>1.0,
  :absorption_factor=>1.0,
  :save_photon_paths=>false,
+ :thinning_factor=>1.0,
  :propagation_log_file=>"tmp/propagation.log",
  :clsim_error_fallback=>"skip",
- :propagation_finished_at=>"2018-03-29 00:31:08 +0200",
+ :propagation_finished_at=>"2018-07-21 18:37:45 +0200",
  :hits_histograms_input_files=>"tmp/photons_from_angle_*_dom_hits.txt",
  :hits_histograms_input_columns=>"hits",
  :hits_histograms_output_file_pattern=>
   "tmp/histograms/hits_histogram_ANGLE.png",
  :hits_histograms_min_bin=>0,
  :hits_histograms_max_bin=>300,
- :hits_histograms_log=>"tmp/hits_histograms.log",
- :options_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/options.txt",
- :data_directory=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data",
- :chi_squared_nu_plot_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/plot_with_reference.png",
- :chi_squared_results_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/chi_square_results.txt",
- :chi_squared_gnuplot_log_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/chi_square_gnuplot.log",
- :chi_squared_data_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/angle_hits_deviation_and_photons.txt",
- :chi_squared_data_without_zero_errors_file=>
-  "/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt",
- :chi_squared_results=>
-  {"/Users/fiedl/hole-ice-study/results/parameter_scan_pencil_beam/esca3.5_r2.0rdom_abs100/data/angle_hits_deviation_and_photons_without_zero_errors.txt"=>
-    {:id=>"esca3.5_r2.0rdom_abs100",
-     "scale"=>"27.475151974887",
-     "N"=>"14",
-     "nu"=>"3",
-     "chi^2_nu"=>"16051.5032157634"}},
- :agreement=>4951.00886105}
+ :hits_histograms_log=>"tmp/hits_histograms.log"}
