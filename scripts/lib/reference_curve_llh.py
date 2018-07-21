@@ -32,7 +32,7 @@ def calculate(data_dir):
 
   # gauging: https://github.com/fiedl/hole-ice-study/issues/12#issuecomment-376580354
   #
-  if opts["plane_wave"]:
+  if ("plane_wave" in opts) and opts["plane_wave"]:
     p_0 = 0.0039667 # plane waves
   else:
     p_0 = 0.045007900000000003 # pencil beam
