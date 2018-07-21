@@ -59,8 +59,9 @@ yi = np.linspace(np.min(y), np.max(y), 100)
 # grid the data
 zi = griddata(x, y, z, xi, yi, interp='linear')
 
-cf0 = ax.contourf(xi, yi, zi, 15, locator = mpl.ticker.LogLocator())
+#cf0 = ax.contourf(xi, yi, zi, 15, locator = mpl.ticker.LogLocator())
 #cf0 = ax.contourf(xi, yi, zi, 50)#, vmax = 1000)
+cf0 = ax.contourf(xi, yi, zi, 50)
 # cf0 = ax.contourf(xi, yi, zi, 15, vmax = 15, extend = 'max') #, vmax=1.5e6)
 # clev = np.arange(z.min(), 15, 1)
 # cf0 = ax.contourf(xi, yi, zi, clev, extend = 'max')
