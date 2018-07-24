@@ -35,8 +35,8 @@ OptionParser.new do |opts|
     options[:hole_ice_radius_in_dom_radii] = r.to_f
   end
 
-  opts.on "--cables", "Simulate cable shadows" do
-    options[:cables] = true
+  opts.on "--cable", "Simulate cable shadow for the sending DOM" do
+    options[:cable] = true
   end
 end.parse!
 
@@ -74,6 +74,7 @@ dom_radius = 0.16510
 # See: https://github.com/fiedl/hole-ice-study/issues/59
 #
 strings_with_hole_ice = [63] + [62, 54, 55, 64, 71, 70] + [61, 53, 44, 45, 46, 56, 65, 72, 78, 77, 76, 69]
+# strings_with_hole_ice = []
 require_relative '../lib/string_positions'
 
 # bubble-column cylinders
@@ -101,8 +102,28 @@ else
   []
 end
 
+# require_relative '../lib/cable_positions'
+# doms = (1..60)
+# cable_positions = strings_with_cables.collect { |string|
+#   doms.collect { |dom|
+#     cable_position = CablePosition.find_by(string: string, dom: dom)
+#     [cable_position.x, cable_position.y, cable_position.z]
+#   }
+# }.flatten(1)
+# cable_radii = [0.02] * (strings_with_cables.count * doms.count)
+# cable_scattering_lengths = [100.0] * (strings_with_cables.count * doms.count)
+# cable_absorption_lengths = [0.0] * (strings_with_cables.count * doms.count)
+
+
+# Simulate a shadowing cable for the sending DOM by hand:
+# https://github.com/fiedl/hole-ice-study/issues/97
+
+if options[:cable]
+  strings_with_cables = [63]
+end
+
 require_relative '../lib/cable_positions'
-doms = (1..60)
+doms = [30]
 cable_positions = strings_with_cables.collect { |string|
   doms.collect { |dom|
     cable_position = CablePosition.find_by(string: string, dom: dom)
