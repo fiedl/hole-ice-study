@@ -118,25 +118,31 @@ end
 # Simulate a shadowing cable for the sending DOM by hand:
 # https://github.com/fiedl/hole-ice-study/issues/97
 
-if options[:cable]
-  strings_with_cables = [63]
-end
+cable_positions = []
+cable_radii = []
+cable_scattering_lengths = []
+cable_absorption_lengths = []
 
 require_relative '../lib/cable_positions'
-doms = [30]
-# cable_positions = strings_with_cables.collect { |string|
-#   doms.collect { |dom|
-#     cable_position = CablePosition.find_by(string: string, dom: dom)
-#     [cable_position.x, cable_position.y, cable_position.z]
-#   }
-# }.flatten(1)
 
-# https://github.com/fiedl/hole-ice-study/issues/97#issuecomment-407362741
-cable_positions = [[-66.83122690023184, 276.78947335840394, 3.119999885559082]]
+if options[:cable]
+  strings_with_cables = [63]
 
-cable_radii = [0.02] * (strings_with_cables.count * doms.count)
-cable_scattering_lengths = [100.0] * (strings_with_cables.count * doms.count)
-cable_absorption_lengths = [0.0] * (strings_with_cables.count * doms.count)
+  doms = [30]
+  # cable_positions = strings_with_cables.collect { |string|
+  #   doms.collect { |dom|
+  #     cable_position = CablePosition.find_by(string: string, dom: dom)
+  #     [cable_position.x, cable_position.y, cable_position.z]
+  #   }
+  # }.flatten(1)
+
+  # https://github.com/fiedl/hole-ice-study/issues/97#issuecomment-407362741
+  cable_positions = [[-66.83122690023184, 276.78947335840394, 3.119999885559082]]
+
+  cable_radii = [0.02] * (strings_with_cables.count * doms.count)
+  cable_scattering_lengths = [100.0] * (strings_with_cables.count * doms.count)
+  cable_absorption_lengths = [0.0] * (strings_with_cables.count * doms.count)
+end
 
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
