@@ -130,7 +130,8 @@ def PerformPropagationSimulation():
             extra_args = dict(
                 SimulateHoleIce = options.use_hole_ice_simulation,
                 HoleIceScatteringLengthFactor = options.scattering_factor,
-                HoleIceAbsorptionLengthFactor = options.absorption_factor
+                HoleIceAbsorptionLengthFactor = options.absorption_factor,
+                MaxNumOutputPhotonsCorrectionFactor = 1.0
                 )
 
         tray.AddSegment(clsim.I3CLSimMakeHits,
