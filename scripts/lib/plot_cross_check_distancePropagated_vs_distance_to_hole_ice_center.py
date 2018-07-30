@@ -22,12 +22,12 @@ def str_round(number):
 
 
 range_min = 0.0
-range_max = 2.0
+range_max = 5.0
 
 true_hole_ice_radius = 0.5
 
 # cuts
-data = data[data.squared_distance_to_hole_ice_center >= range_min**2][data.squared_distance_to_hole_ice_center <= range_max**2]
+# data = data[data.squared_distance_to_hole_ice_center >= range_min**2][data.squared_distance_to_hole_ice_center <= range_max**2]
 
 
 # prepare canvas
@@ -71,13 +71,13 @@ data_outside = data[data.squared_distance_to_hole_ice_center > right_border**2]
 
 # The scattering distances are distributed exponentially.
 # Therefore, use an exponential distribution to get the fit parameters.
-loc, beta = scipy.stats.expon.fit(data_inside["distancePropagated"])
-mean_inside = beta
-std_inside = beta
+loc, scale = scipy.stats.expon.fit(data_inside["distancePropagated"], floc = 0)
+mean_inside = scale
+std_inside = scale
 
-loc, beta = scipy.stats.expon.fit(data_outside["distancePropagated"])
-mean_outside = beta
-std_outside = beta
+loc, scale = scipy.stats.expon.fit(data_outside["distancePropagated"], floc = 0)
+mean_outside = scale
+std_outside = scale
 
 print "mean inside", mean_inside
 print "mean outside", mean_outside
