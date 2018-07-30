@@ -15,6 +15,7 @@ data = data[data.key == "distancePropagated_and_squared_distance_to_hole_ice_cen
 
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats
 
 def str_round(number):
   return "{:.4f}".format(number)
@@ -62,10 +63,29 @@ distance_to_hole_ice_center = np.sqrt(squared_distance_to_hole_ice_center)
 
 ax.errorbar(x, y, yerr = yerr, fmt = 'ro')
 
-mean_inside = data[data.squared_distance_to_hole_ice_center < true_hole_ice_radius**2]["distancePropagated"].mean()
-mean_outside = data[data.squared_distance_to_hole_ice_center > true_hole_ice_radius**2]["distancePropagated"].mean()
-ax.axhline(mean_inside, xmin = 0, xmax = true_hole_ice_radius / (range_max - range_min))
-ax.axhline(mean_outside, xmin = true_hole_ice_radius / (range_max - range_min), xmax = 1)
+left_border = true_hole_ice_radius * 0.8
+right_border = true_hole_ice_radius * 1.2
+
+data_inside = data[data.squared_distance_to_hole_ice_center < left_border**2]
+data_outside = data[data.squared_distance_to_hole_ice_center > right_border**2]
+
+# The scattering distances are distributed exponentially.
+# Therefore, use an exponential distribution to get the fit parameters.
+loc, beta = scipy.stats.expon.fit(data_inside["distancePropagated"])
+mean_inside = beta
+std_inside = beta
+
+loc, beta = scipy.stats.expon.fit(data_outside["distancePropagated"])
+mean_outside = beta
+std_outside = beta
+
+print "mean inside", mean_inside
+print "mean outside", mean_outside
+print "std inside", std_inside
+print "std outside", std_outside
+
+ax.axhline(mean_inside, xmin = 0, xmax = left_border / (range_max - range_min))
+ax.axhline(mean_outside, xmin = right_border / (range_max - range_min), xmax = 1)
 
 ax.set_xlim(xmax = range_max)
 ax.set_ylim(ymin = 0.0)
