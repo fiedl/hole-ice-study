@@ -3,11 +3,21 @@
 # Usage:
 # python plot_angular_acceptance.py ~/hole-ice-study/results/angular_acceptance_ice_paper
 
+import argparse
+parser = argparse.ArgumentParser(description = "Plot angular-acceptance curves")
+parser.add_argument("data_root_folders", metavar = "FOLDER", type = str, nargs = "+")
+parser.add_argument("--hole-ice", dest = "hole_ice", action='store_true')
+parser.add_argument("--no-hole-ice", dest = "hole_ice", action='store_false')
+parser.add_argument("--no-reference-curve", dest = "reference_curve", action = "store_false")
+parser.add_argument("--pencil-beam", dest = "pencil_beam", action = "store_true")
+parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False)
+args = parser.parse_args()
+
 import sys
 import pandas
 import json
 
-data_root_folders = sys.argv[1:]
+data_root_folders = args.data_root_folders
 
 import os
 import glob2
@@ -26,11 +36,23 @@ import matplotlib.pyplot as plt
 import scipy.special
 import numpy as np
 
-def reference_curve(angle):
+def reference_curve_hole_ice(angle):
   x = np.cos(2 * np.pi * angle / 360.0)
   a = 0.32813; b = 0.63899; c = 0.20049; d =-1.2250; e =-0.14470; f = 4.1695;
   g = 0.76898; h =-5.8690; i =-2.0939; j = 2.3834; k = 1.0435;
   return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
+
+def reference_curve_no_hole_ice(angle):
+  x = np.cos(2 * np.pi * angle / 360.0)
+  a = 0.26266; b = 0.47659; c = 0.15480; d = -0.14588; e = 0.17316; f = 1.3070;
+  g = 0.44441; h = -2.3538; i = -1.3564; j = 1.2098; k = 0.81569;
+  return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
+
+def reference_curve(angle, hole_ice):
+  if hole_ice:
+    return reference_curve_hole_ice(angle)
+  else:
+    return reference_curve_no_hole_ice(angle)
 
 def str_round(number):
   return "{:.4f}".format(number)
@@ -41,7 +63,11 @@ fig, ax = plt.subplots(1, 1, facecolor="white")
 
 # Plot reference curve
 reference_curve_angles = np.arange(0.0, 180.0, 0.1)
-ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles), label = "DOM angular acceptance with hole-ice approximation", linewidth = 2)
+hole_ice = args.hole_ice
+label = "DOM angular acceptance"
+if hole_ice:
+  label = "DOM angular acceptance with hole-ice approximation"
+ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles, hole_ice), label = label, linewidth = 2)
 
 for data_dir in data_dirs:
   data_files = glob2.glob(os.path.join(data_dir, "./angle_hits_and_photons_*.txt"))
@@ -63,8 +89,11 @@ for data_dir in data_dirs:
   #
   # See: https://github.com/fiedl/hole-ice-study/issues/12#issuecomment-376580354
   #
-  p_0 = 0.0039667 # plane waves
-  #p_0 = 0.045007900000000003 # pencil beam
+  if args.pencil_beam:
+    p_0 = 0.045007900000000003 # pencil beam
+  else:
+    p_0 = 0.0039667 # plane waves
+
 
   sensitivity = []
   sensitivity_error = []
@@ -72,7 +101,7 @@ for data_dir in data_dirs:
   for i, angle in enumerate(angles):
     n = data[data.angle == angle]["photons"].sum()
     k_i = data[data.angle == angle]["hits"].sum()
-    p_i = reference_curve(angle) * p_0
+    p_i = reference_curve(angle, hole_ice) * p_0
 
     ln_binomial_coefficient = \
         scipy.special.gammaln(n + 1) - scipy.special.gammaln(k_i + 1) - scipy.special.gammaln(n - k_i + 1)
@@ -115,7 +144,15 @@ for data_dir in data_dirs:
 
 
   # Plot simulation data points
-  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood))
+  if args.hole_ice:
+    label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
+  else:
+    if args.pencil_beam:
+      label = "simulation with direct detection, pencil beam, without hole ice"
+    else:
+      label = "simulation with direct detection, plane waves, without hole ice"
+
+  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label)
 
   ax.set(xlabel = "cos($\eta$)")
   ax.set(ylabel = "relative sensitivity", yscale = "log", ylim = [0.001, 1])
