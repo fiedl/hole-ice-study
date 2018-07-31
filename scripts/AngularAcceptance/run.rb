@@ -35,6 +35,9 @@ OptionParser.new do |opts|
   opts.on "--hole-ice-radius=RADIUS", "Geometric scattering length in metres." do |radius|
     options[:hole_ice_radius] = radius.to_f
   end
+  ops.on "--no-hole-ice", "Remove the hole-ice cylinder from the simulation." do
+    options[:no_hole_ice] = true
+  end
 
   opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres, e.g. 1.0" do |dst|
     options[:distance] = dst.to_f
@@ -133,6 +136,12 @@ detector_geometry_options = {
     #0.0
   ]
 }
+if options[:no_hole_ice]
+  detector_geometry_options[:hole_ice_cylinder_positions] = []
+  detector_geometry_options[:hole_ice_cylinder_radii] = []
+  detector_geometry_options[:cylinder_scattering_lengths] = []
+  detector_geometry_options[:cylinder_absorption_lengths] = []
+end
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
 
