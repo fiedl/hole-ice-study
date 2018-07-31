@@ -35,7 +35,7 @@ OptionParser.new do |opts|
   opts.on "--hole-ice-radius=RADIUS", "Geometric scattering length in metres." do |radius|
     options[:hole_ice_radius] = radius.to_f
   end
-  ops.on "--no-hole-ice", "Remove the hole-ice cylinder from the simulation." do
+  opts.on "--no-hole-ice", "Remove the hole-ice cylinder from the simulation." do
     options[:no_hole_ice] = true
   end
 
