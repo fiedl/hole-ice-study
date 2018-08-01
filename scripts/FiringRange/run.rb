@@ -114,6 +114,12 @@ detector_geometry_options = {
     #0.0
   ]
 }
+if options[:hole_ice] == false
+  detector_geometry_options[:hole_ice_cylinder_positions] = []
+  detector_geometry_options[:hole_ice_cylinder_radii] = []
+  detector_geometry_options[:cylinder_scattering_lengths] = []
+  detector_geometry_options[:cylinder_absorption_lengths] = []
+end
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
 
