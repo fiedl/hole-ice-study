@@ -10,7 +10,8 @@ parser.add_argument("--hole-ice", dest = "hole_ice", action='store_true')
 parser.add_argument("--no-hole-ice", dest = "hole_ice", action='store_false')
 parser.add_argument("--no-reference-curve", dest = "reference_curve", action = "store_false")
 parser.add_argument("--pencil-beam", dest = "pencil_beam", action = "store_true")
-parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False)
+parser.add_argument("--no-direct-detection", dest = "direct_detection", action = "store_false")
+parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False, direct_detection = True)
 args = parser.parse_args()
 
 import sys
@@ -148,9 +149,15 @@ for data_dir in data_dirs:
     label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
   else:
     if args.pencil_beam:
-      label = "simulation with direct detection, pencil beam, without hole ice"
+      if args.direct_detection:
+        label = "simulation with direct detection, pencil beam, without hole ice"
+      else:
+        label = "simulation pencil beam, without hole ice, without direct detection"
     else:
-      label = "simulation with direct detection, plane waves, without hole ice"
+      if args.direct_detection:
+        label = "simulation with direct detection, plane waves, without hole ice"
+      else:
+        label = "simulation plane waves, without hole ice, without direct detection"
 
   ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label)
 
