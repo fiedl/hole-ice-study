@@ -61,6 +61,10 @@ OptionParser.new do |opts|
     options[:cylinder_shift] = metres
   end
 
+  opts.on "--cable", "Simulate the main cable as instant-absorption cylinders." do
+    options[:cable] = true
+  end
+
   opts.on "--cpu", "Use the cpu rather than the gpu. For local testing with few photons." do
     options[:cpu] = true
   end
@@ -112,6 +116,7 @@ options.merge! run_id_options
 #
 log.section "Detector geometry"
 dom_radius = 0.16510
+cable_radius = 0.02
 mean_scattering_angle_cosine = 0.94
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
@@ -141,6 +146,16 @@ if options[:no_hole_ice]
   detector_geometry_options[:hole_ice_cylinder_radii] = []
   detector_geometry_options[:cylinder_scattering_lengths] = []
   detector_geometry_options[:cylinder_absorption_lengths] = []
+end
+if options[:cable]
+  detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625, -521.281982421875, 0]
+  detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625 + dom_radius + cable_radius, -521.281982421875, 500.0]
+  detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
+  detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
+  detector_geometry_options[:cylinder_scattering_lengths] << 100.0
+  detector_geometry_options[:cylinder_scattering_lengths] << 100.0
+  detector_geometry_options[:cylinder_absorption_lengths] << 0.0
+  detector_geometry_options[:cylinder_absorption_lengths] << 0.0
 end
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
