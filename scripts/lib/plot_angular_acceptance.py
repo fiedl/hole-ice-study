@@ -11,7 +11,8 @@ parser.add_argument("--no-hole-ice", dest = "hole_ice", action='store_false')
 parser.add_argument("--no-reference-curve", dest = "reference_curve", action = "store_false")
 parser.add_argument("--pencil-beam", dest = "pencil_beam", action = "store_true")
 parser.add_argument("--no-direct-detection", dest = "direct_detection", action = "store_false")
-parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False, direct_detection = True)
+parser.add_argument("--dima-reference-curve", dest = "dima_reference_curve", action = "store_true")
+parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False, direct_detection = True, dima_reference_curve = False)
 args = parser.parse_args()
 
 import sys
@@ -49,6 +50,11 @@ def reference_curve_no_hole_ice(angle):
   g = 0.44441; h = -2.3538; i = -1.3564; j = 1.2098; k = 0.81569;
   return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
 
+def reference_curve_dima(angle, p):
+  # https://github.com/fiedl/hole-ice-study/issues/102
+  eta = 2 * np.pi * angle / 360.0
+  return 0.34 * (1 + 1.5 * np.cos(eta) - np.cos(eta)**3/2) + p * np.cos(eta) * (np.cos(eta)**2 - 1)**3
+
 def reference_curve(angle, hole_ice):
   if hole_ice:
     return reference_curve_hole_ice(angle)
@@ -63,12 +69,20 @@ def str_round(number):
 fig, ax = plt.subplots(1, 1, facecolor="white")
 
 # Plot reference curve
-reference_curve_angles = np.arange(0.0, 180.0, 0.1)
 hole_ice = args.hole_ice
-label = "DOM angular acceptance"
-if hole_ice:
-  label = "DOM angular acceptance with hole-ice approximation"
-ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles, hole_ice), label = label, linewidth = 2)
+if args.reference_curve:
+  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+  label = "DOM angular acceptance"
+  if hole_ice:
+    label = "DOM angular acceptance with hole-ice approximation"
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles, hole_ice), label = label, linewidth = 2)
+
+# Plot Dima's curve if requested
+if args.dima_reference_curve:
+  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+  p = 0.4
+  label = "Dimas's hole-ice model, p = 0.4"
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
 
 for data_dir in data_dirs:
   data_files = glob2.glob(os.path.join(data_dir, "./angle_hits_and_photons_*.txt"))
@@ -146,18 +160,24 @@ for data_dir in data_dirs:
 
   # Plot simulation data points
   if args.hole_ice:
-    label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
-  else:
-    if args.pencil_beam:
-      if args.direct_detection:
-        label = "simulation with direct detection, pencil beam, without hole ice"
-      else:
-        label = "simulation pencil beam, without hole ice, without direct detection"
+    if args.dima_reference_curve:
+      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m"
     else:
-      if args.direct_detection:
-        label = "simulation with direct detection, plane waves, without hole ice"
+      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
+  else:
+    if args.reference_curve:
+      if args.pencil_beam:
+        if args.direct_detection:
+          label = "simulation with direct detection, pencil beam, without hole ice"
+        else:
+          label = "simulation pencil beam, without hole ice, without direct detection"
       else:
-        label = "simulation plane waves, without hole ice, without direct detection"
+        if args.direct_detection:
+          label = "simulation with direct detection, plane waves, without hole ice"
+        else:
+          label = "simulation plane waves, without hole ice, without direct detection"
+    else:
+      label = os.path.dirname(data_dir)
 
   ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label)
 
