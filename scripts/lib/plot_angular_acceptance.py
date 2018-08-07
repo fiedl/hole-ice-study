@@ -21,6 +21,7 @@ parser.add_argument("--h2-reference", dest = "h2_reference_curve", action = "sto
 parser.add_argument("--dima-reference", dest = "dima_reference_curve", action = "store_true")
 
 parser.add_argument("--no-log-scale", dest = "log_scale", action = "store_false")
+parser.add_argument("--llh", dest = "llh", action = "store_true")
 
 parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True)
 args = parser.parse_args()
@@ -86,17 +87,18 @@ if args.h2_reference_curve:
 # Plot Dima's curve if requested
 if args.dima_reference_curve:
   reference_curve_angles = np.arange(0.0, 180.0, 0.1)
-  p = 0.2
-  label = "Dimas's hole-ice model, p = 0.2"
-  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
+
+  # p = 0.2
+  # label = "Dimas's hole-ice model, p = 0.2"
+  # ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
 
   p = 0.3
   label = "Dimas's hole-ice model, p = 0.3"
   ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
 
-  p = 0.4
-  label = "Dimas's hole-ice model, p = 0.4"
-  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
+  # p = 0.4
+  # label = "Dimas's hole-ice model, p = 0.4"
+  # ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_dima(reference_curve_angles, p), label = label, linewidth = 2)
 
 
 for data_dir in data_dirs:
@@ -131,7 +133,10 @@ for data_dir in data_dirs:
   for i, angle in enumerate(angles):
     n = data[data.angle == angle]["photons"].sum()
     k_i = data[data.angle == angle]["hits"].sum()
-    p_i = reference_curve(angle, hole_ice) * p_0
+    if args.hole_ice:
+      p_i = reference_curve_hole_ice(angle) * p_0
+    else:
+      p_i = reference_curve_no_hole_ice(angle) * p_0
 
     ln_binomial_coefficient = \
         scipy.special.gammaln(n + 1) - scipy.special.gammaln(k_i + 1) - scipy.special.gammaln(n - k_i + 1)
@@ -175,12 +180,12 @@ for data_dir in data_dirs:
 
   # Plot simulation data points
   if args.hole_ice:
-    if args.dima_reference_curve:
-      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m"
-    else:
+    if args.llh:
       label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
+    else:
+      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m"
   else:
-    if args.reference_curve:
+    if args.h2_reference_curve:
       if args.pencil_beam:
         if args.direct_detection:
           label = "simulation with direct detection, pencil beam, without hole ice"
@@ -194,7 +199,7 @@ for data_dir in data_dirs:
     else:
       label = os.path.dirname(data_dir)
 
-  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label, linewidth=6, color = "r")
+  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label) #, linewidth=6, color = "r")
 
 ax.set(xlabel = "cos($\eta$)")
 ax.set(ylabel = "relative sensitivity")
