@@ -6,14 +6,23 @@
 import argparse
 parser = argparse.ArgumentParser(description = "Plot angular-acceptance curves")
 parser.add_argument("data_root_folders", metavar = "FOLDER", type = str, nargs = "*")
+
 parser.add_argument("--hole-ice", dest = "hole_ice", action='store_true')
 parser.add_argument("--no-hole-ice", dest = "hole_ice", action='store_false')
-parser.add_argument("--no-reference-curve", dest = "reference_curve", action = "store_false")
+
 parser.add_argument("--pencil-beam", dest = "pencil_beam", action = "store_true")
+parser.add_argument("--plane-wave", dest = "pencil_beam", action = "store_false")
+
+parser.add_argument("--direct-detection", dest = "direct_detection", action = "store_true")
 parser.add_argument("--no-direct-detection", dest = "direct_detection", action = "store_false")
-parser.add_argument("--dima-reference-curve", dest = "dima_reference_curve", action = "store_true")
+
+parser.add_argument("--h0-reference", dest = "h0_reference_curve", action = "store_true")
+parser.add_argument("--h2-reference", dest = "h2_reference_curve", action = "store_true")
+parser.add_argument("--dima-reference", dest = "dima_reference_curve", action = "store_true")
+
 parser.add_argument("--no-log-scale", dest = "log_scale", action = "store_false")
-parser.set_defaults(hole_ice = True, reference_curve = True, pencil_beam = False, direct_detection = True, dima_reference_curve = False, log_scale = True)
+
+parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True)
 args = parser.parse_args()
 
 import sys
@@ -56,12 +65,6 @@ def reference_curve_dima(angle, p):
   eta = 2 * np.pi * angle / 360.0
   return 0.34 * (1 + 1.5 * np.cos(eta) - np.cos(eta)**3/2) + p * np.cos(eta) * (np.cos(eta)**2 - 1)**3
 
-def reference_curve(angle, hole_ice):
-  if hole_ice:
-    return reference_curve_hole_ice(angle)
-  else:
-    return reference_curve_no_hole_ice(angle)
-
 def str_round(number):
   return "{:.4f}".format(number)
 
@@ -71,12 +74,14 @@ fig, ax = plt.subplots(1, 1, facecolor="white")
 
 # Plot reference curve
 hole_ice = args.hole_ice
-if args.reference_curve:
+if args.h0_reference_curve:
   reference_curve_angles = np.arange(0.0, 180.0, 0.1)
   label = "DOM angular acceptance"
-  if hole_ice:
-    label = "A priori DOM angular acceptance with hole-ice approximation H2"
-  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve(reference_curve_angles, hole_ice), label = label, linewidth = 2)
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_no_hole_ice(reference_curve_angles), label = label, linewidth = 2)
+if args.h2_reference_curve:
+  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+  label = "A priori DOM angular acceptance with hole-ice approximation H2"
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_hole_ice(reference_curve_angles), label = label, linewidth = 2)
 
 # Plot Dima's curve if requested
 if args.dima_reference_curve:
