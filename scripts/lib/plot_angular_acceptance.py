@@ -202,14 +202,14 @@ for data_dir in data_dirs:
     else:
       label = os.path.dirname(data_dir)
 
-  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label) #, linewidth=6, color = "r")
+  ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label, linewidth = 1, markersize = 5, elinewidth = 2)
 
 for pocam_file in args.pocam_files:
   data = pandas.read_pickle(pocam_file)
   cos_theta = data[0]
   sensitivity = data[1]
   label = args.pocam_labels.pop(0)
-  ax.plot(cos_theta, sensitivity, "o", label = label)
+  ax.plot(cos_theta, sensitivity, "o", label = label, markersize = 1.5)
 
 
 ax.set(xlabel = "cos($\eta$)")
