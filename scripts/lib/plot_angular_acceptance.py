@@ -23,6 +23,9 @@ parser.add_argument("--dima-reference", dest = "dima_reference_curve", action = 
 parser.add_argument("--no-log-scale", dest = "log_scale", action = "store_false")
 parser.add_argument("--llh", dest = "llh", action = "store_true")
 
+parser.add_argument("--pocam-file", dest = "pocam_files", type = str, nargs = "*")
+parser.add_argument("--pocam-label", dest = "pocam_labels", type = str, nargs = "*")
+
 parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True)
 args = parser.parse_args()
 
@@ -200,6 +203,14 @@ for data_dir in data_dirs:
       label = os.path.dirname(data_dir)
 
   ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label) #, linewidth=6, color = "r")
+
+for pocam_file in args.pocam_files:
+  data = pandas.read_pickle(pocam_file)
+  cos_theta = data[0]
+  sensitivity = data[1]
+  label = args.pocam_labels.pop(0)
+  ax.plot(cos_theta, sensitivity, "o", label = label)
+
 
 ax.set(xlabel = "cos($\eta$)")
 ax.set(ylabel = "relative sensitivity")
