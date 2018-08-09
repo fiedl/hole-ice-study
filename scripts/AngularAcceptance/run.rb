@@ -152,18 +152,18 @@ if options[:no_hole_ice]
   detector_geometry_options[:cylinder_absorption_lengths] = []
 end
 if options[:cable]
-  detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625, -521.281982421875, 500.0 + 0.75]
-  detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625, -521.281982421875, 500.0 - 0.75]
+  # detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625, -521.281982421875, 500.0 + 0.75]
+  # detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625, -521.281982421875, 500.0 - 0.75]
   detector_geometry_options[:hole_ice_cylinder_positions] << [-256.02301025390625 + dom_radius + cable_radius, -521.281982421875, 500.0]
   detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
-  detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
-  detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
+  # detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
+  # detector_geometry_options[:hole_ice_cylinder_radii] << cable_radius
   detector_geometry_options[:cylinder_scattering_lengths] << 100.0
-  detector_geometry_options[:cylinder_scattering_lengths] << 100.0
-  detector_geometry_options[:cylinder_scattering_lengths] << 100.0
+  # detector_geometry_options[:cylinder_scattering_lengths] << 100.0
+  # detector_geometry_options[:cylinder_scattering_lengths] << 100.0
   detector_geometry_options[:cylinder_absorption_lengths] << 0.0
-  detector_geometry_options[:cylinder_absorption_lengths] << 0.0
-  detector_geometry_options[:cylinder_absorption_lengths] << 0.0
+  # detector_geometry_options[:cylinder_absorption_lengths] << 0.0
+  # detector_geometry_options[:cylinder_absorption_lengths] << 0.0
 end
 log.configuration detector_geometry_options
 options.merge! detector_geometry_options
