@@ -26,7 +26,7 @@ parser.add_argument("--llh", dest = "llh", action = "store_true")
 parser.add_argument("--pocam-file", dest = "pocam_files", type = str, nargs = "*")
 parser.add_argument("--pocam-label", dest = "pocam_labels", type = str, nargs = "*")
 
-parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True)
+parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True, pocam_files = [])
 args = parser.parse_args()
 
 import sys
