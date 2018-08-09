@@ -3,8 +3,10 @@
  :distance=>1.0,
  :number_of_photons=>1000000.0,
  :plane_wave=>true,
- :run_id=>"Run-2018-ohnoh7ri",
- :started_at=>"2018-08-09 12:10:45 +0200",
+ :skip_propagation=>true,
+ :resume=>true,
+ :run_id=>"Run-2018-Aiphoh9c",
+ :started_at=>"2018-08-09 15:26:33 +0200",
  :gcd_file=>
   "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
  :ice_model_file=>"$I3_SRC/clsim/resources/ice/spice_mie",
@@ -27,7 +29,6 @@
  :thinning_factor=>1.0,
  :propagation_log_file=>"tmp/propagation.log",
  :clsim_error_fallback=>"skip",
- :propagation_finished_at=>"2018-08-09 12:21:00 +0200",
  :hits_histograms_input_files=>"tmp/photons_from_angle_*_dom_hits.txt",
  :hits_histograms_input_columns=>"hits",
  :hits_histograms_output_file_pattern=>
