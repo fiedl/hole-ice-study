@@ -3,9 +3,12 @@
 # Usage:
 # python plot_angular_acceptance.py ~/hole-ice-study/results/angular_acceptance_ice_paper
 
+# import code; code.interact(local=dict(globals(), **locals()))  # like binding.pry
+
 import argparse
 parser = argparse.ArgumentParser(description = "Plot angular-acceptance curves")
 parser.add_argument("data_root_folders", metavar = "FOLDER", type = str, nargs = "*")
+parser.add_argument("--label", dest = "labels", type = str, nargs = "*")
 
 parser.add_argument("--hole-ice", dest = "hole_ice", action='store_true')
 parser.add_argument("--no-hole-ice", dest = "hole_ice", action='store_false')
@@ -26,7 +29,7 @@ parser.add_argument("--llh", dest = "llh", action = "store_true")
 parser.add_argument("--pocam-file", dest = "pocam_files", type = str, nargs = "*")
 parser.add_argument("--pocam-label", dest = "pocam_labels", type = str, nargs = "*")
 
-parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True, pocam_files = [])
+parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True, pocam_files = [], labels = [])
 args = parser.parse_args()
 
 import sys
@@ -182,25 +185,28 @@ for data_dir in data_dirs:
 
 
   # Plot simulation data points
-  if args.hole_ice:
-    if args.llh:
-      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
-    else:
-      label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m"
+  if len(args.labels) > 0:
+    label = args.labels.pop(0)
   else:
-    if args.h2_reference_curve:
-      if args.pencil_beam:
-        if args.direct_detection:
-          label = "simulation with direct detection, pencil beam, without hole ice"
-        else:
-          label = "simulation pencil beam, without hole ice, without direct detection"
+    if args.hole_ice:
+      if args.llh:
+        label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m, LLH = " + str_round(ln_likelihood)
       else:
-        if args.direct_detection:
-          label = "simulation with direct detection, plane waves, without hole ice"
-        else:
-          label = "simulation plane waves, without hole ice, without direct detection"
+        label = "hole-ice simulation, $\lambda_\mathrm{e}$=" + str_round(simulation_options["hole_ice_effective_scattering_length"]) + "m, $r$=" + str_round(simulation_options["hole_ice_radius"]) + "m"
     else:
-      label = os.path.dirname(data_dir)
+      if args.h2_reference_curve:
+        if args.pencil_beam:
+          if args.direct_detection:
+            label = "simulation with direct detection, pencil beam, without hole ice"
+          else:
+            label = "simulation pencil beam, without hole ice, without direct detection"
+        else:
+          if args.direct_detection:
+            label = "simulation with direct detection, plane waves, without hole ice"
+          else:
+            label = "simulation plane waves, without hole ice, without direct detection"
+      else:
+        label = os.path.dirname(data_dir)
 
   ax.errorbar(np.cos(angles * 2 * np.pi / 360.0), sensitivity, fmt = "-o", yerr = sensitivity_error, label = label, linewidth = 1, markersize = 5, elinewidth = 2)
 
