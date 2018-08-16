@@ -20,7 +20,9 @@ parser.add_argument("--direct-detection", dest = "direct_detection", action = "s
 parser.add_argument("--no-direct-detection", dest = "direct_detection", action = "store_false")
 
 parser.add_argument("--h0-reference", dest = "h0_reference_curve", action = "store_true")
+parser.add_argument("--h1-reference", dest = "h1_reference_curve", action = "store_true")
 parser.add_argument("--h2-reference", dest = "h2_reference_curve", action = "store_true")
+parser.add_argument("--h3-reference", dest = "h3_reference_curve", action = "store_true")
 parser.add_argument("--dima-reference", dest = "dima_reference_curve", action = "store_true")
 
 parser.add_argument("--no-log-scale", dest = "log_scale", action = "store_false")
@@ -55,10 +57,24 @@ import matplotlib.pyplot as plt
 import scipy.special
 import numpy as np
 
-def reference_curve_hole_ice(angle):
+def reference_curve_h1(angle):
+  # https://github.com/fiedl/hole-ice-study/issues/113
+  x = np.cos(2 * np.pi * angle / 360.0)
+  a = 0.29958; b = 0.52578; c = 0.18281; d =-0.11287; e =0.48188; f = 1.0777;
+  g = -0.96676; h = -2.2425; i = 0.70419E-01; j = 0.95132; k = 0.13426;
+  return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
+
+def reference_curve_h2(angle):
   x = np.cos(2 * np.pi * angle / 360.0)
   a = 0.32813; b = 0.63899; c = 0.20049; d =-1.2250; e =-0.14470; f = 4.1695;
   g = 0.76898; h =-5.8690; i =-2.0939; j = 2.3834; k = 1.0435;
+  return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
+
+def reference_curve_h3(angle):
+  # https://github.com/fiedl/hole-ice-study/issues/113
+  x = np.cos(2 * np.pi * angle / 360.0)
+  a = 0.35191; b = 0.68928; c = 0.35927; d = -1.7176; e = -1.1212; f = 5.3179;
+  g = 2.2695; h = -7.2229; i = -3.2619; j = 2.9822; k = 1.4572;
   return a + b*x + c*x**2 + d*x**3 + e*x**4 + f*x**5 + g*x**6 + h*x**7 + i*x**8 + j*x**9 + k*x**10
 
 def reference_curve_no_hole_ice(angle):
@@ -85,10 +101,18 @@ if args.h0_reference_curve:
   reference_curve_angles = np.arange(0.0, 180.0, 0.1)
   label = "DOM angular acceptance"
   ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_no_hole_ice(reference_curve_angles), label = label, linewidth = 2)
+if args.h1_reference_curve:
+  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+  label = "A priori DOM angular acceptance with hole-ice approximation H1"
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_h1(reference_curve_angles), label = label, linewidth = 2)
 if args.h2_reference_curve:
   reference_curve_angles = np.arange(0.0, 180.0, 0.1)
   label = "A priori DOM angular acceptance with hole-ice approximation H2"
-  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_hole_ice(reference_curve_angles), label = label, linewidth = 2)
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_h2(reference_curve_angles), label = label, linewidth = 2)
+if args.h3_reference_curve:
+  reference_curve_angles = np.arange(0.0, 180.0, 0.1)
+  label = "A priori DOM angular acceptance with hole-ice approximation H3"
+  ax.plot(np.cos(reference_curve_angles * 2 * np.pi / 360.0), reference_curve_h3(reference_curve_angles), label = label, linewidth = 2)
 
 # Plot Dima's curve if requested
 if args.dima_reference_curve:
