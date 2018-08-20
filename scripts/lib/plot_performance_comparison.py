@@ -6,13 +6,13 @@
 benchmarks = [
   {"name": "baseline", "user": [9.87, 9.88, 9.95, 9.99, 10.12, 10.01, 10.58, 10.51, 10.13, 9.98], "system": [7.69, 7.43, 7.23, 7.73, 7.50, 7.24, 10.16, 7.95, 7.89, 7.74]},
   {"name": "standard clsim", "user": [18.67, 19.59, 19.58], "system": [8.41, 8.72, 8.51]},
-  {"name": "hole-ice code 2017\nhole ice factor 1", "user": [17.87, 18.25, 18.58], "system": [8.06, 8.51, 8.65]},
-  {"name": "hole-ice code 2017\nwith strong hole ice", "user": [21.31, 22.29, 23.01], "system": [8.64, 8.72, 9.03]},
-  {"name": "hole-ice code 2018\nwith layers, moderate hole ice", "user": [18.39, 18.81, 19.34], "system": [8.44, 8.59, 8.69]},
-  {"name": "hole-ice code 2018\nwithout layers, without hole ice", "user": [18.28, 19.05, 18.93], "system": [8.56, 9.02, 8.83]},
-  {"name": "hole-ice code 2018\nwith layers, with strong hole ice", "user": [22.15, 23.01, 22.65], "system": [8.57, 8.51, 8.69]},
-  {"name": "hole-ice code 2018\nwithout layers, moderate hole ice", "user": [19.14, 19.72, 19.02], "system": [8.55, 9.00, 8.66]},
-  {"name": "hole-ice code 2018\nwith layers, no hole ice", "user": [18.42, 18.26, 19.53], "system": [8.29, 8.55, 8.76]}
+  {"name": "hole-ice-correction algorithm\ninteraction factor 1", "user": [17.87, 18.25, 18.58], "system": [8.06, 8.51, 8.65]},
+  {"name": "hole-ice-correction algorithm\nwith strong hole ice", "user": [21.31, 22.29, 23.01], "system": [8.64, 8.72, 9.03]},
+  {"name": "new medium-propagation algorithm\nwith layers, moderate hole ice", "user": [18.39, 18.81, 19.34], "system": [8.44, 8.59, 8.69]},
+  {"name": "new medium-propagation algorithm\nwithout layers, without hole ice", "user": [18.28, 19.05, 18.93], "system": [8.56, 9.02, 8.83]},
+  {"name": "new medium-propagation algorithm\nwith layers, with strong hole ice", "user": [22.15, 23.01, 22.65], "system": [8.57, 8.51, 8.69]},
+  {"name": "new medium-propagation algorithm\nwithout layers, moderate hole ice", "user": [19.14, 19.72, 19.02], "system": [8.55, 9.00, 8.66]},
+  {"name": "new medium-propagation algorithm\nwith layers, no hole ice", "user": [18.42, 18.26, 19.53], "system": [8.29, 8.55, 8.76]}
 ]
 
 import numpy as np
@@ -52,7 +52,7 @@ ax.set_yticklabels(names)
 ax.invert_yaxis()  # labels read top-to-bottom
 ax.set_aspect(1)
 ax.set_xlabel('Propagation time (usr+sys) [s]')
-ax.set_title('Performance comparison: Propagating 1e5 photons')
+ax.set_title('Performance comparison: Propagating 1e5 photons on a CPU')
 
 plt.show()
 
