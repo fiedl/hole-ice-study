@@ -46,6 +46,9 @@ y_pos = np.arange(len(benchmarks))
 means = list(benchmark["sum_minus_baseline_mean"] for benchmark in benchmarks)
 errors = list(benchmark["sum_minus_baseline_error"] for benchmark in benchmarks)
 
+for i, name in enumerate(names):
+  names[i] = "(" + str(i + 1) + ") " + names[i]
+
 ax.barh(y_pos, means, xerr=errors, align='center', color='green', ecolor='black')
 ax.set_yticks(y_pos)
 ax.set_yticklabels(names)
