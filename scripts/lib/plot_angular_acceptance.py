@@ -153,8 +153,11 @@ for data_dir in data_dirs:
   #
   if args.pencil_beam:
     p_0 = 0.045007900000000003 # pencil beam
-  else:
-    p_0 = 0.0039667 # plane waves
+  else: # plane waves
+    if simulation_options["distance"] == 1.0:
+      p_0 = 0.0039667
+    elif simulation_options["distance"] == 3.0:
+      p_0 = 0.0003814 # https://github.com/fiedl/hole-ice-study/issues/117#issuecomment-431105799
 
 
   sensitivity = []
@@ -164,7 +167,7 @@ for data_dir in data_dirs:
     n = data[data.angle == angle]["photons"].sum()
     k_i = data[data.angle == angle]["hits"].sum()
     if args.hole_ice:
-      p_i = reference_curve_hole_ice(angle) * p_0
+      p_i = reference_curve_h2(angle) * p_0
     else:
       p_i = reference_curve_no_hole_ice(angle) * p_0
 
