@@ -54,4 +54,5 @@ bundle install
 $LOADENV zsh -c "env && bundle exec ruby run.rb $*"
 
 # Copy result files back.
+cp $TMPDIR/*.log $RESULTSDESTINATION/
 cp -r results/* $RESULTSDESTINATION/
