@@ -11,17 +11,18 @@ log.head "Create angular-acceptance scans for several azimuthal directions"
 log.info "https://github.com/fiedl/hole-ice-study/issues/117"
 
 bubble_column_configs = [ # all lengths in meters
-  {offset: 0.15, radius: 0.075, geometric_scattering_length: 0.10},
+  #{offset: 0.15, radius: 0.075, geometric_scattering_length: 0.10},
   {offset: 0.15, radius: 0.15, geometric_scattering_length: 0.10},
-  {offset: 0.15, radius: 0.15, geometric_scattering_length: 0.70},
-  {offset: 0.15, radius: 0.30, geometric_scattering_length: 0.70}
+  #{offset: 0.15, radius: 0.15, geometric_scattering_length: 0.70},
+  #{offset: 0.15, radius: 0.30, geometric_scattering_length: 0.70}
 ]
 
 incoming_azimuthal_angles = [0, 120, 240] # degrees
 
 # https://github.com/fiedl/hole-ice-study/issues/117#issuecomment-430986133
 # incoming_polar_angles = [0, 7.5946433685914485, 8.13010235415598, 8.746162262555202, 9.462322208025611, 10.30484646876603, 11.3099324740202, 12.528807709151508, 14.036243467926468, 15.945395900922847, 18.43494882292201, 21.801409486351815, 26.565051177077976, 33.690067525979785, 45.0, 63.43494882292201, 90.0, 116.56505117707799, 135.0, 146.30993247402023, 153.43494882292202, 158.19859051364818, 161.56505117707798, 164.05460409907715, 165.96375653207355, 167.47119229084848, 168.6900675259798, 169.69515353123398, 170.53767779197437, 171.2538377374448, 171.86989764584402, 172.40535663140855, 180]
-incoming_polar_angles = [0, 8, 9, 10, 11, 13, 16, 180, 22, 27, 34, 45, 63, 90, 117, 135, 146, 153, 158, 162, 164, 166, 167, 169, 171, 172, 180]
+#incoming_polar_angles = [0, 8, 9, 10, 11, 13, 16, 180, 22, 27, 34, 45, 63, 90, 117, 135, 146, 153, 158, 162, 164, 166, 167, 169, 171, 172, 180]
+incoming_polar_angles = [125]
 
 dom_position = [-256.02301025390625, -521.281982421875, 500.0]
 
@@ -48,7 +49,7 @@ if current_cluster_node_index
   save_photon_paths = false
 else
   log.info "Running locally on the CPU in order to produce animations."
-  number_of_photons = 10
+  number_of_photons = 200
   cpu = true
   save_photon_paths = true
 end
