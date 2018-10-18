@@ -1,0 +1,7 @@
+source 'https://rubygems.org' do
+  gem 'colored'
+  gem 'fiedl-log'
+  gem 'descriptive_statistics'
+  gem 'pawgen'
+  gem 'activesupport'
+end
