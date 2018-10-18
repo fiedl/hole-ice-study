@@ -38,6 +38,9 @@ OptionParser.new do |opts|
   opts.on "--no-hole-ice", "Remove the hole-ice cylinder from the simulation." do
     options[:no_hole_ice] = true
   end
+  opts.on "--ice-model=FOLDER", "ice model folder, see http://software.icecube.wisc.edu/documentation/projects/ppc/" do |folder|
+    options[:ice_model] = folder
+  end
 
   opts.on "--distance=DST", "Distance to shoot photons from to the dom in metres, e.g. 1.0" do |dst|
     options[:distance] = dst.to_f
@@ -57,6 +60,9 @@ OptionParser.new do |opts|
   opts.on "--plane-wave", "Start photons from a plane rather than a point." do
     options[:plane_wave] = true
   end
+  opts.on "--plane-wave-size=METRES" do |metres|
+    options[:plane_wave_size] = metres.to_f
+  end
   opts.on "--cylinder-shift=METRES", "Shift the hole-ice cylinder x position by this value in metres to study asymmetries." do |metres|
     options[:cylinder_shift] = metres
   end
@@ -70,6 +76,16 @@ OptionParser.new do |opts|
   end
   opts.on "--thinning-factor=FACTOR", "between 0.0 and 1.0. See https://github.com/fiedl/hole-ice-study/issues/85" do |factor|
     options[:thinning_factor] = factor.to_f
+  end
+  opts.on "--save-photon-paths" do
+    options[:save_photon_paths] = true
+  end
+
+  opts.on "--dom-position=x,y,z" do |pos_string|
+    options[:dom_position] = pos_string.split(",").map(&:to_f)
+  end
+  opts.on "--hole-ice-position=x,y" do |pos_string|
+    options[:hole_ice_position] = pos_string.split(",").map(&:to_f)
   end
 end.parse!
 
@@ -120,28 +136,32 @@ cable_radius = 0.03
 mean_scattering_angle_cosine = 0.94
 detector_geometry_options = {
   gcd_file: "$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz",
-  ice_model_file: "$I3_SRC/clsim/resources/ice/spice_mie",
+  ice_model_file: (options[:ice_model] || "$I3_SRC/clsim/resources/ice/spice_mie"),
   seed: 123456,
   hole_ice_cylinder_positions: [
-    # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
-    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # drill hole
-    [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
-    #[-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
+    if options[:hole_ice_position]
+      [options[:hole_ice_position][0], options[:hole_ice_position][1], 0]
+    else
+      # For the z-ranges, see: https://github.com/fiedl/hole-ice-study/issues/34
+      [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0]  # drill hole
+      # [-256.02301025390625 + options[:cylinder_shift].to_f, -521.281982421875, 0],  # bubble column of the hole ice
+      # [-256.02301025390625 + dom_radius + 0.02, -521.281982421875, 500.0],          # cable
+    end
   ],
   hole_ice_cylinder_radii: [
     options[:hole_ice_radius] || 0.30, # drill hole
-    options[:hole_ice_radius] || 0.08, # bubble column
+    #options[:hole_ice_radius] || 0.08, # bubble column
     #0.08,
     #0.02
   ],
   cylinder_scattering_lengths: [
     options[:hole_ice_scattering_length] || 0.50, # drill hole
-    options[:hole_ice_scattering_length] || 0.01, # bubble column
+    #options[:hole_ice_scattering_length] || 0.01, # bubble column
     #100.0
   ],
   cylinder_absorption_lengths: [
     options[:hole_ice_absorption_length] || 100.0,
-    options[:hole_ice_absorption_length] || 100.0,
+    #options[:hole_ice_absorption_length] || 100.0,
     #0.0
   ]
 }
@@ -243,7 +263,7 @@ else
     --number-of-photons-per-angle=#{options[:number_of_photons]} \\
     --number-of-runs=#{options[:number_of_parallel_runs]} \\
     #{"--plane-wave" if options[:plane_wave]} \\
-    #{"--plane-wave-size=#{options[:distance]}" if options[:plane_wave]} \\
+    #{"--plane-wave-size=#{options[:plane_wave_size] || options[:distance]}" if options[:plane_wave]} \\
     --seed=#{options[:seed]}
   "
 end
@@ -261,7 +281,7 @@ global_propagation_options = {
   hole_ice: :simulation,  # false, :approximation, :simulation
   scattering_factor: options[:scattering_factor] || 1.0,
   absorption_factor: options[:absorption_factor] || 1.0,
-  save_photon_paths: false,
+  save_photon_paths: options[:save_photon_paths] || false,
   thinning_factor: options[:thinning_factor] || 1.0,
   propagation_log_file: "tmp/propagation.log",
   clsim_error_fallback: 'skip' # or: gpu-1-parallel OR cpu OR sleep OR skip
@@ -504,6 +524,7 @@ shell "cp #{options[:chi_squared_results_file]} results/current/data/"
 shell "cp -r tmp/histograms results/current/"
 shell "cp tmp/*.log results/current/"
 shell "cp tmp/README.md results/current/"
+shell "mv tmp/*.i3 results/current/" if options[:save_photon_paths]
 log.ensure_file "results/current"
 shell "ls results/current"
 
