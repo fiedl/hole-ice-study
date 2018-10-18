@@ -43,7 +43,7 @@ number_of_jobs = bubble_column_configs.count * incoming_azimuthal_angles.count
 current_cluster_node_index = ENV['SGE_TASK_ID']
 if current_cluster_node_index
   log.info "This is cluster node #{current_cluster_node_index} of #{number_of_jobs}."
-  number_of_photons = 1e6
+  number_of_photons = 1e7
   cpu = false
   save_photon_paths = false
 else
