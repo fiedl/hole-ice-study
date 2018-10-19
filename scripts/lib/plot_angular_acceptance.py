@@ -31,6 +31,8 @@ parser.add_argument("--llh", dest = "llh", action = "store_true")
 parser.add_argument("--pocam-file", dest = "pocam_files", type = str, nargs = "*")
 parser.add_argument("--pocam-label", dest = "pocam_labels", type = str, nargs = "*")
 
+parser.add_argument("--outfile", dest = "outfile", type = str)
+
 parser.set_defaults(hole_ice = True, pencil_beam = False, direct_detection = True, log_scale = True, pocam_files = [], labels = [])
 args = parser.parse_args()
 
@@ -258,4 +260,7 @@ ax.grid()
 
 ax.set_title("Angular acceptance")
 
-plt.show()
+if args.outfile:
+  plt.savefig(args.outfile)
+else:
+  plt.show()
