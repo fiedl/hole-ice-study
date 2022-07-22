@@ -16,7 +16,7 @@ GEM
     minitest (5.10.3)
     pawgen (1.0.1)
     thread_safe (0.3.6)
-    tzinfo (1.2.4)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
 
 PLATFORMS
