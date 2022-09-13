@@ -115,15 +115,15 @@ For a working example, see [scripts/lib/create_gcd_file_with_bubble_columns_and_
 
 ## How does it work?
 
-In photon propagation simulation, one simulation step consists of everything between two scatterings, i.a. randomizing the distance to the next scattering point, randomizing the scattering angle, moving the photon to the next scattering point, checking for absorption and checking for detection at a DOM.
+In photon propagation simulation, one simulation step consists of everything between two scatterings, i.e. randomizing the distance to the next scattering point, randomizing the scattering angle, moving the photon to the next scattering point, checking for absorption and checking for detection at a DOM.
 
 <img width="500" src="https://user-images.githubusercontent.com/1679688/36198584-4339cfbe-1177-11e8-81b1-5188ff6be2e4.png" />
-
-Hole ice simulation adds another task to each simulation step: Calculate the portion of the photon trajectory in the step that runs through hole ice and correct the distance to the next scattering point for the changed ice properties within the hole ice.
 
 The following flow chart shows where the hole-ice corrections take place within the photon-propagation algorithm.
 
 <img alt="algorithm" width="500" src="https://user-images.githubusercontent.com/1679688/41497756-2cc33348-715c-11e8-8eda-f7b655610f50.png" />
+
+The step "calculate new position and direction" involves propagating the photon through the different ice layers, which may have different scattering and absorption lengths. The hole-ice algorithm makes this code more general such that geometric shapes other than ice layers are supported. This way, the propagation algorithm also supports adding cylinders for cables and hole-ice columns. Other shapes can by added to the algorithm as long as one can provide a method to calculate the intersection points of the photon ray and the new shape.
 
 ## Installation
 
