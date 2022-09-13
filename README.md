@@ -51,6 +51,8 @@ The results of this study have been published in:
 
 ## Usage
 
+*This section shows the usage instructions in the context of the original study. For an updated interface and usage with current icetray, see https://github.com/fiedl/hole-ice-scripts.*
+
 This code has been tested against [icecube-simulation V05-00-07](http://code.icecube.wisc.edu/svn/meta-projects/simulation/releases/V05-00-07/). Until the hole-ice code has been merged into the [main clsim repository](https://github.com/claudiok/clsim), a [patched version of clsim](https://github.com/fiedl/clsim) is required. See section [Installation](#installation) on this page.
 
 ### How to activate hole-ice simulation
@@ -126,6 +128,8 @@ The following flow chart shows where the hole-ice corrections take place within 
 The step "calculate new position and direction" involves propagating the photon through the different ice layers, which may have different scattering and absorption lengths. The hole-ice algorithm makes this code more general such that geometric shapes other than ice layers are supported. This way, the propagation algorithm also supports adding cylinders for cables and hole-ice columns. Other shapes can by added to the algorithm as long as one can provide a method to calculate the intersection points of the photon ray and the new shape.
 
 ## Installation
+
+*This section shows the setup instructions in the context of the original study. For usage with current icetray, see https://github.com/fiedl/hole-ice-scripts.*
 
 ### Install icecube-simulation framework
 
